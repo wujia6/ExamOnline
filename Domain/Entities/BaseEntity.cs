@@ -6,6 +6,6 @@ namespace Domain.Entities
     {
         public abstract Guid ID { get; set; }
 
-        public abstract string Remarks { get; set; }
+        public virtual string Remarks { get; set; }
     }
 }

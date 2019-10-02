@@ -27,4 +27,14 @@ namespace Domain.Entities.ClassAgg
             builder.Property(e => e.Remarks).HasMaxLength(50);
         }
     }
+
+    public class ClassExamConfig : IEntityTypeConfiguration<ClassExam>
+    {
+        public void Configure(EntityTypeBuilder<ClassExam> builder)
+        {
+            builder.HasKey(e => e.ID);
+            builder.HasOne(s => s.ClassInfo).WithMany(m => m.ExamInfos);
+            builder.HasOne(s => s.ExamInfo).WithMany(m => m.ClassInfos);
+        }
+    }
 }

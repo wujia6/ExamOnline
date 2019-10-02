@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Linq;
 using Domain.Entities.ClassAgg;
+using Domain.Entities.ExamAgg;
 
 namespace Domain.Entities.UserAgg
 {
     /// <summary>
     /// 学生实体类
     /// </summary>
-    public class Student : UserInfo
+    public class Student : UserInfo, IExamAnswer
     {
         /// <summary>
         /// 主键
@@ -87,5 +89,10 @@ namespace Domain.Entities.UserAgg
         /// 导航属性
         /// </summary>
         public virtual ClassInfo ClassInfo { get; set; }
+
+        /// <summary>
+        /// 导航属性
+        /// </summary>
+        public virtual IQueryable<AnwserAgg.AnswerInfo> AnswerInfos { get; set; }
     }
 }

@@ -47,6 +47,11 @@ namespace Domain.Entities.ClassAgg
         /// <summary>
         /// 导航属性
         /// </summary>
+        public virtual IQueryable<ClassExam> ExamInfos { get; set; }
+
+        /// <summary>
+        /// 导航属性
+        /// </summary>
         public virtual IQueryable<UserAgg.Student> Students { get; set; }
 
         /// <summary>
