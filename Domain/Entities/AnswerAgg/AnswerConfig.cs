@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities.AnwserAgg
 {
-    public class AnswerConfig : IEntityTypeConfiguration<AnswerInfo>
+    public class AnswerInfoConfig : IEntityTypeConfiguration<AnswerInfo>
     {
         public void Configure(EntityTypeBuilder<AnswerInfo> builder)
         {

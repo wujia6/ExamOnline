@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities.ExamAgg
 {
-    public class ExamConfig : IEntityTypeConfiguration<ExamInfo>
+    public class ExamInfoConfig : IEntityTypeConfiguration<ExamInfo>
     {
         public void Configure(EntityTypeBuilder<ExamInfo> builder)
         {

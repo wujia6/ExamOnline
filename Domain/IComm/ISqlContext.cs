@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Domain.Entities.UserAgg;
 using Domain.Entities.ClassAgg;
+using Domain.Entities.QuestionAgg;
+using Domain.Entities.ExamAgg;
+using Domain.Entities.AnwserAgg;
 
 namespace Domain.IComm
 {
@@ -14,6 +17,10 @@ namespace Domain.IComm
         DbSet<Teacher> Teachers { get; set; }
         DbSet<Student> Students { get; set; }
         DbSet<ClassInfo> ClassInfos { get; set; }
+        DbSet<ClassExam> ClassExams { get; set; }
         DbSet<ClassTeacher> ClassTeachers { get; set; }
+        DbSet<QuestionInfo> QuestionInfos { get; set; }
+        DbSet<ExamInfo> ExamInfos { get; set; }
+        DbSet<AnswerInfo> AnswerInfos { get; set; }
     }
 }
