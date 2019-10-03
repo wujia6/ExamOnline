@@ -7,32 +7,34 @@ namespace Domain.IManages
     /// <summary>
     /// 领域服务班级接口
     /// </summary>
-    public interface IClassManage
+    public interface IClassManage<T> where T : ClassRoot
     {
-        #region ###ClassInfo接口
-        bool InsertOrUpdate(ClassInfo inf);
+        /// <summary>
+        /// 插入或更新
+        /// </summary>
+        /// <param name="inf">实体对象</param>
+        /// <returns></returns>
+        bool InsertOrUpdate(T inf);
 
-        bool Remove(ISpecification<ClassInfo> spec);
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="spec">规约对象</param>
+        /// <returns></returns>
+        bool Remove(ISpecification<T> spec);
 
-        ClassInfo FindBySpec(ISpecification<ClassInfo> spec);
+        /// <summary>
+        /// 查询单个
+        /// </summary>
+        /// <param name="spec">规约对象</param>
+        /// <returns></returns>
+        T FindBySpec(ISpecification<T> spec);
 
-        IQueryable<ClassInfo> QueryBySpec(ISpecification<ClassInfo> spec);
-        #endregion
-
-        #region ###ClassExam接口
-        bool Insert(ClassExam inf);
-
-        bool Remove(ISpecification<ClassExam> spec);
-
-        IQueryable<ClassExam> QueryBySpec(ISpecification<ClassExam> spec);
-        #endregion
-
-        #region ###ClassTeacher接口
-        bool Insert(ClassTeacher inf);
-
-        bool Remove(ISpecification<ClassTeacher> spec);
-
-        IQueryable<ClassTeacher> QueryBySpec(ISpecification<ClassTeacher> spec);
-        #endregion
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <param name="spec">规约对象</param>
+        /// <returns></returns>
+        IQueryable<T> QueryBySpec(ISpecification<T> spec);
     }
 }

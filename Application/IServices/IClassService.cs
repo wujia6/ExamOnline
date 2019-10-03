@@ -7,32 +7,14 @@ namespace Application.IServices
     /// <summary>
     /// 班级应用服务接口
     /// </summary>
-    public interface IClassService
+    public interface IClassService<T> where T : ClassRoot
     {
-        #region ###ClassInfo接口
-        bool InsertOrUpdate(ClassInfo inf);
+        bool InsertOrUpdate(T inf);
 
-        bool Remove(ISpecification<ClassInfo> spec);
+        bool Remove(ISpecification<T> spec);
 
-        ClassInfo Single(ISpecification<ClassInfo> spec);
+        T Single(ISpecification<T> spec);
 
-        IQueryable<ClassInfo> Query(ISpecification<ClassInfo> spec);
-        #endregion
-
-        #region ###ClassExam接口
-        bool Insert(ClassExam inf);
-
-        bool Remove(ISpecification<ClassExam> spec);
-
-        IQueryable<ClassExam> Query(ISpecification<ClassExam> spec);
-        #endregion
-
-        #region ###ClassTeacher接口
-        bool Insert(ClassTeacher inf);
-
-        bool Remove(ISpecification<ClassTeacher> spec);
-
-        IQueryable<ClassTeacher> Query(ISpecification<ClassTeacher> spec);
-        #endregion
+        IQueryable<T> Query(ISpecification<T> spec);
     }
 }

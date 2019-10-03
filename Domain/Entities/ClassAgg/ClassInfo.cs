@@ -7,7 +7,7 @@ namespace Domain.Entities.ClassAgg
     /// <summary>
     /// 班级实体类（聚合根）
     /// </summary>
-    public class ClassInfo : BaseEntity, IAggregateRoot
+    public class ClassInfo : ClassRoot
     {
         /// <summary>
         /// 主键

@@ -2,7 +2,7 @@
 
 namespace Domain.Entities.ClassAgg
 {
-    public class ClassExam : BaseEntity
+    public class ClassExam : ClassRoot
     {
         public override Guid ID { get; set; }
 
