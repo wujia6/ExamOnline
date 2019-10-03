@@ -4,14 +4,38 @@ using Domain.IComm;
 
 namespace Domain.IManages
 {
-    public interface IUserManage
+    /// <summary>
+    /// 领域服务用户接口
+    /// </summary>
+    /// <typeparam name="T">类型</typeparam>
+    public interface IUserManage<T> where T : UserInfo
     {
-        bool InsertOrUpdate(UserInfo inf);
+        /// <summary>
+        /// 添加或修改
+        /// </summary>
+        /// <param name="inf">实体对象</param>
+        /// <returns></returns>
+        bool InsertOrUpdate(T inf);
 
-        bool Remove(ISpecification<UserInfo> spec);
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="spec">规约表达式</param>
+        /// <returns></returns>
+        bool Remove(ISpecification<T> spec);
 
-        UserInfo FindBySpec(ISpecification<UserInfo> spec);
+        /// <summary>
+        /// 单个查找
+        /// </summary>
+        /// <param name="spec">规约表达式</param>
+        /// <returns></returns>
+        T FindBySpec(ISpecification<T> spec);
 
-        IQueryable<UserInfo> QueryBySpec(ISpecification<UserInfo> spec);
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <param name="spec">规约表达式</param>
+        /// <returns></returns>
+        IQueryable<T> QueryBySpec(ISpecification<T> spec);
     }
 }

@@ -1,38 +1,43 @@
 ﻿using System.Linq;
+using Domain.Entities;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Domain.IManages;
 
 namespace Domain.Manages
 {
-    internal class UserManage : IUserManage
+    /// <summary>
+    /// 用户领域服务实现类
+    /// </summary>
+    /// <typeparam name="T">类型</typeparam>
+    internal class UserManage<T> : IUserManage<T> where T : UserInfo
     {
-        private readonly IEfCoreRepository<UserInfo> efCore;
+        private readonly IEfCoreRepository<T> efCore;
 
-        public UserManage(IEfCoreRepository<UserInfo> ef)
+        public UserManage(IEfCoreRepository<T> ef)
         {
             this.efCore = ef;
         }
 
-        public bool InsertOrUpdate(UserInfo inf)
+        public bool InsertOrUpdate(T inf)
         {
             if (inf == null)
                 return false;
             return inf.ID == null ? efCore.UpdateEntity(inf) : efCore.InsertEntity(inf);
         }
 
-        public bool Remove(ISpecification<UserInfo> spec)
+        public bool Remove(ISpecification<T> spec)
         {
             var entity = FindBySpec(spec);
             return entity == null ? false : efCore.RemoveEntity(entity);
         }
 
-        public UserInfo FindBySpec(ISpecification<UserInfo> spec)
+        public T FindBySpec(ISpecification<T> spec)
         {
             return efCore.FindBySpec(spec);
         }
 
-        public IQueryable<UserInfo> QueryBySpec(ISpecification<UserInfo> spec)
+        public IQueryable<T> QueryBySpec(ISpecification<T> spec)
         {
             return efCore.QueryBySpec(spec);
         }

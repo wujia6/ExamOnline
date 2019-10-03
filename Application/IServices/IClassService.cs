@@ -2,21 +2,21 @@
 using Domain.Entities.ClassAgg;
 using Domain.IComm;
 
-namespace Domain.IManages
+namespace Application.IServices
 {
     /// <summary>
-    /// 领域服务班级接口
+    /// 班级应用服务接口
     /// </summary>
-    public interface IClassManage
+    public interface IClassService
     {
         #region ###ClassInfo接口
         bool InsertOrUpdate(ClassInfo inf);
 
         bool Remove(ISpecification<ClassInfo> spec);
 
-        ClassInfo FindBySpec(ISpecification<ClassInfo> spec);
+        ClassInfo Single(ISpecification<ClassInfo> spec);
 
-        IQueryable<ClassInfo> QueryBySpec(ISpecification<ClassInfo> spec);
+        IQueryable<ClassInfo> Query(ISpecification<ClassInfo> spec);
         #endregion
 
         #region ###ClassExam接口
@@ -24,7 +24,7 @@ namespace Domain.IManages
 
         bool Remove(ISpecification<ClassExam> spec);
 
-        IQueryable<ClassExam> QueryBySpec(ISpecification<ClassExam> spec);
+        IQueryable<ClassExam> Query(ISpecification<ClassExam> spec);
         #endregion
 
         #region ###ClassTeacher接口
@@ -32,7 +32,7 @@ namespace Domain.IManages
 
         bool Remove(ISpecification<ClassTeacher> spec);
 
-        IQueryable<ClassTeacher> QueryBySpec(ISpecification<ClassTeacher> spec);
+        IQueryable<ClassTeacher> Query(ISpecification<ClassTeacher> spec);
         #endregion
     }
 }
