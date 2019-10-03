@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Linq;
 using Domain.Entities.ClassAgg;
-using Domain.Entities.ExamAgg;
 
 namespace Domain.Entities.UserAgg
 {
     /// <summary>
     /// 学生实体类
     /// </summary>
-    public class Student : UserInfo, IExamAnswer
+    public class Student : UserInfo
     {
         /// <summary>
         /// 主键

@@ -1,4 +1,5 @@
-﻿using Domain.Entities.AnwserAgg;
+﻿using System.Threading.Tasks;
+using Domain.Entities.AnwserAgg;
 using Domain.Entities.ClassAgg;
 using Domain.Entities.ExamAgg;
 using Domain.Entities.QuestionAgg;
@@ -10,10 +11,8 @@ namespace Domain.Profile
 {
     public class SqlContext : DbContext, ISqlContext
     {
-        public SqlContext(DbContextOptions<SqlContext> options): base(options)
-        {
-            //构造方法
-        }
+        //构造方法
+        public SqlContext(DbContextOptions<SqlContext> options): base(options) { }
 
         //实体模型创建
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,6 +27,26 @@ namespace Domain.Profile
             modelBuilder.ApplyConfiguration(new ExamInfoConfig());
             modelBuilder.ApplyConfiguration(new AnswerInfoConfig());
             base.OnModelCreating(modelBuilder);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await this.SaveChangesAsync();
+        }
+
+        public void BeginTransaction()
+        {
+            this.Database.BeginTransaction();
+        }
+
+        public void CommitTransaction()
+        {
+            this.Database.CommitTransaction();
+        }
+
+        public void RollBackTransaction()
+        {
+            this.Database.RollbackTransaction();
         }
 
         #region ###实现ISqlContext接口
