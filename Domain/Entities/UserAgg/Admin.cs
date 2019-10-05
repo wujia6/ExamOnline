@@ -18,7 +18,7 @@ namespace Domain.Entities.UserAgg
 
         public override string Tel { get; set; }
 
-        public override DateTime CreateDate { get; set; } = DateTime.Now;
+        public override DateTime CreateDate { get; set; }
 
         public override string Remarks { get; set; }
     }
