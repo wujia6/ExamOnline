@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.DTO
 {
-    public class QuestionDto
+    public class QuestionDTO
     {
         /// <summary>
         /// 主键
@@ -43,6 +43,6 @@ namespace Application.DTO
         /// <summary>
         /// 考试信息（导航属性）
         /// </summary>
-        public ExamDto ExamInfo { get; set; }
+        public ExamDTO ExamInfo { get; set; }
     }
 }

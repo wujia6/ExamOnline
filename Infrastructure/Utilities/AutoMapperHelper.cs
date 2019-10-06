@@ -1,14 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Reflection;
 using AutoMapper;
+using AutoMapper.Attributes;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Infrastructure.Utilities
 {
     /// <summary>
     /// AutoMapper帮助类
     /// </summary>
-    public static class AutoMapperHelp
+    public static class AutoMapperHelper
     {
+        static AutoMapperHelper()
+        {
+            Assembly.GetExecutingAssembly().GetTypes().Where(p => p.BaseType.Equals(typeof(Controller))).ToList()
+                .ForEach(p =>
+                {
+                    Mapper.Initialize(c => p.Assembly.MapTypes(c));
+                });
+        }
+
         /// <summary>
         ///  类型映射
         /// </summary>
@@ -53,6 +67,16 @@ namespace Infrastructure.Utilities
             //IEnumerable<T> 类型需要创建元素的映射
             Mapper.Initialize(c => c.CreateMap<TSource, TDest>());
             return Mapper.Map<List<TDest>>(source);
+        }
+
+        /// <summary>
+        /// DataReader映射
+        /// </summary>
+        public static IEnumerable<T> DataReaderMapTo<T>(this IDataReader reader)
+        {
+            Mapper.Reset();
+            Mapper.Initialize(c => c.CreateMap<IDataReader, IEnumerable>());
+            return Mapper.Map<IDataReader, IEnumerable<T>>(reader);
         }
     }
 }

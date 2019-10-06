@@ -4,7 +4,7 @@ using Domain.Entities;
 
 namespace Application.DTO
 {
-    public class AdminDto
+    public class AdminDTO
     {
         [DataMember]
         public Guid ID { get; set; }

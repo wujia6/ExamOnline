@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Application.DTO
 {
-    public class ExamDto
+    public class ExamDTO
     {
         /// <summary>
         /// 主键
@@ -33,21 +33,21 @@ namespace Application.DTO
         /// <summary>
         /// 监考老师（导航属性）
         /// </summary>
-        public ICollection<TeacherDto> Teachers { get; set; }
+        public ICollection<TeacherDTO> Teachers { get; set; }
 
         /// <summary>
         /// 参考班级（导航属性）
         /// </summary>
-        public ICollection<ClassExamDto> ClassInfos { get; set; }
+        public ICollection<ClassExamDTO> ClassInfos { get; set; }
 
         /// <summary>
         /// 试题集合（导航属性）
         /// </summary>
-        public ICollection<QuestionDto> QuestionInfos { get; set; }
+        public ICollection<QuestionDTO> QuestionInfos { get; set; }
 
         /// <summary>
         /// 答卷集合（导航属性）
         /// </summary>
-        public ICollection<AnswerDto> AnswerInfos { get; set; }
+        public ICollection<AnswerDTO> AnswerInfos { get; set; }
     }
 }

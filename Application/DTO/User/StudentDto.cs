@@ -4,7 +4,7 @@ using Domain.Entities;
 
 namespace Application.DTO
 {
-    public class StudentDto
+    public class StudentDTO
     {
         /// <summary>
         /// 主键
@@ -84,11 +84,11 @@ namespace Application.DTO
         /// <summary>
         /// 导航属性
         /// </summary>
-        public ClassDto ClassInfo { get; set; }
+        public ClassDTO ClassInfo { get; set; }
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public ICollection<AnswerDto> AnswerInfos { get; set; }
+        public ICollection<AnswerDTO> AnswerInfos { get; set; }
     }
 }

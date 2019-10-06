@@ -2,12 +2,12 @@
 
 namespace Application.DTO
 {
-    public class ClassExamDto
+    public class ClassExamDTO
     {
         public Guid ID { get; set; }
 
-        public ClassDto ClassInfo { get; set; }
+        public ClassDTO ClassInfo { get; set; }
 
-        public ExamDto ExamInfo { get; set; }
+        public ExamDTO ExamInfo { get; set; }
     }
 }

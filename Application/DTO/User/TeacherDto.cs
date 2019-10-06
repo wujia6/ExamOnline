@@ -5,7 +5,7 @@ using Domain.Entities;
 
 namespace Application.DTO
 {
-    public class TeacherDto
+    public class TeacherDTO
     {
         /// <summary>
         /// 主键
@@ -65,6 +65,6 @@ namespace Application.DTO
         /// <summary>
         /// 导航属性
         /// </summary>
-        public ICollection<ClassTeacherDto> Classes { get; set; }
+        public ICollection<ClassTeacherDTO> Classes { get; set; }
     }
 }

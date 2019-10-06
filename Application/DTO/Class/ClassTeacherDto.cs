@@ -2,13 +2,13 @@
 
 namespace Application.DTO
 {
-    public class ClassTeacherDto
+    public class ClassTeacherDTO
     {
         public Guid ID { get; set; }
 
-        public ClassDto ClassInfo { get; set; }
+        public ClassDTO ClassInfo { get; set; }
 
-        public TeacherDto Teacher { get; set; }
+        public TeacherDTO Teacher { get; set; }
 
         public string Remarks { get; set; }
     }
