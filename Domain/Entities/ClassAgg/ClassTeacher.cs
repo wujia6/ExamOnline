@@ -9,7 +9,5 @@ namespace Domain.Entities.ClassAgg
         public virtual ClassInfo ClassInfo { get; set; }
 
         public virtual UserAgg.Teacher Teacher { get; set; }
-        
-        public override string Remarks { get; set; }
     }
 }

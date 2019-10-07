@@ -3,40 +3,42 @@ using Application.IServices;
 using Domain.Entities.ClassAgg;
 using Domain.IComm;
 using Domain.IManages;
+using Infrastructure.Utilities;
 
 namespace Application.Services
 {
-    internal class ClassService<T> : IClassService<T> where T : ClassRoot
+    internal class ClassService<TSource, TDest> : IClassService<TSource, TDest> where TSource : ClassRoot where TDest : class
     {
-        private readonly IClassManage<T> classManage;
+        private readonly IClassManage<TSource> classManage;
         private readonly ISqlContext sqlContext;
 
-        public ClassService(IClassManage<T> manage, ISqlContext context)
+        public ClassService(IClassManage<TSource> manage, ISqlContext context)
         {
             this.classManage = manage;
             this.sqlContext = context;
         }
 
-        public bool InsertOrUpdate(T inf)
+        public bool InsertOrUpdate(TDest inf)
         {
             if (inf == null)
                 return false;
-            return classManage.InsertOrUpdate(inf) ? sqlContext.SaveChanges() > 0 : false;
+            var entity = inf.MapTo<TSource>();
+            return classManage.InsertOrUpdate(entity) ? sqlContext.SaveChanges() > 0 : false;
         }
 
-        public bool Remove(ISpecification<T> spec)
+        public bool Remove(ISpecification<TSource> spec)
         {
             return classManage.Remove(spec);
         }
 
-        public T Single(ISpecification<T> spec)
+        public TDest Single(ISpecification<TSource> spec)
         {
-            return classManage.FindBySpec(spec);
+            return classManage.FindBySpec(spec).MapTo<TDest>();
         }
 
-        public IQueryable<T> Query(ISpecification<T> spec)
+        public IQueryable<TDest> Query(ISpecification<TSource> spec)
         {
-            return classManage.QueryBySpec(spec);
+            return classManage.QueryBySpec(spec).MapToList<TDest>().AsQueryable();
         }
     }
 }

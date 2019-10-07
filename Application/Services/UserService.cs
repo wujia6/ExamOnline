@@ -1,41 +1,46 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Application.IServices;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Domain.IManages;
+using Infrastructure.Utilities;
 
 namespace Application.Services
 {
-    internal class UserService<T> : IUserService<T> where T : UserInfo
+    internal class UserService<TSource, TDest> : IUserService<TSource, TDest> 
+        where TSource : UserInfo 
+        where TDest : class
     {
-        private readonly IUserManage<T> userManage;
+        private readonly IUserManage<TSource> userManage;
         private readonly ISqlContext sqlContext;
 
-        public UserService(IUserManage<T> mgr, ISqlContext sql)
+        public UserService(IUserManage<TSource> mgr, ISqlContext sql)
         {
             userManage = mgr;
             this.sqlContext = sql;
         }
 
-        public bool InsertOrUpdate(T inf)
+        public bool InsertOrUpdate(TDest inf)
         {
-            return userManage.InsertOrUpdate(inf) ? sqlContext.SaveChanges() > 0 : false;
+            if (inf == null)
+                return false;
+            var entity = inf.MapTo<TSource>();
+            return userManage.InsertOrUpdate(entity) ? sqlContext.SaveChanges() > 0 : false;
         }
 
-        public bool Remove(ISpecification<T> spec)
+        public bool Remove(ISpecification<TSource> spec)
         {
             return userManage.Remove(spec) ? sqlContext.SaveChanges() > 0 : false;
         }
 
-        public T Single(ISpecification<T> spec)
+        public TDest Single(ISpecification<TSource> spec)
         {
-            return userManage.FindBySpec(spec);
+            return userManage.FindBySpec(spec).MapTo<TDest>();
         }
 
-        public IQueryable<T> Query(ISpecification<T> spec)
+        public IQueryable<TDest> Query(ISpecification<TSource> spec)
         {
-            return userManage.QueryBySpec(spec);
+            return userManage.QueryBySpec(spec).MapToList<TDest>().AsQueryable();
         }
     }
 }

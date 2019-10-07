@@ -7,14 +7,14 @@ namespace Application.IServices
     /// <summary>
     /// 班级应用服务接口
     /// </summary>
-    public interface IClassService<T> where T : ClassRoot
+    public interface IClassService<TSource, TDest> where TSource : ClassRoot where TDest : class
     {
-        bool InsertOrUpdate(T inf);
+        bool InsertOrUpdate(TDest inf);
 
-        bool Remove(ISpecification<T> spec);
+        bool Remove(ISpecification<TSource> spec);
 
-        T Single(ISpecification<T> spec);
+        TDest Single(ISpecification<TSource> spec);
 
-        IQueryable<T> Query(ISpecification<T> spec);
+        IQueryable<TDest> Query(ISpecification<TSource> spec);
     }
 }

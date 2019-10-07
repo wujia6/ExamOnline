@@ -14,23 +14,24 @@ namespace Infrastructure.Utilities
     /// </summary>
     public static class AutoMapperHelper
     {
-        static AutoMapperHelper()
-        {
-            Assembly.GetExecutingAssembly().GetTypes().Where(p => p.BaseType.Equals(typeof(Controller))).ToList()
-                .ForEach(p =>
-                {
-                    Mapper.Initialize(c => p.Assembly.MapTypes(c));
-                });
-        }
+        //static AutoMapperHelper()
+        //{
+        //    Assembly.GetExecutingAssembly().GetTypes().Where(p => p.BaseType.Equals(typeof(Controller))).ToList()
+        //        .ForEach(p =>
+        //        {
+        //            Mapper.Initialize(c => p.Assembly.MapTypes(c));
+        //        });
+        //}
 
         /// <summary>
         ///  类型映射
         /// </summary>
-        public static TDest MapTo<TDest>(this object source)
+        public static T MapTo<T>(this object source)
         {
-            if (source == null) return default(TDest);
-            Mapper.Initialize(c => c.CreateMap(source.GetType(), typeof(TDest)));
-            return Mapper.Map<TDest>(source);
+            if (source == null)
+                return default(T);
+            Mapper.Initialize(cfg => cfg.CreateMap(source.GetType(), typeof(T)));
+            return Mapper.Map<T>(source);
         }
 
         /// <summary>

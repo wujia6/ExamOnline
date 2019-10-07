@@ -9,7 +9,5 @@ namespace Application.DTO
         public ClassDTO ClassInfo { get; set; }
 
         public TeacherDTO Teacher { get; set; }
-
-        public string Remarks { get; set; }
     }
 }
