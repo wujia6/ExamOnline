@@ -8,12 +8,12 @@ namespace Infrastructure.Repository
     public class EfCoreRepository<T> : IEfCoreRepository<T> where T : BaseEntity, IAggregateRoot
     {
         //构造方法
-        public EfCoreRepository(ISqlContext sqlcxt)
+        public EfCoreRepository(IExamDbContext sqlcxt)
         {
             this.SqlContext = sqlcxt;
         }
 
-        public ISqlContext SqlContext { get; }
+        public IExamDbContext SqlContext { get; }
 
         public IQueryable<T> EntitySet => SqlContext.Set<T>().AsQueryable();
 

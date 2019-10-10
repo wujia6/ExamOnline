@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Application.DTO;
-using Domain.Profile;
-using Domain.IComm;
-using Infrastructure.Repository;
+using Infrastructure.Utilities;
 
 namespace ExamUI
 {
@@ -39,19 +35,11 @@ namespace ExamUI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            //services.AddAutoMapper();
+            services.AddAutoMapper();
 
             //注册Autofac
             ContainerBuilder builder = new ContainerBuilder();
-            builder.Register(options => 
-                new DbContextOptionsBuilder<SqlContext>()
-                .UseSqlServer(Configuration.GetConnectionString("DbConnection"))
-                .Options).InstancePerLifetimeScope();
-            //注册服务
-            builder.RegisterType<SqlContext>().As<ISqlContext>().InstancePerLifetimeScope();
-            builder.RegisterGeneric(typeof(EfCoreRepository<>)).As(typeof(IEfCoreRepository<>)).InstancePerLifetimeScope();
-            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).Where(t=>t.Name.EndsWith("Manage")).AsImplementedInterfaces();
-            builder.RegisterAssemblyTypes(Assembly.GetExecutingAssembly()).Where(t=>t.Name.EndsWith("Service")).AsImplementedInterfaces();
+            builder.RegisterModule<AutofacModule>();
             builder.Populate(services);
             this.ApplicationContainer = builder.Build();
             return new AutofacServiceProvider(this.ApplicationContainer);

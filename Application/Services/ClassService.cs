@@ -10,9 +10,9 @@ namespace Application.Services
     internal class ClassService<TSource, TDest> : IClassService<TSource, TDest> where TSource : ClassRoot where TDest : class
     {
         private readonly IClassManage<TSource> classManage;
-        private readonly ISqlContext sqlContext;
+        private readonly IExamDbContext sqlContext;
 
-        public ClassService(IClassManage<TSource> manage, ISqlContext context)
+        public ClassService(IClassManage<TSource> manage, IExamDbContext context)
         {
             this.classManage = manage;
             this.sqlContext = context;

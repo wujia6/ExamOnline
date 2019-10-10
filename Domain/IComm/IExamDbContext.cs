@@ -8,7 +8,7 @@ using Domain.Entities.AnwserAgg;
 
 namespace Domain.IComm
 {
-    public interface ISqlContext: IUnitOfWork
+    public interface IExamDbContext: IUnitOfWork
     {
         DbSet<T> Set<T>() where T : class;
         EntityEntry Entry(object entry);

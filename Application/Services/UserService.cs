@@ -12,9 +12,9 @@ namespace Application.Services
         where TDest : class
     {
         private readonly IUserManage<TSource> userManage;
-        private readonly ISqlContext sqlContext;
+        private readonly IExamDbContext sqlContext;
 
-        public UserService(IUserManage<TSource> mgr, ISqlContext sql)
+        public UserService(IUserManage<TSource> mgr, IExamDbContext sql)
         {
             userManage = mgr;
             this.sqlContext = sql;

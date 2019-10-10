@@ -9,9 +9,9 @@ namespace Application.Services
     internal class AnswerService : IAnswerService
     {
         private readonly IAnswerManage answerManage;
-        private readonly ISqlContext sqlContext;
+        private readonly IExamDbContext sqlContext;
 
-        public AnswerService(IAnswerManage manage, ISqlContext context)
+        public AnswerService(IAnswerManage manage, IExamDbContext context)
         {
             this.answerManage = manage;
             this.sqlContext = context;

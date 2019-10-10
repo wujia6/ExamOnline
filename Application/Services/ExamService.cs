@@ -10,9 +10,9 @@ namespace Application.Services
     internal class ExamService : IExamService
     {
         private readonly IExamManage examManage;
-        private readonly ISqlContext sqlContext;
+        private readonly IExamDbContext sqlContext;
 
-        public ExamService(IExamManage manage, ISqlContext context)
+        public ExamService(IExamManage manage, IExamDbContext context)
         {
             this.examManage = manage;
             this.sqlContext = context;

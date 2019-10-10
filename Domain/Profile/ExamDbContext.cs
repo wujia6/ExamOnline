@@ -6,15 +6,22 @@ using Domain.Entities.QuestionAgg;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Domain.Profile
 {
-    public class SqlContext : DbContext, ISqlContext
+    public class ExamDbContext: DbContext, IExamDbContext
     {
-        //构造方法
-        public SqlContext(DbContextOptions<SqlContext> options): base(options) { }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+            optionsBuilder.UseSqlServer(config.GetConnectionString("ExamDbStr"));
+            base.OnConfiguring(optionsBuilder);
+        }
 
-        //实体模型创建
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new AdminConfig());
