@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
+using Application.DTO;
 using Domain.Profile;
 using Domain.IComm;
 using Infrastructure.Repository;
@@ -20,6 +22,7 @@ namespace ExamUI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            RuleConfig.Initialize();    //加载DTO转换配置
         }
 
         public IConfiguration Configuration { get; }
@@ -36,6 +39,8 @@ namespace ExamUI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            //services.AddAutoMapper();
+
             //注册Autofac
             ContainerBuilder builder = new ContainerBuilder();
             builder.Register(options => 
