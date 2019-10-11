@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Reflection;
 using AutoMapper;
 
-namespace Infrastructure.Utilities
+namespace Infrastructure.Utils
 {
     /// <summary>
     /// AutoMapper帮助类

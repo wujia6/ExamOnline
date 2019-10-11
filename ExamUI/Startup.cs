@@ -9,7 +9,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Application.DTO;
-using Infrastructure.Utilities;
+using Infrastructure.Utils;
 
 namespace ExamUI
 {
@@ -24,7 +24,7 @@ namespace ExamUI
         public IConfiguration Configuration { get; }
 
         public IContainer ApplicationContainer { get; private set; }
-
+        
         //DI注册容器组件服务
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {

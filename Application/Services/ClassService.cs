@@ -3,7 +3,7 @@ using Application.IServices;
 using Domain.Entities.ClassAgg;
 using Domain.IComm;
 using Domain.IManages;
-using Infrastructure.Utilities;
+using Infrastructure.Utils;
 
 namespace Application.Services
 {

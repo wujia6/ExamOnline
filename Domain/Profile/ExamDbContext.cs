@@ -12,6 +12,8 @@ namespace Domain.Profile
 {
     public class ExamDbContext: DbContext, IExamDbContext
     {
+        public ExamDbContext(DbContextOptions<ExamDbContext> options) : base(options) { }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var config = new ConfigurationBuilder()
