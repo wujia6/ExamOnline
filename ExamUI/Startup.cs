@@ -30,7 +30,7 @@ namespace ExamUI
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // 这个λ决定用户是否同意不必要的饼干是必要的对于一个给定的请求。
+                // 这个λ决定用户是否同意不必要的cookie是必要的对于一个给定的请求。
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });

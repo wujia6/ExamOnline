@@ -12,7 +12,7 @@ namespace Domain.Entities
         /// <returns></returns>
         public static T CreateInstance<T>(params object[] parms)
         {
-            var obj = Activator.CreateInstance(typeof(T));
+            T obj = (T)Activator.CreateInstance(typeof(T));
             var props = typeof(T).GetProperties();
             if (parms.Length > 0)
             {
@@ -22,7 +22,7 @@ namespace Domain.Entities
                     property.SetValue(obj, parms[i]);
                 }
             }
-            return (T)obj;
+            return obj;
         }
     }
 }

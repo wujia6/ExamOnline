@@ -10,7 +10,7 @@ namespace Domain.IComm
     public interface IEfCoreRepository<T> where T: BaseEntity, IAggregateRoot
     {
         //数据上下文接口对象
-        IExamDbContext SqlContext { get; }
+        IExamDbContext SourceDbContext { get; }
 
         //数据表对象
         IQueryable<T> EntitySet { get; }
