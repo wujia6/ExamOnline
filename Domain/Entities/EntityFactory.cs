@@ -16,7 +16,7 @@ namespace Domain.Entities
             var props = typeof(T).GetProperties();
             if (parms.Length > 0)
             {
-                for (int i = 0; i < props.Length; i++)
+                for (int i = 0; i < parms.Length; i++)
                 {
                     var property = props[i];
                     property.SetValue(obj, parms[i]);

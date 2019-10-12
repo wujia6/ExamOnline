@@ -13,7 +13,7 @@ namespace Domain.Entities.QuestionAgg
         /// <summary>
         /// 主键
         /// </summary>
-        public override Guid ID { get; set; }
+        //public override Guid ID { get; set; }
 
         /// <summary>
         /// 试题类别
@@ -43,7 +43,7 @@ namespace Domain.Entities.QuestionAgg
         /// <summary>
         /// 备注
         /// </summary>
-        public override string Remarks { get; set; }
+        //public override string Remarks { get; set; }
 
         /// <summary>
         /// 考试信息（导航属性）

@@ -4,8 +4,8 @@ namespace Domain.Entities
 {
     public abstract class BaseEntity
     {
-        public abstract Guid ID { get; set; }
+        public Guid ID { get; set; }
 
-        public virtual string Remarks { get; set; }
+        public string Remarks { get; set; } = string.Empty;
     }
 }

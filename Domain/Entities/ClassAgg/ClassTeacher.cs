@@ -4,7 +4,7 @@ namespace Domain.Entities.ClassAgg
 {
     public class ClassTeacher : ClassRoot
     {
-        public override Guid ID { get; set; }
+        //public override Guid ID { get; set; }
 
         public virtual ClassInfo ClassInfo { get; set; }
 

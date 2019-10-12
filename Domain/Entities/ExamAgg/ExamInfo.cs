@@ -14,7 +14,7 @@ namespace Domain.Entities.ExamAgg
         /// <summary>
         /// 主键
         /// </summary>
-        public override Guid ID { get; set; }
+        //public override Guid ID { get; set; }
 
         /// <summary>
         /// 标题
@@ -34,26 +34,26 @@ namespace Domain.Entities.ExamAgg
         /// <summary>
         /// 备注
         /// </summary>
-        public override string Remarks { get; set; }
+        //public override string Remarks { get; set; }
 
         /// <summary>
         /// 监考老师（导航属性）
         /// </summary>
-        public virtual IQueryable<UserAgg.Teacher> Teachers { get; set; }
+        public virtual IQueryable<UserAgg.Teacher> Teachers { get; set; } = new List<UserAgg.Teacher>().AsQueryable();
 
         /// <summary>
         /// 参考班级（导航属性）
         /// </summary>
-        public virtual IQueryable<ClassAgg.ClassExam> ClassInfos { get; set; }
+        public virtual IQueryable<ClassAgg.ClassExam> ClassInfos { get; set; } = new List<ClassAgg.ClassExam>().AsQueryable();
 
         /// <summary>
         /// 试题集合（导航属性）
         /// </summary>
-        public virtual IQueryable<QuestionAgg.QuestionInfo> QuestionInfos { get; set; }
+        public virtual IQueryable<QuestionAgg.QuestionInfo> QuestionInfos { get; set; } = new List<QuestionAgg.QuestionInfo>().AsQueryable();
 
         /// <summary>
         /// 答卷集合（导航属性）
         /// </summary>
-        public virtual IQueryable<AnwserAgg.AnswerInfo> AnswerInfos { get; set; }
+        public virtual IQueryable<AnwserAgg.AnswerInfo> AnswerInfos { get; set; } = new List<AnwserAgg.AnswerInfo>().AsQueryable();
     }
 }

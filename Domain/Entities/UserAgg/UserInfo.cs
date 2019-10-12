@@ -8,18 +8,18 @@ namespace Domain.Entities.UserAgg
     /// </summary>
     public abstract class UserInfo : BaseEntity, IAggregateRoot
     {
-        public abstract string Account { get; set; }
+        public string Account { get; set; }
 
-        public abstract string Pwd { get; set; }
+        public string Pwd { get; set; }
 
-        public abstract string Name { get; set; }
+        public string Name { get; set; }
 
-        public abstract Gender Gender { get; set; }
+        public Gender Gender { get; set; }
 
-        public abstract int Age { get; set; }
+        public int Age { get; set; }
 
-        public abstract string Tel { get; set; }
+        public string Tel { get; set; }
 
-        public abstract DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 }

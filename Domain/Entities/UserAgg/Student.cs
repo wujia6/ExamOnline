@@ -12,17 +12,17 @@ namespace Domain.Entities.UserAgg
         /// <summary>
         /// 主键
         /// </summary>
-        public override Guid ID { get; set; }
+        //public override Guid ID { get; set; }
 
         /// <summary>
         /// 账号
         /// </summary>
-        public override string Account { get; set; }
+        //public override string Account { get; set; }
 
         /// <summary>
         /// 密码
         /// </summary>
-        public override string Pwd { get; set; }
+        //public override string Pwd { get; set; }
 
         /// <summary>
         /// 学号
@@ -32,17 +32,17 @@ namespace Domain.Entities.UserAgg
         /// <summary>
         /// 姓名
         /// </summary>
-        public override string Name { get; set; }
+        //public override string Name { get; set; }
 
         /// <summary>
         /// 性别
         /// </summary>
-        public override Gender Gender { get; set; }
+        //public override Gender Gender { get; set; }
 
         /// <summary>
         /// 年龄
         /// </summary>
-        public override int Age { get; set; }
+        //public override int Age { get; set; }
 
         /// <summary>
         /// 身份证
@@ -52,7 +52,7 @@ namespace Domain.Entities.UserAgg
         /// <summary>
         /// 电话
         /// </summary>
-        public override string Tel { get; set; }
+        //public override string Tel { get; set; }
 
         /// <summary>
         /// 监护人电话
@@ -77,12 +77,12 @@ namespace Domain.Entities.UserAgg
         /// <summary>
         /// 创建时间
         /// </summary>
-        public override DateTime CreateDate { get; set; } = DateTime.Now;
+        //public override DateTime CreateDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// 备注
         /// </summary>
-        public override string Remarks { get; set; }
+        //public override string Remarks { get; set; }
 
         /// <summary>
         /// 导航属性

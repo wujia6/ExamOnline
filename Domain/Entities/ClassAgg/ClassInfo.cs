@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Domain.IComm;
+using Domain.Entities.UserAgg;
 
 namespace Domain.Entities.ClassAgg
 {
@@ -12,7 +13,7 @@ namespace Domain.Entities.ClassAgg
         /// <summary>
         /// 主键
         /// </summary>
-        public override Guid ID { get; set; }
+        //public override Guid ID { get; set; }
 
         /// <summary>
         /// 名称
@@ -42,21 +43,21 @@ namespace Domain.Entities.ClassAgg
         /// <summary>
         /// 备注
         /// </summary>
-        public override string Remarks { get; set; }
+        //public override string Remarks { get; set; }
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<ClassExam> ExamInfos { get; set; }
+        public virtual IQueryable<ClassExam> ExamInfos { get; set; } = new List<ClassExam>().AsQueryable();
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<UserAgg.Student> Students { get; set; }
+        public virtual IQueryable<Student> Students { get; set; } = new List<Student>().AsQueryable();
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<ClassTeacher> Teachers { get; set; }
+        public virtual IQueryable<ClassTeacher> Teachers { get; set; } = new List<ClassTeacher>().AsQueryable();
     }
 }

@@ -8,7 +8,7 @@ namespace Domain.Entities.AnwserAgg
         /// <summary>
         /// 主键
         /// </summary>
-        public override Guid ID { get; set; }
+        //public override Guid ID { get; set; }
 
         /// <summary>
         /// 结果
@@ -23,11 +23,11 @@ namespace Domain.Entities.AnwserAgg
         /// <summary>
         /// 考试信息（导航属性）
         /// </summary>
-        public virtual ExamAgg.ExamInfo ExamInfo { get; set; }
+        public virtual ExamAgg.ExamInfo ExamInfo { get; set; } = new ExamAgg.ExamInfo();
 
         /// <summary>
         /// 学生信息（导航属性）
         /// </summary>
-        public virtual UserAgg.Student Student { get; set; }
+        public virtual UserAgg.Student Student { get; set; } = new UserAgg.Student();
     }
 }
