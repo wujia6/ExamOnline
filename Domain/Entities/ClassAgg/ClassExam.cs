@@ -1,9 +1,14 @@
-﻿namespace Domain.Entities.ClassAgg
+﻿using System.Runtime.Serialization;
+using Domain.Entities.ExamAgg;
+
+namespace Domain.Entities.ClassAgg
 {
     public class ClassExam : ClassRoot
     {
+        [DataMember]
         public virtual ClassInfo ClassInfo { get; set; } = EntityFactory.CreateInstance<ClassInfo>();
 
-        public virtual ExamAgg.ExamInfo ExamInfo { get; set; } = EntityFactory.CreateInstance<ExamAgg.ExamInfo>();
+        [DataMember]
+        public virtual ExamInfo ExamInfo { get; set; } = EntityFactory.CreateInstance<ExamAgg.ExamInfo>();
     }
 }

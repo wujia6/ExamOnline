@@ -7,7 +7,7 @@ namespace Application.DTO
     public class AdminDTO
     {
         [DataMember]
-        public Guid ID { get; set; }
+        public int ID { get; set; }
 
         [DataMember]
         public string Account { get; set; }

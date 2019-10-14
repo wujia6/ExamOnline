@@ -22,8 +22,8 @@ namespace Domain.Entities.ClassAgg
         public void Configure(EntityTypeBuilder<ClassTeacher> builder)
         {
             builder.HasKey(e => e.ID);
-            builder.HasOne(s => s.ClassInfo).WithMany(m => m.TeacherInfos);
-            builder.HasOne(s => s.TeacherInfo).WithMany(m => m.ClassInfos);
+            builder.HasOne(s => s.ClassInfo).WithMany(m => m.ClassTeachers);
+            builder.HasOne(s => s.TeacherInfo).WithMany(m => m.ClassTeachers);
         }
     }
 
@@ -32,8 +32,8 @@ namespace Domain.Entities.ClassAgg
         public void Configure(EntityTypeBuilder<ClassExam> builder)
         {
             builder.HasKey(e => e.ID);
-            builder.HasOne(s => s.ClassInfo).WithMany(m => m.ExamInfos);
-            builder.HasOne(s => s.ExamInfo).WithMany(m => m.ClassInfos);
+            builder.HasOne(s => s.ClassInfo).WithMany(m => m.ClassExams);
+            builder.HasOne(s => s.ExamInfo).WithMany(m => m.ClassExams);
         }
     }
 }

@@ -7,15 +7,17 @@ using Infrastructure.Utils;
 
 namespace Application.Services
 {
-    internal class ClassService<TSource, TDest> : IClassService<TSource, TDest> where TSource : ClassRoot where TDest : class
+    internal class ClassService<TSource, TDest> : IClassService<TSource, TDest> 
+        where TSource : ClassRoot 
+        where TDest : class
     {
         private readonly IClassManage<TSource> classManage;
-        private readonly IExamDbContext sqlContext;
+        private readonly IExamDbContext examContext;
 
         public ClassService(IClassManage<TSource> manage, IExamDbContext context)
         {
             this.classManage = manage;
-            this.sqlContext = context;
+            this.examContext = context;
         }
 
         public bool InsertOrUpdate(TDest inf)
@@ -23,7 +25,7 @@ namespace Application.Services
             if (inf == null)
                 return false;
             var entity = inf.MapTo<TSource>();
-            return classManage.InsertOrUpdate(entity) ? sqlContext.SaveChanges() > 0 : false;
+            return classManage.InsertOrUpdate(entity) ? examContext.SaveChanges() > 0 : false;
         }
 
         public bool Remove(ISpecification<TSource> spec)
@@ -38,7 +40,7 @@ namespace Application.Services
 
         public IQueryable<TDest> Query(ISpecification<TSource> spec)
         {
-            return classManage.QueryBySpec(spec).MapToList<TDest>().AsQueryable();
+            return classManage.QueryBySpec(spec).MapToList<TDest>();
         }
     }
 }

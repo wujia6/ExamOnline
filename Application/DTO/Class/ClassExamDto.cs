@@ -1,13 +1,16 @@
-﻿using System;
+﻿using System.Runtime.Serialization;
 
 namespace Application.DTO
 {
     public class ClassExamDTO
     {
-        public Guid ID { get; set; }
+        [DataMember]
+        public int ID { get; set; }
 
-        public ClassDTO ClassInfo { get; set; }
+        [DataMember]
+        public ClassDTO ClassDto { get; set; }
 
-        public ExamDTO ExamInfo { get; set; }
+        [DataMember]
+        public ExamDTO ExamDto { get; set; }
     }
 }

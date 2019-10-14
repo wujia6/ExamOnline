@@ -15,17 +15,17 @@ namespace UnitTest
         [TestMethod]
         public void UserAggTest()
         {
-            //var userInfo = EntityFactory.CreateInstance<Admin>(new object[] {
-            //    1,
-            //    "administrator",
-            //    "password",
-            //    "wujia",
-            //    Gender.男,
-            //    38,
-            //    "18673968186",
-            //    DateTime.Now,
-            //    "暂无"
-            //});
+            var admin = EntityFactory.CreateInstance<AdminInfo>(new object[] {
+                1,
+                "administrator",
+                "password",
+                "wujia",
+                Gender.男,
+                38,
+                "18673968186",
+                DateTime.Now,
+                "暂无"
+            });
 
             var teacher = EntityFactory.CreateInstance<TeacherInfo>(new object[] {
                 "软件工程",

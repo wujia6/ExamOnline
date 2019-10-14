@@ -10,12 +10,12 @@ namespace Infrastructure.Repository
         //构造方法
         public EfCoreRepository(IExamDbContext context)
         {
-            this.SourceDbContext = context;
+            this.DBContext = context;
         }
 
-        public IExamDbContext SourceDbContext { get; }
+        public IExamDbContext DBContext { get; }
 
-        public IQueryable<T> EntitySet => SourceDbContext.Set<T>().AsQueryable();
+        public IQueryable<T> EntitySet => DBContext.Set<T>().AsQueryable();
 
         /// <summary>
         /// 插入
@@ -24,7 +24,7 @@ namespace Infrastructure.Repository
         /// <returns></returns>
         public bool InsertEntity(T entity)
         {
-            SourceDbContext.Entry(entity).State = EntityState.Added;
+            DBContext.Entry(entity).State = EntityState.Added;
             return true;
         }
 
@@ -35,7 +35,7 @@ namespace Infrastructure.Repository
         /// <returns></returns>
         public bool RemoveEntity(T entity)
         {
-            SourceDbContext.Entry(entity).State = EntityState.Deleted;
+            DBContext.Entry(entity).State = EntityState.Deleted;
             return true;
         }
 
@@ -46,7 +46,7 @@ namespace Infrastructure.Repository
         /// <returns></returns>
         public bool UpdateEntity(T entity)
         {
-            SourceDbContext.Entry(entity).State = EntityState.Modified;
+            DBContext.Entry(entity).State = EntityState.Modified;
             return true;
         }
 

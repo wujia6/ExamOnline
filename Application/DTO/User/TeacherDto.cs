@@ -1,69 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using Domain.Entities;
 
 namespace Application.DTO
 {
     public class TeacherDTO
     {
-        /// <summary>
-        /// 主键
-        /// </summary>
-        public Guid ID { get; set; }
+        [DataMember]
+        public int ID { get; set; }
 
-        /// <summary>
-        /// 账号
-        /// </summary>
+        [DataMember]
         public string Account { get; set; }
 
-        /// <summary>
-        /// 密码
-        /// </summary>
+        [DataMember]
         public string Pwd { get; set; }
 
-        /// <summary>
-        /// 名称
-        /// </summary>
+        [DataMember]
         public string Name { get; set; }
 
-        /// <summary>
-        /// 性别
-        /// </summary>
+        [DataMember]
         public Gender Gender { get; set; }
 
-        /// <summary>
-        /// 年龄
-        /// </summary>
+        [DataMember]
         public int Age { get; set; }
 
-        /// <summary>
-        /// 电话
-        /// </summary>
+        [DataMember]
         public string Tel { get; set; }
 
-        /// <summary>
-        /// 专业
-        /// </summary>
+        [DataMember]
         public string Profssion { get; set; }
 
-        /// <summary>
-        /// 课程
-        /// </summary>
+        [DataMember]
         public CommType Course { get; set; }
 
-        /// <summary>
-        /// 创建时间
-        /// </summary>
+        [DataMember]
         public DateTime CreateDate { get; set; }
 
-        /// <summary>
-        /// 备注
-        /// </summary>
+        [DataMember]
         public string Remarks { get; set; }
 
-        /// <summary>
-        /// 导航属性
-        /// </summary>
-        public ICollection<ClassTeacherDTO> Classes { get; set; }
+        [DataMember]
+        public IQueryable<ClassTeacherDTO> ClassTeacherDtos { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Application.DTO;
 using Domain.Entities.ExamAgg;
 using Domain.IComm;
 
@@ -14,7 +15,7 @@ namespace Application.IServices
         /// </summary>
         /// <param name="inf">实体对象</param>
         /// <returns></returns>
-        bool InsertOrUpdate(ExamInfo inf);
+        bool InsertOrUpdate(ExamDTO inf);
 
         /// <summary>
         /// 删除
@@ -28,13 +29,13 @@ namespace Application.IServices
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        ExamInfo Single(ISpecification<ExamInfo> spec);
+        ExamDTO Single(ISpecification<ExamInfo> spec);
 
         /// <summary>
         /// 查询
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        IQueryable<ExamInfo> Query(ISpecification<ExamInfo> spec);
+        IQueryable<ExamDTO> Query(ISpecification<ExamInfo> spec);
     }
 }

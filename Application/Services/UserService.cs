@@ -12,12 +12,12 @@ namespace Application.Services
         where TDest : class
     {
         private readonly IUserManage<TSource> userManage;
-        private readonly IExamDbContext sqlContext;
+        private readonly IExamDbContext examContext;
 
-        public UserService(IUserManage<TSource> mgr, IExamDbContext sql)
+        public UserService(IUserManage<TSource> manage, IExamDbContext context)
         {
-            userManage = mgr;
-            this.sqlContext = sql;
+            userManage = manage;
+            this.examContext = context;
         }
 
         public bool InsertOrUpdate(TDest inf)
@@ -25,12 +25,12 @@ namespace Application.Services
             if (inf == null)
                 return false;
             var entity = inf.MapTo<TSource>();
-            return userManage.InsertOrUpdate(entity) ? sqlContext.SaveChanges() > 0 : false;
+            return userManage.InsertOrUpdate(entity) ? examContext.SaveChanges() > 0 : false;
         }
 
         public bool Remove(ISpecification<TSource> spec)
         {
-            return userManage.Remove(spec) ? sqlContext.SaveChanges() > 0 : false;
+            return userManage.Remove(spec) ? examContext.SaveChanges() > 0 : false;
         }
 
         public TDest Single(ISpecification<TSource> spec)
@@ -40,7 +40,7 @@ namespace Application.Services
 
         public IQueryable<TDest> Query(ISpecification<TSource> spec)
         {
-            return userManage.QueryBySpec(spec).MapToList<TDest>().AsQueryable();
+            return userManage.QueryBySpec(spec).MapToList<TDest>();
         }
     }
 }

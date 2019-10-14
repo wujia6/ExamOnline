@@ -1,53 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Application.DTO
 {
     public class ExamDTO
     {
-        /// <summary>
-        /// 主键
-        /// </summary>
-        public Guid ID { get; set; }
+        [DataMember]
+        public int ID { get; set; }
 
-        /// <summary>
-        /// 标题
-        /// </summary>
+        [DataMember]
         public string Title { get; set; }
 
-        /// <summary>
-        /// 开始时间
-        /// </summary>
+        [DataMember]
         public DateTime BeginTime { get; set; }
 
-        /// <summary>
-        /// 结束时间
-        /// </summary>
+        [DataMember]
         public DateTime EndTime { get; set; }
 
-        /// <summary>
-        /// 备注
-        /// </summary>
+        [DataMember]
         public string Remarks { get; set; }
 
-        /// <summary>
-        /// 监考老师（导航属性）
-        /// </summary>
-        public ICollection<TeacherDTO> Teachers { get; set; }
+        [DataMember]
+        public IQueryable<TeacherDTO> TeacherDtos { get; set; }
 
-        /// <summary>
-        /// 参考班级（导航属性）
-        /// </summary>
-        public ICollection<ClassExamDTO> ClassInfos { get; set; }
+        [DataMember]
+        public IQueryable<ClassExamDTO> ClassExamDtos { get; set; }
 
-        /// <summary>
-        /// 试题集合（导航属性）
-        /// </summary>
-        public ICollection<QuestionDTO> QuestionInfos { get; set; }
+        [DataMember]
+        public IQueryable<QuestionDTO> QuestionDtos { get; set; }
 
-        /// <summary>
-        /// 答卷集合（导航属性）
-        /// </summary>
-        public ICollection<AnswerDTO> AnswerInfos { get; set; }
+        [DataMember]
+        public IQueryable<AnswerDTO> AnswerDtos { get; set; }
     }
 }

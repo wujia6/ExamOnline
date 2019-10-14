@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Domain.Entities.UserAgg;
 
 namespace Domain.Entities.ClassAgg
@@ -13,16 +14,19 @@ namespace Domain.Entities.ClassAgg
         /// <summary>
         /// 名称
         /// </summary>
+        [DataMember]
         public string Name { get; set; }
 
         /// <summary>
         /// 年级
         /// </summary>
+        [DataMember]
         public ClassGrade Grade { get; set; } = ClassGrade.一年级;
 
         /// <summary>
         /// 类别
         /// </summary>
+        [DataMember]
         public CommType Category { get; set; } = CommType.专业班;
 
         /// <summary>
@@ -33,21 +37,25 @@ namespace Domain.Entities.ClassAgg
         /// <summary>
         /// 状态
         /// </summary>
+        [DataMember]
         public ClassStatus Status { get; set; } = ClassStatus.未启用;
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<ClassExam> ExamInfos { get; set; } = new List<ClassExam>().AsQueryable();
+        [DataMember]
+        public virtual IQueryable<ClassExam> ClassExams { get; set; } = new List<ClassExam>().AsQueryable();
 
         /// <summary>
         /// 导航属性
         /// </summary>
+        [DataMember]
         public virtual IQueryable<StudentInfo> StudentInfos { get; set; } = new List<StudentInfo>().AsQueryable();
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<ClassTeacher> TeacherInfos { get; set; } = new List<ClassTeacher>().AsQueryable();
+        [DataMember]
+        public virtual IQueryable<ClassTeacher> ClassTeachers { get; set; } = new List<ClassTeacher>().AsQueryable();
     }
 }

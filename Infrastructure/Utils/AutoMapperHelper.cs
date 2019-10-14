@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using AutoMapper;
 
@@ -47,6 +48,20 @@ namespace Infrastructure.Utils
                 break;
             }
             return Mapper.Map<List<TDestination>>(source);
+        }
+
+        /// <summary>
+        /// 集合列表类型映射
+        /// </summary>
+        public static IQueryable<TDestination> MapToList<TDestination>(this IQueryable source)
+        {
+            foreach (var first in source)
+            {
+                var type = first.GetType();
+                Mapper.Initialize(c => c.CreateMap(type, typeof(TDestination)));
+                break;
+            }
+            return Mapper.Map<IQueryable<TDestination>>(source);
         }
 
         /// <summary>

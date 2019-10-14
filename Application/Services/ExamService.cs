@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Application.DTO;
 using Application.IServices;
 using Domain.Entities.ExamAgg;
 using Domain.IComm;
@@ -10,34 +11,35 @@ namespace Application.Services
     internal class ExamService : IExamService
     {
         private readonly IExamManage examManage;
-        private readonly IExamDbContext sqlContext;
+        private readonly IExamDbContext examContext;
 
         public ExamService(IExamManage manage, IExamDbContext context)
         {
             this.examManage = manage;
-            this.sqlContext = context;
+            this.examContext = context;
         }
 
-        public bool InsertOrUpdate(ExamInfo inf)
+        public bool InsertOrUpdate(ExamDTO inf)
         {
             if (inf == null)
                 return false;
-            return examManage.InsertOrUpdate(inf) ? sqlContext.SaveChanges() > 0 : false;
+            var entity = inf.MapTo<ExamInfo>();
+            return examManage.InsertOrUpdate(entity) ? examContext.SaveChanges() > 0 : false;
         }
 
         public bool Remove(ISpecification<ExamInfo> spec)
         {
-            return examManage.Remove(spec) ? sqlContext.SaveChanges() > 0 : false;
+            return examManage.Remove(spec) ? examContext.SaveChanges() > 0 : false;
         }
 
-        public ExamInfo Single(ISpecification<ExamInfo> spec)
+        public ExamDTO Single(ISpecification<ExamInfo> spec)
         {
-            return examManage.FindBySpec(spec);
+            return examManage.FindBySpec(spec).MapTo<ExamDTO>();
         }
 
-        public IQueryable<ExamInfo> Query(ISpecification<ExamInfo> spec)
+        public IQueryable<ExamDTO> Query(ISpecification<ExamInfo> spec)
         {
-            return examManage.QueryBySpec(spec);
+            return examManage.QueryBySpec(spec).MapToList<ExamDTO>();
         }
     }
 }

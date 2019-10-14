@@ -1,48 +1,32 @@
-﻿using System;
+﻿using System.Runtime.Serialization;
 using Domain.Entities;
 
 namespace Application.DTO
 {
     public class QuestionDTO
     {
-        /// <summary>
-        /// 主键
-        /// </summary>
-        public Guid ID { get; set; }
+        [DataMember]
+        public int ID { get; set; }
 
-        /// <summary>
-        /// 试题类别
-        /// </summary>
+        [DataMember]
         public CommType Category { get; set; }
 
-        /// <summary>
-        /// 等级
-        /// </summary>
+        [DataMember]
         public CommType Level { get; set; }
 
-        /// <summary>
-        /// 试题标题
-        /// </summary>
+        [DataMember]
         public string Title { get; set; }
 
-        /// <summary>
-        /// 试题类容
-        /// </summary>
+        [DataMember]
         public string Contents { get; set; }
 
-        /// <summary>
-        /// 试题答案
-        /// </summary>
+        [DataMember]
         public string Answer { get; set; }
 
-        /// <summary>
-        /// 备注
-        /// </summary>
+        [DataMember]
         public string Remarks { get; set; }
 
-        /// <summary>
-        /// 考试信息（导航属性）
-        /// </summary>
-        public ExamDTO ExamInfo { get; set; }
+        [DataMember]
+        public ExamDTO ExamDto { get; set; }
     }
 }

@@ -12,18 +12,19 @@ namespace Domain.Entities
         /// <returns></returns>
         public static T CreateInstance<T>(params object[] parms)
         {
-            int index = 0;
             T obj = (T)Activator.CreateInstance(typeof(T));
-            if (parms.Length == 0 || parms== null)
-                return obj;
-            var props = typeof(T).GetProperties();
-            foreach (var prop in props)
+            if (parms.Length > 0)
             {
-                //index = Array.FindIndex(props, p => p.Name == prop.Name);
-                if (!prop.PropertyType.IsGenericType && prop.PropertyType.IsValueType || prop.PropertyType.Equals(typeof(string)))
+                int index = 0;
+                var props = typeof(T).GetProperties();
+                foreach (var prop in props)
                 {
-                    prop.SetValue(obj, parms[index]);
-                    index++;
+                    //index = Array.FindIndex(props, p => p.Name == prop.Name);
+                    if (!prop.PropertyType.IsGenericType && prop.PropertyType.IsValueType || prop.PropertyType.Equals(typeof(string)))
+                    {
+                        prop.SetValue(obj, parms[index]);
+                        index++;
+                    }
                 }
             }
             return obj;

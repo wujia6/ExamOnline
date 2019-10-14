@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using Domain.Entities.AnwserAgg;
 using Domain.Entities.ClassAgg;
 
 namespace Domain.Entities.UserAgg
@@ -12,41 +14,49 @@ namespace Domain.Entities.UserAgg
         /// <summary>
         /// 学号
         /// </summary>
+        [DataMember]
         public string StudentNo { get; set; }
 
         /// <summary>
         /// 身份证
         /// </summary>
+        [DataMember]
         public string IdentityNo { get; set; }
 
         /// <summary>
         /// 监护人电话
         /// </summary>
+        [DataMember]
         public string ParentTel { get; set; }
 
         /// <summary>
         /// 地区
         /// </summary>
+        [DataMember]
         public string District { get; set; }
 
         /// <summary>
         /// 地址
         /// </summary>
+        [DataMember]
         public string Address { get; set; }
 
         /// <summary>
         /// 寝室号
         /// </summary>
+        [DataMember]
         public string Dormitory { get; set; }
 
         /// <summary>
         /// 导航属性
         /// </summary>
+        [DataMember]
         public virtual ClassInfo ClassInfo { get; set; } = EntityFactory.CreateInstance<ClassInfo>();
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<AnwserAgg.AnswerInfo> AnswerInfos { get; set; } = new List<AnwserAgg.AnswerInfo>().AsQueryable();
+        [DataMember]
+        public virtual IQueryable<AnswerInfo> AnswerInfos { get; set; } = new List<AnswerInfo>().AsQueryable();
     }
 }
