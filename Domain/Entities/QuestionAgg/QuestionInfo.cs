@@ -1,6 +1,4 @@
-﻿using System;
-using Domain.Entities.ExamAgg;
-using Domain.Entities.UserAgg;
+﻿using Domain.Entities.ExamAgg;
 using Domain.IComm;
 
 namespace Domain.Entities.QuestionAgg
@@ -10,11 +8,6 @@ namespace Domain.Entities.QuestionAgg
     /// </summary>
     public class QuestionInfo : BaseEntity, IAggregateRoot
     {
-        /// <summary>
-        /// 主键
-        /// </summary>
-        //public override Guid ID { get; set; }
-
         /// <summary>
         /// 试题类别
         /// </summary>
@@ -39,11 +32,6 @@ namespace Domain.Entities.QuestionAgg
         /// 试题答案
         /// </summary>
         public string Answer { get; set; }
-
-        /// <summary>
-        /// 备注
-        /// </summary>
-        //public override string Remarks { get; set; }
 
         /// <summary>
         /// 考试信息（导航属性）

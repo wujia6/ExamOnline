@@ -24,7 +24,7 @@ namespace Application.DTO
         /// <summary>
         /// 类别
         /// </summary>
-        public ClassCategory Category { get; set; }
+        public CommType Category { get; set; }
 
         /// <summary>
         /// 创建日期

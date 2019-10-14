@@ -9,7 +9,7 @@ namespace Domain.Manages
     /// 用户领域服务实现类
     /// </summary>
     /// <typeparam name="T">类型</typeparam>
-    internal class UserManage<T> : IUserManage<T> where T : UserInfo
+    internal class UserManage<T> : IUserManage<T> where T : UserRoot
     {
         private readonly IEfCoreRepository<T> efCore;
 
@@ -22,7 +22,7 @@ namespace Domain.Manages
         {
             if (inf == null)
                 return false;
-            return inf.ID == null ? efCore.UpdateEntity(inf) : efCore.InsertEntity(inf);
+            return inf.ID > 0 ? efCore.UpdateEntity(inf) : efCore.InsertEntity(inf);
         }
 
         public bool Remove(ISpecification<T> spec)

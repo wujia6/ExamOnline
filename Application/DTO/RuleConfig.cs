@@ -14,17 +14,17 @@ namespace Application.DTO
     {
         public RuleConfig()
         {
-            CreateMap<AdminDTO, Admin>();
-            CreateMap<Admin, AdminDTO>();
+            CreateMap<AdminDTO, AdminInfo>();
+            CreateMap<AdminInfo, AdminDTO>();
 
-            CreateMap<TeacherDTO, Teacher>()
-                .ForMember(dest => dest.Classes, opts => opts.MapFrom(src => src.Classes));
-            CreateMap<Teacher, TeacherDTO>();
+            CreateMap<TeacherDTO, TeacherInfo>()
+                .ForMember(dest => dest.ClassInfos, opts => opts.MapFrom(src => src.Classes));
+            CreateMap<TeacherInfo, TeacherDTO>();
 
-            CreateMap<StudentDTO, Student>()
+            CreateMap<StudentDTO, StudentInfo>()
                 .ForMember(dest => dest.ClassInfo, opts => opts.MapFrom(src => src.ClassInfo))
                 .ForMember(dest => dest.AnswerInfos, opts => opts.MapFrom(src => src.AnswerInfos));
-            CreateMap<Student, StudentDTO>();
+            CreateMap<StudentInfo, StudentDTO>();
 
             CreateMap<QuestionDTO, QuestionInfo>()
                 .ForMember(dest => dest.ExamInfo, opts => opts.MapFrom(src => src.ExamInfo));
@@ -39,8 +39,8 @@ namespace Application.DTO
 
             CreateMap<ClassDTO, ClassInfo>()
                 .ForMember(dest => dest.ExamInfos, opts => opts.MapFrom(src => src.ExamInfos))
-                .ForMember(dest => dest.Teachers, opts => opts.MapFrom(src => src.Teachers))
-                .ForMember(dest => dest.Students, opts => opts.MapFrom(src => src.Students));
+                .ForMember(dest => dest.TeacherInfos, opts => opts.MapFrom(src => src.Teachers))
+                .ForMember(dest => dest.StudentInfos, opts => opts.MapFrom(src => src.Students));
             CreateMap<ClassInfo, ClassDTO>();
 
             CreateMap<ClassExamDTO, ClassExam>()
@@ -50,12 +50,12 @@ namespace Application.DTO
 
             CreateMap<ClassTeacherDTO, ClassTeacher>()
                 .ForMember(dest => dest.ClassInfo, opts => opts.MapFrom(src => src.ClassInfo))
-                .ForMember(dest => dest.Teacher, opts => opts.MapFrom(src => src.Teacher));
+                .ForMember(dest => dest.TeacherInfo, opts => opts.MapFrom(src => src.Teacher));
             CreateMap<ClassTeacher, ClassTeacherDTO>();
 
             CreateMap<AnswerDTO, AnswerInfo>()
                 .ForMember(dest => dest.ExamInfo, opts => opts.MapFrom(src => src.ExamInfo))
-                .ForMember(dest => dest.Student, opts => opts.MapFrom(src => src.Student));
+                .ForMember(dest => dest.StudentInfo, opts => opts.MapFrom(src => src.Student));
             CreateMap<AnswerInfo, AnswerDTO>();
         }
 

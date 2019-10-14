@@ -13,40 +13,66 @@ namespace UnitTest
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod1()
+        public void UserAggTest()
         {
-            var userInfo = EntityFactory.CreateInstance<Admin>(new object[]{
-                new Guid(),
-                "administrator",
+            //var userInfo = EntityFactory.CreateInstance<Admin>(new object[] {
+            //    1,
+            //    "administrator",
+            //    "password",
+            //    "wujia",
+            //    Gender.男,
+            //    38,
+            //    "18673968186",
+            //    DateTime.Now,
+            //    "暂无"
+            //});
+
+            var teacher = EntityFactory.CreateInstance<TeacherInfo>(new object[] {
+                "软件工程",
+                CommType.C语言,
+                "Teacher01",
                 "password",
-                "wujia",
+                "吴嘉",
                 Gender.男,
-                38,
-                "18673968186",
+                35,
+                "16673956869",
                 DateTime.Now,
+                1,
                 "暂无"
             });
-            string typeName = userInfo.GetType().Name;
+
+            var student = EntityFactory.CreateInstance<StudentInfo>(new object[] {
+                "170101",
+                "430503190102163958",
+                "13907390101",
+                "大祥区",
+                "西湖路滑石新村",
+                "1101",
+                "Student01",
+                "passsword",
+                "学生01",
+                Gender.男,
+                18,
+                "13907390001",
+                DateTime.Now,
+                1001,
+                "暂无"
+            });
         }
 
         [TestMethod]
-        public void TestClassInfo()
+        public void ClassAggTest()
         {
-            var classInfo=EntityFactory.CreateInstance<ClassInfo>();
+            //var classInfo=EntityFactory.CreateInstance<ClassInfo>();
             var classEntity=EntityFactory.CreateInstance<ClassInfo>(new object[]{
-                new Guid(),
+                1,
                 "1701",
                 ClassGrade.三年级,
-                ClassCategory.高考班,
+                CommType.高考班,
                 DateTime.Now,
                 ClassStatus.未启用,
                 "暂无"
             });
-
-            if (classInfo == null)
-                classInfo = null;
-            else if (classEntity == null)
-                classEntity = null;
         }
     }
 }

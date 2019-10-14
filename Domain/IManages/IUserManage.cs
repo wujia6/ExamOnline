@@ -8,7 +8,7 @@ namespace Domain.IManages
     /// 领域服务用户接口
     /// </summary>
     /// <typeparam name="T">类型</typeparam>
-    public interface IUserManage<T> where T : UserInfo
+    public interface IUserManage<T> where T : UserRoot
     {
         /// <summary>
         /// 添加或修改

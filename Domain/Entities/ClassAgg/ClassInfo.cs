@@ -11,11 +11,6 @@ namespace Domain.Entities.ClassAgg
     public class ClassInfo : ClassRoot
     {
         /// <summary>
-        /// 主键
-        /// </summary>
-        //public override Guid ID { get; set; }
-
-        /// <summary>
         /// 名称
         /// </summary>
         public string Name { get; set; }
@@ -23,27 +18,22 @@ namespace Domain.Entities.ClassAgg
         /// <summary>
         /// 年级
         /// </summary>
-        public ClassGrade Grade { get; set; }
+        public ClassGrade Grade { get; set; } = ClassGrade.一年级;
 
         /// <summary>
         /// 类别
         /// </summary>
-        public ClassCategory Category { get; set; }
+        public CommType Category { get; set; } = CommType.专业班;
 
         /// <summary>
         /// 创建日期
         /// </summary>
-        public DateTime CreateDate { get; set; }
+        public DateTime CreateDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// 状态
         /// </summary>
-        public ClassStatus Status { get; set; }
-
-        /// <summary>
-        /// 备注
-        /// </summary>
-        //public override string Remarks { get; set; }
+        public ClassStatus Status { get; set; } = ClassStatus.未启用;
 
         /// <summary>
         /// 导航属性
@@ -53,11 +43,11 @@ namespace Domain.Entities.ClassAgg
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<Student> Students { get; set; } = new List<Student>().AsQueryable();
+        public virtual IQueryable<StudentInfo> StudentInfos { get; set; } = new List<StudentInfo>().AsQueryable();
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<ClassTeacher> Teachers { get; set; } = new List<ClassTeacher>().AsQueryable();
+        public virtual IQueryable<ClassTeacher> TeacherInfos { get; set; } = new List<ClassTeacher>().AsQueryable();
     }
 }

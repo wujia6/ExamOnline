@@ -8,7 +8,7 @@ using Infrastructure.Utils;
 namespace Application.Services
 {
     internal class UserService<TSource, TDest> : IUserService<TSource, TDest> 
-        where TSource : UserInfo 
+        where TSource : UserRoot 
         where TDest : class
     {
         private readonly IUserManage<TSource> userManage;

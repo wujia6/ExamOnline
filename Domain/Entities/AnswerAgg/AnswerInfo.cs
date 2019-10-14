@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities.ExamAgg;
+using Domain.Entities.UserAgg;
 using Domain.IComm;
 
 namespace Domain.Entities.AnwserAgg
@@ -23,11 +24,11 @@ namespace Domain.Entities.AnwserAgg
         /// <summary>
         /// 考试信息（导航属性）
         /// </summary>
-        public virtual ExamAgg.ExamInfo ExamInfo { get; set; } = new ExamAgg.ExamInfo();
+        public virtual ExamInfo ExamInfo { get; set; } = EntityFactory.CreateInstance<ExamInfo>();
 
         /// <summary>
         /// 学生信息（导航属性）
         /// </summary>
-        public virtual UserAgg.Student Student { get; set; } = new UserAgg.Student();
+        public virtual StudentInfo StudentInfo { get; set; } = EntityFactory.CreateInstance<StudentInfo>();
     }
 }

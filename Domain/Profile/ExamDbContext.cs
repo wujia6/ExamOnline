@@ -14,15 +14,15 @@ namespace Domain.Profile
     {
         public ExamDbContext(DbContextOptions<ExamDbContext> options) : base(options) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-            optionsBuilder.UseSqlServer(config.GetConnectionString("ExamDbStr"));
-            base.OnConfiguring(optionsBuilder);
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    var config = new ConfigurationBuilder()
+        //        .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+        //        .AddJsonFile("appsettings.json")
+        //        .Build();
+        //    optionsBuilder.UseSqlServer(config.GetConnectionString("ExamDbStr"));
+        //    base.OnConfiguring(optionsBuilder);
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +38,7 @@ namespace Domain.Profile
             base.OnModelCreating(modelBuilder);
         }
 
+        #region ###实现IExamDbContext接口
         public async Task<int> SaveChangesAsync()
         {
             return await this.SaveChangesAsync();
@@ -57,11 +58,10 @@ namespace Domain.Profile
         {
             this.Database.RollbackTransaction();
         }
-
-        #region ###实现ISqlContext接口
-        public DbSet<Admin> Admins { get; set; }
-        public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<Student> Students { get; set; }
+        
+        public DbSet<AdminInfo> Admins { get; set; }
+        public DbSet<TeacherInfo> Teachers { get; set; }
+        public DbSet<StudentInfo> Students { get; set; }
         public DbSet<ClassInfo> ClassInfos { get; set; }
         public DbSet<ClassTeacher> ClassTeachers { get; set; }
         public DbSet<ClassExam> ClassExams { get; set; }

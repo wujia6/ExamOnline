@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities.UserAgg
 {
-    public class AdminConfig : IEntityTypeConfiguration<Admin>
+    public class AdminConfig : IEntityTypeConfiguration<AdminInfo>
     {
-        public void Configure(EntityTypeBuilder<Admin> builder)
+        public void Configure(EntityTypeBuilder<AdminInfo> builder)
         {
             builder.HasKey(e => e.ID);
             builder.Property(e => e.Account).IsRequired().HasMaxLength(30);
@@ -19,9 +19,9 @@ namespace Domain.Entities.UserAgg
         }
     }
 
-    public class TeacherConfig : IEntityTypeConfiguration<Teacher>
+    public class TeacherConfig : IEntityTypeConfiguration<TeacherInfo>
     {
-        public void Configure(EntityTypeBuilder<Teacher> builder)
+        public void Configure(EntityTypeBuilder<TeacherInfo> builder)
         {
             builder.HasKey(e => e.ID);
             builder.Property(e => e.Account).IsRequired().HasMaxLength(30);
@@ -37,9 +37,9 @@ namespace Domain.Entities.UserAgg
         }
     }
 
-    public class StudentConfig : IEntityTypeConfiguration<Student>
+    public class StudentConfig : IEntityTypeConfiguration<StudentInfo>
     {
-        public void Configure(EntityTypeBuilder<Student> builder)
+        public void Configure(EntityTypeBuilder<StudentInfo> builder)
         {
             builder.HasKey(e => e.ID);
             builder.Property(e => e.Account).IsRequired().HasMaxLength(30);
@@ -57,7 +57,7 @@ namespace Domain.Entities.UserAgg
             builder.Property(e => e.CreateDate).IsRequired();
             builder.Property(e => e.Remarks).HasMaxLength(50);
             //关系一对多
-            builder.HasOne(s => s.ClassInfo).WithMany(m => m.Students);
+            builder.HasOne(s => s.ClassInfo).WithMany(m => m.StudentInfos);
         }
     }
 }

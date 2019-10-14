@@ -22,9 +22,8 @@ namespace Domain.Entities.ClassAgg
         public void Configure(EntityTypeBuilder<ClassTeacher> builder)
         {
             builder.HasKey(e => e.ID);
-            builder.HasOne(s => s.ClassInfo).WithMany(m => m.Teachers);
-            builder.HasOne(s => s.Teacher).WithMany(m => m.Classes);
-            builder.Property(e => e.Remarks).HasMaxLength(50);
+            builder.HasOne(s => s.ClassInfo).WithMany(m => m.TeacherInfos);
+            builder.HasOne(s => s.TeacherInfo).WithMany(m => m.ClassInfos);
         }
     }
 

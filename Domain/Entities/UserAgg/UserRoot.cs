@@ -6,7 +6,7 @@ namespace Domain.Entities.UserAgg
     /// <summary>
     /// 用户实体类（聚合根）
     /// </summary>
-    public abstract class UserInfo : BaseEntity, IAggregateRoot
+    public abstract class UserRoot : BaseEntity, IAggregateRoot
     {
         public string Account { get; set; }
 
@@ -14,7 +14,7 @@ namespace Domain.Entities.UserAgg
 
         public string Name { get; set; }
 
-        public Gender Gender { get; set; }
+        public Gender Gender { get; set; } = Gender.男;
 
         public int Age { get; set; }
 

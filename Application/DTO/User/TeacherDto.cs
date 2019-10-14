@@ -49,7 +49,7 @@ namespace Application.DTO
         /// <summary>
         /// 课程
         /// </summary>
-        public Subject Course { get; set; }
+        public CommType Course { get; set; }
 
         /// <summary>
         /// 创建时间

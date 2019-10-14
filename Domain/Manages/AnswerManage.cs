@@ -18,7 +18,7 @@ namespace Domain.Manages
         {
             if (inf == null)
                 return false;
-            return inf.ID == null ? efCore.InsertEntity(inf) : efCore.UpdateEntity(inf);
+            return inf.ID > 0 ? efCore.InsertEntity(inf) : efCore.UpdateEntity(inf);
         }
 
         public bool Remove(ISpecification<AnswerInfo> spec)
