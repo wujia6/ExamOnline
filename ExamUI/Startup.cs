@@ -10,18 +10,18 @@ using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Application.DTO;
 using Infrastructure.Utils;
+using Domain.IComm;
 
 namespace ExamUI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup()
         {
-            Configuration = configuration;
             RuleConfig.Initialize();    //加载DTO转换配置
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration => ConfigurationUtils.Configuration;
 
         public IContainer ApplicationContainer { get; private set; }
         
@@ -68,6 +68,13 @@ namespace ExamUI
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-        }
+
+            //数据初始化
+            //using (var scope = ApplicationContainer.BeginLifetimeScope())
+            //{
+            //    var context = scope.Resolve<IExamDbContext>();
+            //    DbInitialize.Seed(context);
+            //}
+        }  
     }
 }

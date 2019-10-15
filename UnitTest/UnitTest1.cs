@@ -6,6 +6,7 @@ using Domain.Entities.QuestionAgg;
 using Domain.Entities.ExamAgg;
 using Domain.Entities.ClassAgg;
 using Domain.Entities.AnwserAgg;
+using Infrastructure.Utils;
 
 namespace UnitTest
 {
@@ -73,6 +74,12 @@ namespace UnitTest
                 ClassStatus.未启用,
                 "暂无"
             });
+        }
+
+        [TestMethod]
+        public void ConnectionStringsTest()
+        {
+            string connString = ConfigurationUtils.GetSection("ConnectionStrings");
         }
     }
 }
