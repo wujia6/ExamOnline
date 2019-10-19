@@ -17,7 +17,7 @@ namespace Infrastructure.Utils
         {
             if (context.ClassInfos.Any())
                 return;
-            var classInfo = EntityFactory.CreateInstance<ClassInfo>(new object[] {
+            var classInfo = EntityFactory.Create<ClassInfo>(new object[] {
                 "1701",
                 ClassGrade.三年级,
                 CommType.高考班,
@@ -30,12 +30,12 @@ namespace Infrastructure.Utils
 
             if (context.ClassTeachers.Any())
                 return;
-            var classTeacher = EntityFactory.CreateInstance<ClassTeacher>(new object[] { 1, 1, 1, "暂无" });
+            var classTeacher = EntityFactory.Create<ClassTeacher>(new object[] { 1, 1, 1, "暂无" });
             context.ClassTeachers.Add(classTeacher);
 
             if (context.Admins.Any())
                 return;
-            var adminInfo = EntityFactory.CreateInstance<AdminInfo>(new object[] {
+            var adminInfo = EntityFactory.Create<AdminInfo>(new object[] {
                 "admin",
                 "password",
                 "管理员",
@@ -50,7 +50,7 @@ namespace Infrastructure.Utils
 
             if (context.Teachers.Any())
                 return;
-            var teacherInfo = EntityFactory.CreateInstance<TeacherInfo>(new object[] {
+            var teacherInfo = EntityFactory.Create<TeacherInfo>(new object[] {
                 "软件工程",
                 CommType.C语言,
                 "Teacher01",
@@ -67,7 +67,7 @@ namespace Infrastructure.Utils
 
             if (context.Students.Any())
                 return;
-            var studentInfo = EntityFactory.CreateInstance<StudentInfo>(new object[] {
+            var studentInfo = EntityFactory.Create<StudentInfo>(new object[] {
                 "170101",
                 "430503190102163958",
                 "13907390101",

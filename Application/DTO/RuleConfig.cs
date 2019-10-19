@@ -14,49 +14,49 @@ namespace Application.DTO
     {
         public RuleConfig()
         {
-            CreateMap<AdminDTO, AdminInfo>();
+            CreateMap<AdminInfo, AdminDTO>();
             CreateMap<AdminInfo, AdminDTO>();
 
-            CreateMap<TeacherDTO, TeacherInfo>()
-                .ForMember(dest => dest.ClassTeachers, opts => opts.MapFrom(src => src.ClassTeacherDtos));
-            CreateMap<TeacherInfo, TeacherDTO>();
+            CreateMap<TeacherInfo, TeacherDTO>()
+                .ForMember(dest => dest.ClassTeacherDtos, opts => opts.MapFrom(src => src.ClassTeachers));
+            CreateMap<TeacherDTO, TeacherInfo>();
 
-            CreateMap<StudentDTO, StudentInfo>()
-                .ForMember(dest => dest.ClassInfo, opts => opts.MapFrom(src => src.ClassDto))
-                .ForMember(dest => dest.AnswerInfos, opts => opts.MapFrom(src => src.AnswerDtos));
-            CreateMap<StudentInfo, StudentDTO>();
+            CreateMap<StudentInfo, StudentDTO>()
+                .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
+                .ForMember(dest => dest.AnswerDtos, opts => opts.MapFrom(src => src.AnswerInfomations));
+            CreateMap<StudentDTO, StudentInfo>();
 
-            CreateMap<QuestionDTO, QuestionInfo>()
-                .ForMember(dest => dest.ExamInfo, opts => opts.MapFrom(src => src.ExamDto));
-            CreateMap<QuestionInfo, QuestionDTO>();
+            CreateMap<QuestionInfo, QuestionDTO>()
+                .ForMember(dest => dest.ExamDto, opts => opts.MapFrom(src => src.ExamInfomation));
+            CreateMap<QuestionDTO, QuestionInfo>();
 
-            CreateMap<ExamDTO, ExamInfo>()
-                .ForMember(dest => dest.TeacherInfos, opts => opts.MapFrom(src => src.TeacherDtos))
-                .ForMember(dest => dest.ClassExams, opts => opts.MapFrom(src => src.ClassExamDtos))
-                .ForMember(dest => dest.QuestionInfos, opts => opts.MapFrom(src => src.QuestionDtos))
-                .ForMember(dest => dest.AnswerInfos, opts => opts.MapFrom(src => src.AnswerDtos));
-            CreateMap<ExamInfo, ExamDTO>();
+            CreateMap<ExamInfo, ExamDTO>()
+                .ForMember(dest => dest.TeacherDtos, opts => opts.MapFrom(src => src.TeacherInfomations))
+                .ForMember(dest => dest.ClassExamDtos, opts => opts.MapFrom(src => src.ClassExams))
+                .ForMember(dest => dest.QuestionDtos, opts => opts.MapFrom(src => src.QuestionInfomations))
+                .ForMember(dest => dest.AnswerDtos, opts => opts.MapFrom(src => src.AnswerInfomations));
+            CreateMap<ExamDTO, ExamInfo>();
 
-            CreateMap<ClassDTO, ClassInfo>()
-                .ForMember(dest => dest.ClassExams, opts => opts.MapFrom(src => src.ClassExamDtos))
-                .ForMember(dest => dest.ClassTeachers, opts => opts.MapFrom(src => src.ClassTeacherDtos))
-                .ForMember(dest => dest.StudentInfos, opts => opts.MapFrom(src => src.StudentDtos));
-            CreateMap<ClassInfo, ClassDTO>();
+            CreateMap<ClassInfo, ClassDTO>()
+                .ForMember(dest => dest.ClassExamDtos, opts => opts.MapFrom(src => src.ClassExams))
+                .ForMember(dest => dest.ClassTeacherDtos, opts => opts.MapFrom(src => src.ClassTeachers))
+                .ForMember(dest => dest.StudentDtos, opts => opts.MapFrom(src => src.StudentInfomations));
+            CreateMap<ClassDTO, ClassInfo>();
 
-            CreateMap<ClassExamDTO, ClassExam>()
-                .ForMember(dest => dest.ClassInfo, opts => opts.MapFrom(src => src.ClassDto))
-                .ForMember(dest => dest.ExamInfo, opts => opts.MapFrom(src => src.ExamDto));
-            CreateMap<ClassExam, ClassExamDTO>();
+            CreateMap<ClassExam, ClassExamDTO>()
+                .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
+                .ForMember(dest => dest.ExamDto, opts => opts.MapFrom(src => src.ExamInfomation));
+            CreateMap<ClassExamDTO, ClassExam>();
 
-            CreateMap<ClassTeacherDTO, ClassTeacher>()
-                .ForMember(dest => dest.ClassInfo, opts => opts.MapFrom(src => src.ClassDto))
-                .ForMember(dest => dest.TeacherInfo, opts => opts.MapFrom(src => src.TeacherDto));
-            CreateMap<ClassTeacher, ClassTeacherDTO>();
+            CreateMap<ClassTeacher, ClassTeacherDTO>()
+                .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
+                .ForMember(dest => dest.TeacherDto, opts => opts.MapFrom(src => src.TeacherInfomation));
+            CreateMap<ClassTeacherDTO, ClassTeacher>();
 
-            CreateMap<AnswerDTO, AnswerInfo>()
-                .ForMember(dest => dest.ExamInfo, opts => opts.MapFrom(src => src.ExamDTO))
-                .ForMember(dest => dest.StudentInfo, opts => opts.MapFrom(src => src.StudentDTO));
-            CreateMap<AnswerInfo, AnswerDTO>();
+            CreateMap<AnswerInfo, AnswerDTO>()
+                .ForMember(dest => dest.ExamDto, opts => opts.MapFrom(src => src.ExamInfomation))
+                .ForMember(dest => dest.StudentDto, opts => opts.MapFrom(src => src.StudentInfomation));
+            CreateMap<AnswerDTO, AnswerInfo>();
         }
 
         public static void Initialize()

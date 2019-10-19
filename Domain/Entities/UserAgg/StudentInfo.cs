@@ -51,12 +51,12 @@ namespace Domain.Entities.UserAgg
         /// 导航属性
         /// </summary>
         [DataMember]
-        public virtual ClassInfo ClassInfo { get; set; } = EntityFactory.CreateInstance<ClassInfo>();
+        public virtual ClassInfo ClassInfomation { get; set; } = EntityFactory.Create<ClassInfo>();
 
         /// <summary>
         /// 导航属性
         /// </summary>
         [DataMember]
-        public virtual IQueryable<AnswerInfo> AnswerInfos { get; set; } = new List<AnswerInfo>().AsQueryable();
+        public virtual IQueryable<AnswerInfo> AnswerInfomations { get; set; } = new List<AnswerInfo>().AsQueryable();
     }
 }

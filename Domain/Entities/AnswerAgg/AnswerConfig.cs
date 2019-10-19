@@ -10,8 +10,8 @@ namespace Domain.Entities.AnwserAgg
             builder.HasKey(e => e.ID);
             builder.Property(e => e.Result).IsRequired().HasMaxLength(200);
             builder.Property(e => e.Score).IsRequired();
-            builder.HasOne(e => e.ExamInfo).WithMany(m => m.AnswerInfos);
-            builder.HasOne(s => s.StudentInfo).WithMany(m => m.AnswerInfos);
+            builder.HasOne(e => e.ExamInfomation).WithMany(m => m.AnswerInfomations);
+            builder.HasOne(s => s.StudentInfomation).WithMany(m => m.AnswerInfomations);
         }
     }
 }

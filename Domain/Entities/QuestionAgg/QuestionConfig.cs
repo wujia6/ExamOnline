@@ -14,7 +14,7 @@ namespace Domain.Entities.QuestionAgg
             builder.Property(e => e.Answer).IsRequired();
             builder.Property(e => e.Remarks).HasMaxLength(50);
             //one to many
-            builder.HasOne(s => s.ExamInfo).WithMany(m => m.QuestionInfos);
+            builder.HasOne(s => s.ExamInfomation).WithMany(m => m.QuestionInfomations);
         }
     }
 }

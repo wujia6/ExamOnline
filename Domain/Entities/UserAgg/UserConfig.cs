@@ -57,7 +57,7 @@ namespace Domain.Entities.UserAgg
             builder.Property(e => e.CreateDate).IsRequired();
             builder.Property(e => e.Remarks).HasMaxLength(50);
             //关系一对多
-            builder.HasOne(s => s.ClassInfo).WithMany(m => m.StudentInfos);
+            builder.HasOne(s => s.ClassInfomation).WithMany(m => m.StudentInfomations);
         }
     }
 }

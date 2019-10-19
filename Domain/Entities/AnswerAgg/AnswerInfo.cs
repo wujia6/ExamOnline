@@ -23,12 +23,12 @@ namespace Domain.Entities.AnwserAgg
         /// 考试信息（导航属性）
         /// </summary>
         [DataMember]
-        public virtual ExamInfo ExamInfo { get; set; } = EntityFactory.CreateInstance<ExamInfo>();
+        public virtual ExamInfo ExamInfomation { get; set; } = EntityFactory.Create<ExamInfo>();
 
         /// <summary>
         /// 学生信息（导航属性）
         /// </summary>
         [DataMember]
-        public virtual StudentInfo StudentInfo { get; set; } = EntityFactory.CreateInstance<StudentInfo>();
+        public virtual StudentInfo StudentInfomation { get; set; } = EntityFactory.Create<StudentInfo>();
     }
 }

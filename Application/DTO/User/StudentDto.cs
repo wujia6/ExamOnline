@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Domain.Entities;
 
@@ -56,6 +56,6 @@ namespace Application.DTO
         public ClassDTO ClassDto { get; set; }
 
         [DataMember]
-        public IQueryable<AnswerDTO> AnswerDtos { get; set; }
+        public List<AnswerDTO> AnswerDtos { get; set; }
     }
 }

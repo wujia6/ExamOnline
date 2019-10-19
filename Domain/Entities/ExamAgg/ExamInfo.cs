@@ -37,7 +37,7 @@ namespace Domain.Entities.ExamAgg
         /// 监考老师（导航属性）
         /// </summary>
         [DataMember]
-        public virtual IQueryable<TeacherInfo> TeacherInfos { get; set; } = new List<TeacherInfo>().AsQueryable();
+        public virtual IQueryable<TeacherInfo> TeacherInfomations { get; set; } = new List<TeacherInfo>().AsQueryable();
 
         /// <summary>
         /// 参考班级（导航属性）
@@ -49,12 +49,12 @@ namespace Domain.Entities.ExamAgg
         /// 试题集合（导航属性）
         /// </summary>
         [DataMember]
-        public virtual IQueryable<QuestionInfo> QuestionInfos { get; set; } = new List<QuestionInfo>().AsQueryable();
+        public virtual IQueryable<QuestionInfo> QuestionInfomations { get; set; } = new List<QuestionInfo>().AsQueryable();
 
         /// <summary>
         /// 答卷集合（导航属性）
         /// </summary>
         [DataMember]
-        public virtual IQueryable<AnswerInfo> AnswerInfos { get; set; } = new List<AnswerInfo>().AsQueryable();
+        public virtual IQueryable<AnswerInfo> AnswerInfomations { get; set; } = new List<AnswerInfo>().AsQueryable();
     }
 }

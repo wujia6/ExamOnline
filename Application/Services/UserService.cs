@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Application.IServices;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
@@ -38,7 +38,7 @@ namespace Application.Services
             return userManage.FindBySpec(spec).MapTo<TDest>();
         }
 
-        public IQueryable<TDest> Query(ISpecification<TSource> spec)
+        public List<TDest> Query(ISpecification<TSource> spec)
         {
             return userManage.QueryBySpec(spec).MapToList<TDest>();
         }

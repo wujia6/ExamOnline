@@ -14,9 +14,9 @@ namespace Application.DTO
         public int Score { get; set; }
 
         [DataMember]
-        public ExamDTO ExamDTO { get; set; }
+        public ExamDTO ExamDto { get; set; }
 
         [DataMember]
-        public StudentDTO StudentDTO { get; set; }
+        public StudentDTO StudentDto { get; set; }
     }
 }

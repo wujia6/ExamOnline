@@ -50,7 +50,7 @@ namespace Domain.Entities.ClassAgg
         /// 导航属性
         /// </summary>
         [DataMember]
-        public virtual IQueryable<StudentInfo> StudentInfos { get; set; } = new List<StudentInfo>().AsQueryable();
+        public virtual IQueryable<StudentInfo> StudentInfomations { get; set; } = new List<StudentInfo>().AsQueryable();
 
         /// <summary>
         /// 导航属性

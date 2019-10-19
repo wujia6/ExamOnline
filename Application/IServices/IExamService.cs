@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Application.DTO;
 using Domain.Entities.ExamAgg;
 using Domain.IComm;
@@ -36,6 +36,6 @@ namespace Application.IServices
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        IQueryable<ExamDTO> Query(ISpecification<ExamInfo> spec);
+        List<ExamDTO> Query(ISpecification<ExamInfo> spec);
     }
 }

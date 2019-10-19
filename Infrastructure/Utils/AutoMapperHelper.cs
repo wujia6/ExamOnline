@@ -15,6 +15,11 @@ namespace Infrastructure.Utils
     public static class AutoMapperHelper
     {
         /// <summary>
+        /// 同步锁
+        /// </summary>
+        private static readonly object Sync = new object();
+
+        /// <summary>
         ///  类型映射
         /// </summary>
         public static T MapTo<T>(this object source)
@@ -28,7 +33,7 @@ namespace Infrastructure.Utils
         /// <summary>
         /// 类型映射
         /// </summary>
-        public static TDestination MapTo<TSource, TDestination>(this TDestination source, TDestination dest)
+        public static TDestination MapTo<TSource, TDestination>(this TSource source, TDestination dest)
         {
             if (source == null)
                 return dest;
@@ -43,8 +48,10 @@ namespace Infrastructure.Utils
         {
             foreach (var first in source)
             {
-                var type = first.GetType();
-                Mapper.Initialize(c => c.CreateMap(type, typeof(TDestination)));
+                var sourceType = first.GetType();
+                var map = Mapper.Configuration.FindTypeMapFor(sourceType, typeof(TDestination));
+                if (map == null)
+                    Mapper.Initialize(c => c.CreateMap(sourceType, typeof(TDestination)));
                 break;
             }
             return Mapper.Map<List<TDestination>>(source);
@@ -53,24 +60,13 @@ namespace Infrastructure.Utils
         /// <summary>
         /// 集合列表类型映射
         /// </summary>
-        public static IQueryable<TDestination> MapToList<TDestination>(this IQueryable source)
-        {
-            foreach (var first in source)
-            {
-                var type = first.GetType();
-                Mapper.Initialize(c => c.CreateMap(type, typeof(TDestination)));
-                break;
-            }
-            return Mapper.Map<IQueryable<TDestination>>(source);
-        }
-
-        /// <summary>
-        /// 集合列表类型映射
-        /// </summary>
         public static List<TDestination> MapToList<TSource, TDestination>(this IEnumerable<TSource> source)
         {
             //IEnumerable<T> 类型需要创建元素的映射
-            Mapper.Initialize(c => c.CreateMap<TSource, TDestination>());
+            //Mapper.Initialize(c => c.CreateMap<TSource, TDestination>());
+            var map = Mapper.Configuration.FindTypeMapFor(typeof(TSource), typeof(TDestination));
+            if (map == null)
+                Mapper.Initialize(cfg => cfg.CreateMap(typeof(TSource), typeof(TDestination)));
             return Mapper.Map<List<TDestination>>(source);
         }
 
@@ -83,14 +79,79 @@ namespace Infrastructure.Utils
             Mapper.Initialize(c => c.CreateMap<IDataReader, IEnumerable>());
             return Mapper.Map<IDataReader, IEnumerable<T>>(reader);
         }
+
+        /// <summary>
+        /// 获取映射配置
+        /// </summary>
+        /// <param name="sourceType">源类型</param>
+        /// <param name="destinationType">目标类型</param>
+        /// <returns></returns>
+        private static TypeMap GetMap(Type sourceType, Type destinationType)
+        {
+            try
+            {
+                return Mapper.Configuration.FindTypeMapFor(sourceType, destinationType);
+            }
+            catch (InvalidOperationException)
+            {
+                lock (Sync)
+                {
+                    try
+                    {
+                        return Mapper.Configuration.FindTypeMapFor(sourceType, destinationType);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        InitMaps(sourceType, destinationType);
+                    }
+                    return Mapper.Configuration.FindTypeMapFor(sourceType, destinationType);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 初始化映射配置
+        /// </summary>
+        /// <param name="sourceType">源类型</param>
+        /// <param name="destinationType">目标类型</param>
+        private static void InitMaps(Type sourceType, Type destinationType)
+        {
+            try
+            {
+                var maps = Mapper.Configuration.GetAllTypeMaps();
+                Mapper.Initialize(cfg =>
+                {
+                    ClearConfig();
+                    foreach (var item in maps)
+                    {
+                        cfg.CreateMap(item.SourceType, item.DestinationType);
+                    }
+                    cfg.CreateMap(sourceType, destinationType);
+                });
+            }
+            catch (InvalidOperationException)
+            {
+                Mapper.Initialize(cfg => cfg.CreateMap(sourceType, destinationType));
+            }
+        }
+
+        /// <summary>
+        /// 清空配置
+        /// </summary>
+        private static void ClearConfig()
+        {
+            var typeMapper = typeof(Mapper).GetTypeInfo();
+            var configuration = typeMapper.GetDeclaredField("_configuration");
+            configuration.SetValue(null, null, BindingFlags.Static, null, CultureInfo.CurrentCulture);
+        }
     }
 
     //public static class AutoMapperHelper
     //{
-    //    /// <summary>
-    //    /// 同步锁
-    //    /// </summary>
-    //    private static readonly object Sync = new object();
+    ///// <summary>
+    ///// 同步锁
+    ///// </summary>
+    //private static readonly object Sync = new object();
 
     //    #region Mapping(将源对象映射到目标对象或集合)
     //    /// <summary>
@@ -103,7 +164,7 @@ namespace Infrastructure.Utils
     //    /// <returns></returns>
     //    public static TDestination MapTo<TSource, TDestination>(this TSource source, TDestination destination)
     //    {
-    //        return BuildMap<TDestination>(source, destination);
+    //        return MapTo<TDestination>(source, destination);
     //    }
 
     //    /// <summary>
@@ -114,7 +175,7 @@ namespace Infrastructure.Utils
     //    /// <returns></returns>
     //    public static TDestination MapTo<TDestination>(this object source) where TDestination : new()
     //    {
-    //        return BuildMap(source, new TDestination());
+    //        return MapTo(source, new TDestination());
     //    }
 
     //    /// <summary>
@@ -137,7 +198,7 @@ namespace Infrastructure.Utils
     //    /// <param name="source">源对象</param>
     //    /// <param name="destination">目标对象</param>
     //    /// <returns></returns>
-    //    private static TDestination BuildMap<TDestination>(object source, TDestination destination)
+    //    private static TDestination MapTo<TDestination>(object source, TDestination destination)
     //    {
     //        if (source == null)
     //            throw new ArgumentNullException("source is null");
@@ -161,34 +222,34 @@ namespace Infrastructure.Utils
     //        return Mapper.Map(source, destination);
     //    }
 
-    //    /// <summary>
-    //    /// 获取映射配置
-    //    /// </summary>
-    //    /// <param name="sourceType">源类型</param>
-    //    /// <param name="destinationType">目标类型</param>
-    //    /// <returns></returns>
-    //    private static TypeMap GetMap(Type sourceType, Type destinationType)
+    ///// <summary>
+    ///// 获取映射配置
+    ///// </summary>
+    ///// <param name="sourceType">源类型</param>
+    ///// <param name="destinationType">目标类型</param>
+    ///// <returns></returns>
+    //private static TypeMap GetMap(Type sourceType, Type destinationType)
+    //{
+    //    try
     //    {
-    //        try
+    //        return Mapper.Configuration.FindTypeMapFor(sourceType, destinationType);
+    //    }
+    //    catch (InvalidOperationException)
+    //    {
+    //        lock (Sync)
     //        {
-    //            return Mapper.Configuration.FindTypeMapFor(sourceType, destinationType);
-    //        }
-    //        catch (InvalidOperationException)
-    //        {
-    //            lock (Sync)
+    //            try
     //            {
-    //                try
-    //                {
-    //                    return Mapper.Configuration.FindTypeMapFor(sourceType, destinationType);
-    //                }
-    //                catch (InvalidOperationException)
-    //                {
-    //                    InitMaps(sourceType, destinationType);
-    //                }
     //                return Mapper.Configuration.FindTypeMapFor(sourceType, destinationType);
     //            }
+    //            catch (InvalidOperationException)
+    //            {
+    //                InitMaps(sourceType, destinationType);
+    //            }
+    //            return Mapper.Configuration.FindTypeMapFor(sourceType, destinationType);
     //        }
     //    }
+    //}
 
     //    /// <summary>
     //    /// 获取类型
@@ -250,6 +311,5 @@ namespace Infrastructure.Utils
     //        configuration.SetValue(null, null, BindingFlags.Static, null, CultureInfo.CurrentCulture);
     //    }
     //    #endregion
-
     //}
 }

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Application.DTO;
 using Application.IServices;
 using Domain.Entities.QuestionAgg;
@@ -37,7 +37,7 @@ namespace Application.Services
             return questionManage.FindBySpec(spec).MapTo<QuestionDTO>();
         }
 
-        public IQueryable<QuestionDTO> Query(ISpecification<QuestionInfo> spec)
+        public List<QuestionDTO> Query(ISpecification<QuestionInfo> spec)
         {
             return questionManage.QueryBySpec(spec).MapToList<QuestionDTO>();
         }

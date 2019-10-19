@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Domain.Entities.ClassAgg;
 using Domain.IComm;
 
@@ -15,6 +15,6 @@ namespace Application.IServices
 
         TDest Single(ISpecification<TSource> spec);
 
-        IQueryable<TDest> Query(ISpecification<TSource> spec);
+        List<TDest> Query(ISpecification<TSource> spec);
     }
 }

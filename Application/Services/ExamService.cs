@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Application.DTO;
 using Application.IServices;
 using Domain.Entities.ExamAgg;
@@ -37,7 +37,7 @@ namespace Application.Services
             return examManage.FindBySpec(spec).MapTo<ExamDTO>();
         }
 
-        public IQueryable<ExamDTO> Query(ISpecification<ExamInfo> spec)
+        public List<ExamDTO> Query(ISpecification<ExamInfo> spec)
         {
             return examManage.QueryBySpec(spec).MapToList<ExamDTO>();
         }

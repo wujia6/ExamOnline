@@ -6,9 +6,9 @@ namespace Domain.Entities.ClassAgg
     public class ClassExam : ClassRoot
     {
         [DataMember]
-        public virtual ClassInfo ClassInfo { get; set; } = EntityFactory.CreateInstance<ClassInfo>();
+        public virtual ClassInfo ClassInfomation { get; set; } = EntityFactory.Create<ClassInfo>();
 
         [DataMember]
-        public virtual ExamInfo ExamInfo { get; set; } = EntityFactory.CreateInstance<ExamAgg.ExamInfo>();
+        public virtual ExamInfo ExamInfomation { get; set; } = EntityFactory.Create<ExamAgg.ExamInfo>();
     }
 }

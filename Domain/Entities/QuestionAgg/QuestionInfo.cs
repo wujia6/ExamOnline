@@ -42,6 +42,6 @@ namespace Domain.Entities.QuestionAgg
         /// 考试信息（导航属性）
         /// </summary>
         [DataMember]
-        public virtual ExamInfo ExamInfo { get; set; }
+        public virtual ExamInfo ExamInfomation { get; set; }
     }
 }

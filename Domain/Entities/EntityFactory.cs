@@ -2,6 +2,9 @@
 
 namespace Domain.Entities
 {
+    /// <summary>
+    /// 实体创建工厂类
+    /// </summary>
     public static class EntityFactory
     {
         /// <summary>
@@ -10,24 +13,23 @@ namespace Domain.Entities
         /// <typeparam name="T">类型</typeparam>
         /// <param name="parms">可变参数</param>
         /// <returns></returns>
-        public static T CreateInstance<T>(params object[] parms)
+        public static T Create<T>(params object[] parms)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T));
-            if (parms.Length > 0)
+            Type tp = typeof(T);
+            var obj = Activator.CreateInstance(typeof(T));
+            if (parms.Length == 0) return (T)obj;
+            int index = 0;
+            foreach (var prop in tp.GetProperties())
             {
-                int index = 0;
-                var props = typeof(T).GetProperties();
-                foreach (var prop in props)
+                //index = Array.FindIndex(props, p => p.Name == prop.Name);
+                //判断属性类型
+                if (!prop.PropertyType.IsGenericType && prop.PropertyType.IsValueType || prop.PropertyType.Equals(typeof(string)))
                 {
-                    //index = Array.FindIndex(props, p => p.Name == prop.Name);
-                    if (!prop.PropertyType.IsGenericType && prop.PropertyType.IsValueType || prop.PropertyType.Equals(typeof(string)))
-                    {
-                        prop.SetValue(obj, parms[index]);
-                        index++;
-                    }
+                    prop.SetValue(obj, parms[index]);
+                    index++;
                 }
             }
-            return obj;
+            return (T)obj;
         }
     }
 }

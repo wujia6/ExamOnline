@@ -29,12 +29,12 @@ namespace Application.DTO
         public string Remarks { get; set; }
 
         [DataMember]
-        public ICollection<ClassExamDTO> ClassExamDtos { get; set; }
+        public List<ClassExamDTO> ClassExamDtos { get; set; }
 
         [DataMember]
-        public ICollection<StudentDTO> StudentDtos { get; set; }
+        public List<StudentDTO> StudentDtos { get; set; }
 
         [DataMember]
-        public ICollection<ClassTeacherDTO> ClassTeacherDtos { get; set; }
+        public List<ClassTeacherDTO> ClassTeacherDtos { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 
@@ -37,6 +37,6 @@ namespace Application.IServices
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        IQueryable<TDest> Query(ISpecification<TSource> spec);
+        List<TDest> Query(ISpecification<TSource> spec);
     }
 }

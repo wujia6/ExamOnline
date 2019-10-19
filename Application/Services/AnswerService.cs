@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Application.DTO;
 using Application.IServices;
 using Domain.Entities.AnwserAgg;
@@ -37,7 +37,7 @@ namespace Application.Services
             return answerManage.FindBySpec(spec).MapTo<AnswerDTO>();
         }
 
-        public IQueryable<AnswerDTO> Query(ISpecification<AnswerInfo> spec)
+        public List<AnswerDTO> Query(ISpecification<AnswerInfo> spec)
         {
             return answerManage.QueryBySpec(spec).MapToList<AnswerDTO>();
         }
