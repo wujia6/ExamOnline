@@ -40,7 +40,6 @@ namespace Application.DTO
         [DataMember]
         public string Remarks { get; set; }
 
-        [DataMember]
         public List<ClassTeacherDTO> ClassTeacherDtos { get; set; }
     }
 }

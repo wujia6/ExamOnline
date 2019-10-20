@@ -9,7 +9,6 @@ using Domain.Entities.AnwserAgg;
 using Infrastructure.Utils;
 using Application.DTO;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,7 +20,8 @@ namespace UnitTest
         [TestMethod]
         public void UserAggTest()
         {
-            var classEntity = EntityFactory.Create<ClassInfo>(new object[]{
+            AutoMapperHelper.InitMaps();
+            var classInfo = EntityFactory.Create<ClassInfo>(new object[]{
                 "1701",
                 ClassGrade.三年级,
                 CommType.高考班,
@@ -30,7 +30,19 @@ namespace UnitTest
                 1,
                 "暂无"
             });
-            var teacher = EntityFactory.Create<TeacherInfo>(new object[] {
+            //var adminInfo = EntityFactory.Create<AdminInfo>(new object[] {
+            //    "administrator",
+            //    "password",
+            //    "wujia",
+            //    Gender.男,
+            //    38,
+            //    "18673968186",
+            //    DateTime.Now,
+            //    1,
+            //    "暂无"
+            //});
+            //var adminDto = adminInfo.MapTo<AdminDTO>();
+            var teacherInfo = EntityFactory.Create<TeacherInfo>(new object[] {
                 "软件工程",
                 CommType.C语言,
                 "Teacher01",
@@ -43,33 +55,17 @@ namespace UnitTest
                 1,
                 "暂无"
             });
-            teacher.ClassTeachers = new List<ClassTeacher>()
+            teacherInfo.ClassTeachers = new List<ClassTeacher>
             {
                 new ClassTeacher()
                 {
-                    ClassInfomation = classEntity,
-                    TeacherInfomation = teacher,
                     ID = 1,
                     Remarks = "暂无"
                 }
             }.AsQueryable();
 
-            var teacherDto = teacher.ProjectTo<ClassTeacherDTO>();
-
-            teacherDto.ClassTeacherDtos = teacher.ClassTeachers.MapToList<ClassTeacherDTO>();
-
-            var admin = EntityFactory.Create<AdminInfo>(new object[] {
-                1,
-                "administrator",
-                "password",
-                "wujia",
-                Gender.男,
-                38,
-                "18673968186",
-                DateTime.Now,
-                "暂无"
-            });
-
+            var teacherDto = teacherInfo.MapTo<TeacherDTO>();
+            
             var student = EntityFactory.Create<StudentInfo>(new object[] {
                 "170101",
                 "430503190102163958",
@@ -100,29 +96,6 @@ namespace UnitTest
                 ClassStatus.未启用,
                 1,
                 "暂无"
-            });
-            Mapper.Initialize(cfg =>
-            {
-                cfg.CreateMap<ClassTeacherDTO, ClassTeacher>()
-                    .ForMember(dest => dest.ClassInfomation, opts => opts.MapFrom(src => src.ClassDto))
-                    .ForMember(dest => dest.TeacherInfomation, opts => opts.MapFrom(src => src.TeacherDto));
-                cfg.CreateMap<ClassTeacher, ClassTeacherDTO>();
-
-                cfg.CreateMap<StudentDTO, StudentInfo>()
-                    .ForMember(dest => dest.ClassInfomation, opts => opts.MapFrom(src => src.ClassDto))
-                    .ForMember(dest => dest.AnswerInfomations, opts => opts.MapFrom(src => src.AnswerDtos));
-                cfg.CreateMap<StudentInfo, StudentDTO>();
-
-                cfg.CreateMap<ClassExamDTO, ClassExam>()
-                    .ForMember(dest => dest.ClassInfomation, opts => opts.MapFrom(src => src.ClassDto))
-                    .ForMember(dest => dest.ExamInfomation, opts => opts.MapFrom(src => src.ExamDto));
-                cfg.CreateMap<ClassExam, ClassExamDTO>();
-
-                cfg.CreateMap<ClassDTO, ClassInfo>()
-                    .ForMember(dest => dest.ClassExams, opts => opts.MapFrom(src => src.ClassExamDtos))
-                    .ForMember(dest => dest.ClassTeachers, opts => opts.MapFrom(src => src.ClassTeacherDtos))
-                    .ForMember(dest => dest.StudentInfomations, opts => opts.MapFrom(src => src.StudentDtos));
-                cfg.CreateMap<ClassInfo, ClassDTO>();
             });
             var clsDto = Mapper.Map<ClassInfo, ClassDTO>(classEntity);
         }

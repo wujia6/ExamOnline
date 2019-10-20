@@ -10,25 +10,21 @@ namespace Domain.Entities.AnwserAgg
         /// <summary>
         /// 结果
         /// </summary>
-        [DataMember]
         public string Result { get; set; }
 
         /// <summary>
         /// 分数
         /// </summary>
-        [DataMember]
         public int Score { get; set; }
 
         /// <summary>
         /// 考试信息（导航属性）
         /// </summary>
-        [DataMember]
         public virtual ExamInfo ExamInfomation { get; set; } = EntityFactory.Create<ExamInfo>();
 
         /// <summary>
         /// 学生信息（导航属性）
         /// </summary>
-        [DataMember]
         public virtual StudentInfo StudentInfomation { get; set; } = EntityFactory.Create<StudentInfo>();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Application.DTO;
 using AutoMapper;
 using Domain.Entities.AnwserAgg;
@@ -15,18 +16,18 @@ namespace Infrastructure.Utils
     /// </summary>
     public static class AutoMapperHelper
     {
-        static AutoMapperHelper()
+        public static void InitMaps()
         {
             Mapper.Initialize(cfg =>
             {
                 #region entity ==> dto
                 cfg.CreateMap<ClassInfo, ClassDTO>()
-                    .ForMember(dest => dest.ClassExamDtos, opts => 
-                        opts.MapFrom(src => Mapper.Map<IEnumerable<ClassExam>,List<ClassExamDTO>>(src.ClassExams)))
-                    .ForMember(dest => dest.ClassTeacherDtos, opts => 
-                        opts.MapFrom(src => Mapper.Map<IEnumerable<ClassTeacher>,List<ClassTeacherDTO>>(src.ClassTeachers)))
-                    .ForMember(dest => dest.StudentDtos, opts => 
-                        opts.MapFrom(src => Mapper.Map<IEnumerable<StudentInfo>,List<StudentDTO>>(src.StudentInfomations)));
+                    .ForMember(dest => dest.ClassExamDtos, opts =>
+                        opts.MapFrom(src => Mapper.Map<IEnumerable<ClassExam>, List<ClassExamDTO>>(src.ClassExams)))
+                    .ForMember(dest => dest.ClassTeacherDtos, opts =>
+                        opts.MapFrom(src => Mapper.Map<IEnumerable<ClassTeacher>, List<ClassTeacherDTO>>(src.ClassTeachers)))
+                    .ForMember(dest => dest.StudentDtos, opts =>
+                        opts.MapFrom(src => Mapper.Map<IEnumerable<StudentInfo>, List<StudentDTO>>(src.StudentInfomations)));
 
                 cfg.CreateMap<ClassExam, ClassExamDTO>()
                     .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
@@ -39,26 +40,26 @@ namespace Infrastructure.Utils
                 cfg.CreateMap<AdminInfo, AdminDTO>();
 
                 cfg.CreateMap<TeacherInfo, TeacherDTO>()
-                    .ForMember(dest => dest.ClassTeacherDtos, opts => 
-                        opts.MapFrom(src => Mapper.Map<IEnumerable<ClassTeacher>,List<ClassTeacherDTO>>(src.ClassTeachers)));
+                    .ForMember(dest => dest.ClassTeacherDtos, opts =>
+                        opts.MapFrom(src => Mapper.Map<IEnumerable<ClassTeacher>, List<ClassTeacherDTO>>(src.ClassTeachers)));
 
                 cfg.CreateMap<StudentInfo, StudentDTO>()
                     .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
-                    .ForMember(dest => dest.AnswerDtos, opts => 
-                        opts.MapFrom(src => Mapper.Map<IEnumerable<AnswerInfo>,List<AnswerDTO>>(src.AnswerInfomations)));
+                    .ForMember(dest => dest.AnswerDtos, opts =>
+                        opts.MapFrom(src => Mapper.Map<IEnumerable<AnswerInfo>, List<AnswerDTO>>(src.AnswerInfomations)));
 
                 cfg.CreateMap<QuestionInfo, QuestionDTO>()
                     .ForMember(dest => dest.ExamDto, opts => opts.MapFrom(src => src.ExamInfomation));
 
                 cfg.CreateMap<ExamInfo, ExamDTO>()
-                    .ForMember(dest => dest.TeacherDtos, opts => 
-                        opts.MapFrom(src => Mapper.Map<IEnumerable<TeacherInfo>,List<TeacherDTO>>(src.TeacherInfomations)))
-                    .ForMember(dest => dest.ClassExamDtos, opts => 
-                        opts.MapFrom(src => Mapper.Map<IEnumerable<ClassExam>,List<ClassExamDTO>>(src.ClassExams)))
-                    .ForMember(dest => dest.QuestionDtos, opts => 
-                        opts.MapFrom(src => Mapper.Map<IEnumerable<QuestionInfo>,List<QuestionDTO>>(src.QuestionInfomations)))
-                    .ForMember(dest => dest.AnswerDtos, opts => 
-                        opts.MapFrom(src => Mapper.Map<IEnumerable<AnswerInfo>,List<AnswerDTO>>(src.AnswerInfomations)));
+                    .ForMember(dest => dest.TeacherDtos, opts =>
+                        opts.MapFrom(src => Mapper.Map<IEnumerable<TeacherInfo>, List<TeacherDTO>>(src.TeacherInfomations)))
+                    .ForMember(dest => dest.ClassExamDtos, opts =>
+                        opts.MapFrom(src => Mapper.Map<IEnumerable<ClassExam>, List<ClassExamDTO>>(src.ClassExams)))
+                    .ForMember(dest => dest.QuestionDtos, opts =>
+                        opts.MapFrom(src => Mapper.Map<IEnumerable<QuestionInfo>, List<QuestionDTO>>(src.QuestionInfomations)))
+                    .ForMember(dest => dest.AnswerDtos, opts =>
+                        opts.MapFrom(src => Mapper.Map<IEnumerable<AnswerInfo>, List<AnswerDTO>>(src.AnswerInfomations)));
 
                 cfg.CreateMap<AnswerInfo, AnswerDTO>()
                     .ForMember(dest => dest.ExamDto, opts => opts.MapFrom(src => src.ExamInfomation))
@@ -67,11 +68,11 @@ namespace Infrastructure.Utils
 
                 #region dto ==> entity
                 cfg.CreateMap<ClassDTO, ClassInfo>()
-                    .ForMember(dest => dest.ClassExams, opts => 
+                    .ForMember(dest => dest.ClassExams, opts =>
                         opts.MapFrom(src => Mapper.Map<List<ClassExamDTO>, IEnumerable<ClassExam>>(src.ClassExamDtos)))
-                    .ForMember(dest => dest.ClassTeachers, opts => 
+                    .ForMember(dest => dest.ClassTeachers, opts =>
                         opts.MapFrom(src => Mapper.Map<List<ClassTeacherDTO>, IEnumerable<ClassTeacher>>(src.ClassTeacherDtos)))
-                    .ForMember(dest => dest.StudentInfomations, opts => 
+                    .ForMember(dest => dest.StudentInfomations, opts =>
                         opts.MapFrom(src => Mapper.Map<List<StudentDTO>, IEnumerable<StudentInfo>>(src.StudentDtos)));
 
                 cfg.CreateMap<ClassExamDTO, ClassExam>()
@@ -85,25 +86,25 @@ namespace Infrastructure.Utils
                 cfg.CreateMap<AdminDTO, AdminInfo>();
 
                 cfg.CreateMap<TeacherDTO, TeacherInfo>()
-                    .ForMember(dest => dest.ClassTeachers, opts => 
+                    .ForMember(dest => dest.ClassTeachers, opts =>
                         opts.MapFrom(src => Mapper.Map<List<ClassTeacherDTO>, IEnumerable<ClassTeacher>>(src.ClassTeacherDtos)));
 
                 cfg.CreateMap<StudentDTO, StudentInfo>()
                     .ForMember(dest => dest.ClassInfomation, opts => opts.MapFrom(src => src.ClassDto))
-                    .ForMember(dest => dest.AnswerInfomations, opts => 
+                    .ForMember(dest => dest.AnswerInfomations, opts =>
                         opts.MapFrom(src => Mapper.Map<List<AnswerDTO>, IEnumerable<AnswerInfo>>(src.AnswerDtos)));
 
                 cfg.CreateMap<QuestionDTO, QuestionInfo>()
                     .ForMember(dest => dest.ExamInfomation, opts => opts.MapFrom(src => src.ExamDto));
 
                 cfg.CreateMap<ExamDTO, ExamInfo>()
-                    .ForMember(dest => dest.TeacherInfomations, opts => 
+                    .ForMember(dest => dest.TeacherInfomations, opts =>
                         opts.MapFrom(src => Mapper.Map<List<TeacherDTO>, IEnumerable<TeacherInfo>>(src.TeacherDtos)))
                     .ForMember(dest => dest.ClassExams, opts =>
-                        opts.MapFrom(src => Mapper.Map<List<ClassExamDTO>, IEnumerable <ClassExam>>(src.ClassExamDtos)))
-                    .ForMember(dest => dest.QuestionInfomations, opts => 
-                        opts.MapFrom(src => Mapper.Map< List<QuestionDTO>, IEnumerable <QuestionInfo>>(src.QuestionDtos)))
-                    .ForMember(dest => dest.AnswerInfomations, opts => 
+                        opts.MapFrom(src => Mapper.Map<List<ClassExamDTO>, IEnumerable<ClassExam>>(src.ClassExamDtos)))
+                    .ForMember(dest => dest.QuestionInfomations, opts =>
+                        opts.MapFrom(src => Mapper.Map<List<QuestionDTO>, IEnumerable<QuestionInfo>>(src.QuestionDtos)))
+                    .ForMember(dest => dest.AnswerInfomations, opts =>
                         opts.MapFrom(src => Mapper.Map<List<AnswerDTO>, IEnumerable<AnswerInfo>>(src.AnswerDtos)));
 
                 cfg.CreateMap<AnswerDTO, AnswerInfo>()
@@ -119,23 +120,21 @@ namespace Infrastructure.Utils
         public static T MapTo<T>(this object source)
         {
             if (source == null)    return default(T);
-            var TSource = source.GetType();
-            var TDestination = typeof(T);
-            var map = Mapper.Configuration.FindTypeMapFor(TSource, TDestination);
-            if (map == null)
-                Mapper.Initialize(cfg => cfg.CreateMap(TSource, TDestination));
+            var map = Mapper.Configuration.FindTypeMapFor(source.GetType(), typeof(T));
+            if(map == null)
+                Mapper.Initialize(cfg => cfg.CreateMap(source.GetType(), typeof(T)));
             return Mapper.Map<T>(source);
         }
-
+        
         /// <summary>
         /// 类型映射
         /// </summary>
         public static TDestination MapTo<TSource, TDestination>(this TSource source, TDestination dest)
         {
             if (source == null)    return dest;
-            var map = Mapper.Configuration.FindTypeMapFor<TSource, TDestination>();
+            var map = Mapper.Configuration.FindTypeMapFor(source.GetType(), dest.GetType());
             if (map == null)
-                Mapper.Initialize(cfg => cfg.CreateMap<TSource, TDestination>());
+                Mapper.Initialize(cfg => cfg.CreateMap<TSource,TDestination>());
             return Mapper.Map(source, dest);
         }
 
@@ -147,9 +146,7 @@ namespace Infrastructure.Utils
             foreach (var first in source)
             {
                 var sourceType = first.GetType();
-                var map = Mapper.Configuration.FindTypeMapFor(sourceType, typeof(TDestination));
-                if (map == null)
-                    Mapper.Initialize(c => c.CreateMap(sourceType, typeof(TDestination)));
+                Mapper.Initialize(c => c.CreateMap(sourceType, typeof(TDestination)));
                 break;
             }
             return Mapper.Map<List<TDestination>>(source);
@@ -161,10 +158,7 @@ namespace Infrastructure.Utils
         public static List<TDestination> MapToList<TSource, TDestination>(this IEnumerable<TSource> source)
         {
             //IEnumerable<T> 类型需要创建元素的映射
-            //Mapper.Initialize(c => c.CreateMap<TSource, TDestination>());
-            var map = Mapper.Configuration.FindTypeMapFor<TSource, TDestination>();
-            if (map == null)
-                Mapper.Initialize(cfg => cfg.CreateMap<TSource, TDestination>());
+            Mapper.Initialize(c => c.CreateMap<TSource, TDestination>());
             return Mapper.Map<List<TDestination>>(source);
         }
     }

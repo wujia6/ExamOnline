@@ -7,10 +7,8 @@ namespace Application.DTO
         [DataMember]
         public int ID { get; set; }
 
-        [DataMember]
         public ClassDTO ClassDto { get; set; }
 
-        [DataMember]
         public ExamDTO ExamDto { get; set; }
     }
 }

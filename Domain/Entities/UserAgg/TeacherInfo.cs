@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using Domain.Entities.ClassAgg;
 
 namespace Domain.Entities.UserAgg
@@ -13,19 +12,16 @@ namespace Domain.Entities.UserAgg
         /// <summary>
         /// 专业
         /// </summary>
-        [DataMember]
         public string Profssion { get; set; }
 
         /// <summary>
         /// 课程
         /// </summary>
-        [DataMember]
         public CommType Course { get; set; } = CommType.C语言;
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        [DataMember]
         public virtual IQueryable<ClassTeacher> ClassTeachers { get; set; } = new List<ClassTeacher>().AsQueryable();
     }
 }
