@@ -9,6 +9,7 @@ using Domain.Entities.AnwserAgg;
 using Infrastructure.Utils;
 using Application.DTO;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -42,28 +43,18 @@ namespace UnitTest
                 1,
                 "暂无"
             });
-
             teacher.ClassTeachers = new List<ClassTeacher>()
             {
-                new ClassTeacher(){ ID=1, Remarks="暂无", ClassInfomation = classEntity, TeacherInfomation = teacher }
-            }.AsQueryable() ;
+                new ClassTeacher()
+                {
+                    ClassInfomation = classEntity,
+                    TeacherInfomation = teacher,
+                    ID = 1,
+                    Remarks = "暂无"
+                }
+            }.AsQueryable();
 
-            //Mapper.Initialize(cfg =>
-            //{
-            //    cfg.CreateMap<ClassTeacherDTO, ClassTeacher>()
-            //        .ForMember(dest => dest.ClassInfomation, opts => opts.MapFrom(src => src.ClassDto))
-            //        .ForMember(dest => dest.TeacherInfomation, opts => opts.MapFrom(src => src.TeacherDto));
-            //    cfg.CreateMap<ClassTeacher, ClassTeacherDTO>()
-            //        .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
-            //        .ForMember(dest => dest.TeacherDto, opts => opts.MapFrom(src => src.TeacherInfomation));
-
-            //    cfg.CreateMap<TeacherInfo, TeacherDTO>()
-            //        .ForMember(dest => dest.ClassTeacherDtos, opts => opts.MapFrom(src => src.ClassTeachers));
-            //    cfg.CreateMap<TeacherDTO, TeacherInfo>()
-            //        .ForMember(dest => dest.ClassTeachers, opts => opts.MapFrom(src => src.ClassTeacherDtos));
-            //});
-
-            var teacherDto = teacher.MapTo<TeacherDTO>();
+            var teacherDto = teacher.ProjectTo<ClassTeacherDTO>();
 
             teacherDto.ClassTeacherDtos = teacher.ClassTeachers.MapToList<ClassTeacherDTO>();
 
