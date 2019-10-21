@@ -20,8 +20,6 @@ namespace ExamUI
             AutoMapperHelper.InitMaps();    //加载DTO转换配置
         }
 
-        public IConfiguration Configuration => ConfigurationUtils.Configuration;
-
         public IContainer ApplicationContainer { get; private set; }
         
         //DI注册容器组件服务
