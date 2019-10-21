@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
-using Application.DTO;
 using Infrastructure.Utils;
 using Domain.IComm;
 
@@ -18,7 +17,7 @@ namespace ExamUI
     {
         public Startup()
         {
-            RuleConfig.Initialize();    //加载DTO转换配置
+            AutoMapperHelper.InitMaps();    //加载DTO转换配置
         }
 
         public IConfiguration Configuration => ConfigurationUtils.Configuration;
@@ -73,7 +72,7 @@ namespace ExamUI
             //using (var scope = ApplicationContainer.BeginLifetimeScope())
             //{
             //    var context = scope.Resolve<IExamDbContext>();
-            //    DbInitialize.Seed(context);
+            //    SeedData.Initialize(context);
             //}
         }  
     }

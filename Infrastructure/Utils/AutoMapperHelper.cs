@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Application.DTO;
 using AutoMapper;
 using Domain.Entities.AnwserAgg;
@@ -16,6 +15,9 @@ namespace Infrastructure.Utils
     /// </summary>
     public static class AutoMapperHelper
     {
+        /// <summary>
+        /// 初始化映射配置
+        /// </summary>
         public static void InitMaps()
         {
             Mapper.Initialize(cfg =>
@@ -65,7 +67,6 @@ namespace Infrastructure.Utils
                     .ForMember(dest => dest.ExamDto, opts => opts.MapFrom(src => src.ExamInfomation))
                     .ForMember(dest => dest.StudentDto, opts => opts.MapFrom(src => src.StudentInfomation));
                 #endregion
-
                 #region dto ==> entity
                 cfg.CreateMap<ClassDTO, ClassInfo>()
                     .ForMember(dest => dest.ClassExams, opts =>
@@ -146,7 +147,9 @@ namespace Infrastructure.Utils
             foreach (var first in source)
             {
                 var sourceType = first.GetType();
-                Mapper.Initialize(c => c.CreateMap(sourceType, typeof(TDestination)));
+                var map = Mapper.Configuration.FindTypeMapFor(source.GetType(), typeof(TDestination));
+                if (map == null)
+                    Mapper.Initialize(c => c.CreateMap(sourceType, typeof(TDestination)));
                 break;
             }
             return Mapper.Map<List<TDestination>>(source);
@@ -158,7 +161,9 @@ namespace Infrastructure.Utils
         public static List<TDestination> MapToList<TSource, TDestination>(this IEnumerable<TSource> source)
         {
             //IEnumerable<T> 类型需要创建元素的映射
-            Mapper.Initialize(c => c.CreateMap<TSource, TDestination>());
+            var map = Mapper.Configuration.FindTypeMapFor(typeof(TSource), typeof(TDestination));
+            if (map == null)
+                Mapper.Initialize(c => c.CreateMap<TSource, TDestination>());
             return Mapper.Map<List<TDestination>>(source);
         }
     }

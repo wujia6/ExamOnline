@@ -14,9 +14,9 @@ namespace Application.IServices
         /// <summary>
         /// 插入或更新
         /// </summary>
-        /// <param name="inf">实体对象</param>
+        /// <param name="model">实体对象</param>
         /// <returns></returns>
-        bool InsertOrUpdate(TDest inf);
+        bool InsertOrUpdate(TDest model);
 
         /// <summary>
         /// 删除
@@ -38,5 +38,19 @@ namespace Application.IServices
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
         List<TDest> Query(ISpecification<TSource> spec);
+
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <param name="spec">规约对象</param>
+        /// <returns></returns>
+        TDest UserLogin(ISpecification<TSource> spec);
+
+        /// <summary>
+        /// 用户注册
+        /// </summary>
+        /// <param name="model">用户对象</param>
+        /// <returns></returns>
+        bool UserRegister(TDest model);
     }
 }

@@ -5,11 +5,8 @@ using Domain.Entities;
 
 namespace Application.DTO
 {
-    public class TeacherDTO
+    public class TeacherDTO : UserRootDTO
     {
-        [DataMember]
-        public int ID { get; set; }
-
         [DataMember]
         public string Account { get; set; }
 
@@ -36,9 +33,6 @@ namespace Application.DTO
 
         [DataMember]
         public DateTime CreateDate { get; set; }
-
-        [DataMember]
-        public string Remarks { get; set; }
 
         public List<ClassTeacherDTO> ClassTeacherDtos { get; set; }
     }

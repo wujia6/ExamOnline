@@ -14,6 +14,7 @@
     <Compile Include="..\Application\DTO\QuestionDTO.cs" Link="LinkDTO\QuestionDTO.cs" />
     <Compile Include="..\Application\DTO\StudentDTO.cs" Link="LinkDTO\StudentDTO.cs" />
     <Compile Include="..\Application\DTO\TeacherDto.cs" Link="LinkDTO\TeacherDto.cs" />
+    <Compile Include="..\Application\DTO\UserRootDTO.cs" Link="LinkDTO\UserRootDTO.cs" />
   </ItemGroup>
 
   <ItemGroup>

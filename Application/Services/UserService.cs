@@ -20,11 +20,11 @@ namespace Application.Services
             this.examContext = context;
         }
 
-        public bool InsertOrUpdate(TDest inf)
+        public bool InsertOrUpdate(TDest model)
         {
-            if (inf == null)
+            if (model == null)
                 return false;
-            var entity = inf.MapTo<TSource>();
+            var entity = model.MapTo<TSource>();
             return userManage.InsertOrUpdate(entity) ? examContext.SaveChanges() > 0 : false;
         }
 
@@ -41,6 +41,20 @@ namespace Application.Services
         public List<TDest> Query(ISpecification<TSource> spec)
         {
             return userManage.QueryBySpec(spec).MapToList<TDest>();
+        }
+
+        public TDest UserLogin(ISpecification<TSource> spec)
+        {
+            var entity = userManage.FindBySpec(spec);
+            return entity.MapTo<TDest>();
+        }
+
+        public bool UserRegister(TDest model)
+        {
+            if (model==null)
+                return false;
+            var entity = model.MapTo<TSource>();
+            return userManage.InsertOrUpdate(entity);
         }
     }
 }
