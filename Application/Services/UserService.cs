@@ -4,6 +4,10 @@ using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Utils;
+using Application.DTO;
+using Infrastructure.Repository;
+using System;
+using System.Linq.Expressions;
 
 namespace Application.Services
 {
@@ -28,25 +32,30 @@ namespace Application.Services
             return userManage.InsertOrUpdate(entity) ? examContext.SaveChanges() > 0 : false;
         }
 
-        public bool Remove(ISpecification<TSource> spec)
+        public bool Remove(TDest model)
         {
+            var userDto = model.MapTo<TDest>() as UserRootDTO;
+            ISpecification<TSource> spec = Specification<TSource>.Eval(e => e.ID == userDto.ID);
             return userManage.Remove(spec) ? examContext.SaveChanges() > 0 : false;
         }
 
-        public TDest Single(ISpecification<TSource> spec)
+        public TDest FindById(int id)
         {
+            var spec = Specification<TSource>.Eval(e => e.ID == id);
             return userManage.FindBySpec(spec).MapTo<TDest>();
         }
 
-        public List<TDest> Query(ISpecification<TSource> spec)
+        public List<TDest> QueryBySet(Expression<Func<TSource, bool>> express)
         {
+            var spec = Specification<TSource>.Eval(express);
             return userManage.QueryBySpec(spec).MapToList<TDest>();
         }
 
-        public TDest UserLogin(ISpecification<TSource> spec)
+        public TDest UserLogin(TDest model)
         {
-            var entity = userManage.FindBySpec(spec);
-            return entity.MapTo<TDest>();
+            var userDto = model.MapTo<TDest>() as UserRootDTO;
+            var spec = Specification<TSource>.Eval(e => e.Account == userDto.Account && e.Pwd == userDto.Pwd);
+            return userManage.FindBySpec(spec).MapTo<TDest>();
         }
 
         public bool UserRegister(TDest model)

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using Domain.Entities.UserAgg;
-using Domain.IComm;
 
 namespace Application.IServices
 {
@@ -23,28 +24,28 @@ namespace Application.IServices
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        bool Remove(ISpecification<TSource> spec);
+        bool Remove(TDest model);
 
         /// <summary>
         /// 查询单个
         /// </summary>
-        /// <param name="spec">规约对象</param>
+        /// <param name="id">主键</param>
         /// <returns></returns>
-        TDest Single(ISpecification<TSource> spec);
+        TDest FindById(int id);
 
         /// <summary>
         /// 查询
         /// </summary>
-        /// <param name="spec">规约对象</param>
+        /// <param name="spec">条件委托</param>
         /// <returns></returns>
-        List<TDest> Query(ISpecification<TSource> spec);
+        List<TDest> QueryBySet(Expression<Func<TSource,bool>> express);
 
         /// <summary>
         /// 用户登录
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        TDest UserLogin(ISpecification<TSource> spec);
+        TDest UserLogin(TDest model);
 
         /// <summary>
         /// 用户注册

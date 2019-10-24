@@ -2,7 +2,9 @@
 using Domain.Entities.AnwserAgg;
 using Domain.Entities.ClassAgg;
 using Domain.Entities.ExamAgg;
+using Domain.Entities.MenuAgg;
 using Domain.Entities.QuestionAgg;
+using Domain.Entities.RoleAgg;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,10 @@ namespace Domain.Profile
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new MenuConfig());
+            modelBuilder.ApplyConfiguration(new RoleConfig());
+            modelBuilder.ApplyConfiguration(new RoleMenuConfig());
+            modelBuilder.ApplyConfiguration(new UserRoleConfig());
             modelBuilder.ApplyConfiguration(new AdminConfig());
             modelBuilder.ApplyConfiguration(new TeacherConfig());
             modelBuilder.ApplyConfiguration(new StudentConfig());
@@ -58,7 +64,11 @@ namespace Domain.Profile
         {
             this.Database.RollbackTransaction();
         }
-        
+
+        public DbSet<MenuInfo> Menus { get; set; }
+        public DbSet<RoleInfo> Roles { get; set; }
+        public DbSet<RoleMenu> RoleMenus { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<AdminInfo> Admins { get; set; }
         public DbSet<TeacherInfo> Teachers { get; set; }
         public DbSet<StudentInfo> Students { get; set; }

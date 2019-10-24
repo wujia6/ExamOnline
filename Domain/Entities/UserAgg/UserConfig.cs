@@ -60,4 +60,14 @@ namespace Domain.Entities.UserAgg
             builder.HasOne(s => s.ClassInfomation).WithMany(m => m.StudentInfomations);
         }
     }
+
+    public class UserRoleConfig : IEntityTypeConfiguration<UserRole>
+    {
+        public void Configure(EntityTypeBuilder<UserRole> builder)
+        {
+            builder.HasKey(e => e.ID);
+            builder.HasOne(e => e.UserInfomation).WithMany(s => s.UserRoles);
+            builder.HasOne(e => e.RoleInfomation).WithMany(s => s.UserRoles);
+        }
+    }
 }

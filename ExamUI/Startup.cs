@@ -32,6 +32,7 @@ namespace ExamUI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSession();
             services.AddAutoMapper();
 
             //注册Autofac
@@ -54,11 +55,10 @@ namespace ExamUI
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
             app.UseCookiePolicy();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -67,11 +67,11 @@ namespace ExamUI
             });
 
             //数据初始化
-            //using (var scope = ApplicationContainer.BeginLifetimeScope())
-            //{
-            //    var context = scope.Resolve<IExamDbContext>();
-            //    SeedData.Initialize(context);
-            //}
+            using (var scope = ApplicationContainer.BeginLifetimeScope())
+            {
+                var context = scope.Resolve<IExamDbContext>();
+                SeedData.Initialize(context);
+            }
         }  
     }
 }

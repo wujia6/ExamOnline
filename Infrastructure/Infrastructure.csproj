@@ -5,16 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Application\DTO\AdminDTO.cs" Link="LinkDTO\AdminDTO.cs" />
-    <Compile Include="..\Application\DTO\AnswerDTO.cs" Link="LinkDTO\AnswerDTO.cs" />
-    <Compile Include="..\Application\DTO\ClassDTO.cs" Link="LinkDTO\ClassDTO.cs" />
-    <Compile Include="..\Application\DTO\ClassExamDTO.cs" Link="LinkDTO\ClassExamDTO.cs" />
-    <Compile Include="..\Application\DTO\ClassTeacherDTO.cs" Link="LinkDTO\ClassTeacherDTO.cs" />
-    <Compile Include="..\Application\DTO\ExamDTO.cs" Link="LinkDTO\ExamDTO.cs" />
-    <Compile Include="..\Application\DTO\QuestionDTO.cs" Link="LinkDTO\QuestionDTO.cs" />
-    <Compile Include="..\Application\DTO\StudentDTO.cs" Link="LinkDTO\StudentDTO.cs" />
-    <Compile Include="..\Application\DTO\TeacherDto.cs" Link="LinkDTO\TeacherDto.cs" />
-    <Compile Include="..\Application\DTO\UserRootDTO.cs" Link="LinkDTO\UserRootDTO.cs" />
+    <Compile Include="..\Application\DTO\MapperRuleConfig.cs" Link="Utils\MapperRuleConfig.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,10 +23,6 @@
     <Reference Include="Microsoft.AspNetCore.Mvc.ViewFeatures">
       <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.mvc.viewfeatures\2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="LinkDTO\" />
   </ItemGroup>
 
 </Project>
