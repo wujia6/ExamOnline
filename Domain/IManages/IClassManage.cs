@@ -7,7 +7,7 @@ namespace Domain.IManages
     /// <summary>
     /// 领域服务班级接口
     /// </summary>
-    public interface IClassManage<T> where T : ClassRoot
+    public interface IClassManage<T> where T : ClassBase
     {
         /// <summary>
         /// 插入或更新

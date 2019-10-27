@@ -10,6 +10,7 @@ namespace Domain.Entities.RoleAgg
             builder.HasKey(e => e.ID);
             builder.Property(e => e.Name).IsRequired().HasMaxLength(20);
             builder.Property(e => e.Code).IsRequired().HasMaxLength(20);
+            builder.Property(e => e.Remarks).HasMaxLength(50);
         }
     }
 

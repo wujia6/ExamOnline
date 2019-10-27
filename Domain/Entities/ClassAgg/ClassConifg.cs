@@ -27,9 +27,9 @@ namespace Domain.Entities.ClassAgg
         }
     }
 
-    public class ClassExamConfig : IEntityTypeConfiguration<ClassExam>
+    public class ClassExaminationConfig : IEntityTypeConfiguration<ClassExamination>
     {
-        public void Configure(EntityTypeBuilder<ClassExam> builder)
+        public void Configure(EntityTypeBuilder<ClassExamination> builder)
         {
             builder.HasKey(e => e.ID);
             builder.HasOne(s => s.ClassInfomation).WithMany(m => m.ClassExams);

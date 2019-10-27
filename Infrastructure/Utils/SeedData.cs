@@ -15,7 +15,7 @@ namespace Infrastructure.Utils
         /// <param name="context">上下文接口对象</param>
         public static void Initialize(IExamDbContext context)
         {
-            if (context.ClassInfos.Any())
+            if (context.Classes.Any())
                 return;
             var classInfo = EntityFactory.Create<ClassInfo>(new object[] {
                 "1701",
@@ -26,7 +26,7 @@ namespace Infrastructure.Utils
                 1,
                 "暂无"
             });
-            context.ClassInfos.Add(classInfo);
+            context.Classes.Add(classInfo);
 
             if (context.ClassTeachers.Any())
                 return;

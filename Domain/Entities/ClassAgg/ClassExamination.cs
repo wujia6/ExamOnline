@@ -2,10 +2,10 @@
 
 namespace Domain.Entities.ClassAgg
 {
-    public class ClassExam : ClassRoot
+    public class ClassExamination : ClassBase
     {
         public virtual ClassInfo ClassInfomation { get; set; } = EntityFactory.Create<ClassInfo>();
 
-        public virtual ExamInfo ExamInfomation { get; set; } = EntityFactory.Create<ExamAgg.ExamInfo>();
+        public virtual ExaminationInfo ExamInfomation { get; set; } = EntityFactory.Create<ExaminationInfo>();
     }
 }

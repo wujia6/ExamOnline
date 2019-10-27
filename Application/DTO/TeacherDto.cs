@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.DTO
 {
-    public class TeacherDTO : UserRootDTO
+    public class TeacherDTO : UserBaseDTO
     {
         public string Profssion { get; set; }
         

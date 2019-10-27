@@ -16,7 +16,7 @@ namespace Infrastructure.Utils
             //string connectionString = ConfigurationUtils.GetSection("SQLLocalDB");
             //注册服务
             builder.Register(options => new DbContextOptionsBuilder<ExamDbContext>()
-                .UseSqlServer(ConfigurationUtils.Configuration.GetConnectionString("SQLLocalDB")).Options)
+                .UseSqlServer(ConfigurationUtils.Configuration.GetConnectionString("ExamDbConn")).Options)
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<ExamDbContext>()

@@ -19,27 +19,27 @@ namespace Application.Services
             this.examContext = context;
         }
 
-        public bool InsertOrUpdate(ExamDTO inf)
+        public bool InsertOrUpdate(ExaminationDTO inf)
         {
             if (inf == null)
                 return false;
-            var entity = inf.MapTo<ExamInfo>();
+            var entity = inf.MapTo<ExaminationInfo>();
             return examManage.InsertOrUpdate(entity) ? examContext.SaveChanges() > 0 : false;
         }
 
-        public bool Remove(ISpecification<ExamInfo> spec)
+        public bool Remove(ISpecification<ExaminationInfo> spec)
         {
             return examManage.Remove(spec) ? examContext.SaveChanges() > 0 : false;
         }
 
-        public ExamDTO Single(ISpecification<ExamInfo> spec)
+        public ExaminationDTO Single(ISpecification<ExaminationInfo> spec)
         {
-            return examManage.FindBySpec(spec).MapTo<ExamDTO>();
+            return examManage.FindBySpec(spec).MapTo<ExaminationDTO>();
         }
 
-        public List<ExamDTO> Query(ISpecification<ExamInfo> spec)
+        public List<ExaminationDTO> Query(ISpecification<ExaminationInfo> spec)
         {
-            return examManage.QueryBySpec(spec).MapToList<ExamDTO>();
+            return examManage.QueryBySpec(spec).MapToList<ExaminationDTO>();
         }
     }
 }

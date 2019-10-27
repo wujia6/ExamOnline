@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
-using Application.DTO;
 using AutoMapper;
 
 namespace Infrastructure.Utils
@@ -13,9 +13,10 @@ namespace Infrastructure.Utils
         /// <summary>
         /// 初始化自定义profile
         /// </summary>
-        public static void InitMaps()
+        public static void SetMappings()
         {
-            MapperRuleConfig.Initialize();
+            var classInstance = Assembly.LoadFrom("Application.dll").CreateInstance("Application.DTO.RuleConfig");
+            classInstance.GetType().GetMethod("Initialize").Invoke(classInstance, null);
         }
 
         /// <summary>

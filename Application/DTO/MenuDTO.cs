@@ -19,6 +19,6 @@ namespace Application.DTO
 
         public string Remarks { get; set; }
 
-        public virtual List<RoleMenuDTO> RoleMenuDtos { get; set; }
+        public List<RoleMenuDTO> RoleMenuDtos { get; set; }
     }
 }

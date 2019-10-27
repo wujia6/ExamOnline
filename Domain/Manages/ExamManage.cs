@@ -7,32 +7,32 @@ namespace Domain.Manages
 {
     internal class ExamManage : IExamManage
     {
-        private readonly IEfCoreRepository<ExamInfo> efCore;
+        private readonly IEfCoreRepository<ExaminationInfo> efCore;
 
-        public ExamManage(IEfCoreRepository<ExamInfo> ef)
+        public ExamManage(IEfCoreRepository<ExaminationInfo> ef)
         {
             this.efCore = ef;
         }
 
-        public bool InsertOrUpdate(ExamInfo inf)
+        public bool InsertOrUpdate(ExaminationInfo inf)
         {
             if (inf == null)
                 return false;
             return inf.ID > 0 ? efCore.InsertEntity(inf) : efCore.UpdateEntity(inf);
         }
 
-        public bool Remove(ISpecification<ExamInfo> spec)
+        public bool Remove(ISpecification<ExaminationInfo> spec)
         {
             var entity = FindBySpec(spec);
             return entity == null ? false : efCore.RemoveEntity(entity);
         }
 
-        public ExamInfo FindBySpec(ISpecification<ExamInfo> spec)
+        public ExaminationInfo FindBySpec(ISpecification<ExaminationInfo> spec)
         {
             return efCore.FindBySpec(spec);
         }
 
-        public IQueryable<ExamInfo> QueryBySpec(ISpecification<ExamInfo> spec)
+        public IQueryable<ExaminationInfo> QueryBySpec(ISpecification<ExaminationInfo> spec)
         {
             return efCore.QueryBySpec(spec);
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Domain.Entities.UserAgg;
 
@@ -8,7 +7,7 @@ namespace Domain.Entities.ClassAgg
     /// <summary>
     /// 班级实体类（聚合根）
     /// </summary>
-    public class ClassInfo : ClassRoot
+    public class ClassInfo : ClassBase
     {
         /// <summary>
         /// 名称
@@ -38,16 +37,16 @@ namespace Domain.Entities.ClassAgg
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<ClassExam> ClassExams { get; set; } = new List<ClassExam>().AsQueryable();
+        public virtual IQueryable<ClassExamination> ClassExams { get; set; }
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<StudentInfo> StudentInfomations { get; set; } = new List<StudentInfo>().AsQueryable();
+        public virtual IQueryable<StudentInfo> StudentInfomations { get; set; }
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<ClassTeacher> ClassTeachers { get; set; } = new List<ClassTeacher>().AsQueryable();
+        public virtual IQueryable<ClassTeacher> ClassTeachers { get; set; }
     }
 }

@@ -6,8 +6,8 @@
 
         public string Remark { get; set; }
 
-        public virtual UserRootDTO UserDto { get; set; }
+        public UserBaseDTO UserDto { get; set; }
 
-        public virtual RoleDTO RoleDto { get; set; }
+        public RoleDTO RoleDto { get; set; }
     }
 }

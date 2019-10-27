@@ -17,8 +17,10 @@ namespace ExamUI
     {
         public Startup()
         {
-            AutoMapperHelper.InitMaps();    //加载DTO转换配置
+            //AutoMapperHelper.SetMappings();    //加载DTO转换配置
         }
+
+        public IConfiguration Configuration => ConfigurationUtils.Configuration;
 
         public IContainer ApplicationContainer { get; private set; }
         
@@ -67,11 +69,11 @@ namespace ExamUI
             });
 
             //数据初始化
-            using (var scope = ApplicationContainer.BeginLifetimeScope())
-            {
-                var context = scope.Resolve<IExamDbContext>();
-                SeedData.Initialize(context);
-            }
+            //using (var scope = ApplicationContainer.BeginLifetimeScope())
+            //{
+            //    var context = scope.Resolve<IExamDbContext>();
+            //    SeedData.Initialize(context);
+            //}
         }  
     }
 }

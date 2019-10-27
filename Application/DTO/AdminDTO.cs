@@ -1,6 +1,6 @@
 ﻿namespace Application.DTO
 {
-    public class AdminDTO : UserRootDTO
+    public class AdminDTO : UserBaseDTO
     {
         
     }

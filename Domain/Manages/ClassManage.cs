@@ -5,7 +5,7 @@ using Domain.IManages;
 
 namespace Domain.Manages
 {
-    internal class ClassManage<T> : IClassManage<T> where T : ClassRoot
+    internal class ClassManage<T> : IClassManage<T> where T : ClassBase
     {
         private readonly IEfCoreRepository<T> efCore;
 

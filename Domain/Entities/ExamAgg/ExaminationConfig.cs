@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities.ExamAgg
 {
-    public class ExamInfoConfig : IEntityTypeConfiguration<ExamInfo>
+    public class ExaminationConfig : IEntityTypeConfiguration<ExaminationInfo>
     {
-        public void Configure(EntityTypeBuilder<ExamInfo> builder)
+        public void Configure(EntityTypeBuilder<ExaminationInfo> builder)
         {
             builder.HasKey(e => e.ID);
             builder.Property(e => e.Title).IsRequired().HasMaxLength(100);

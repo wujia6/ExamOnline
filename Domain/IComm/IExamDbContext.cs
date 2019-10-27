@@ -5,8 +5,8 @@ using Domain.Entities.ClassAgg;
 using Domain.Entities.QuestionAgg;
 using Domain.Entities.ExamAgg;
 using Domain.Entities.AnwserAgg;
-using Domain.Entities.RoleAgg;
 using Domain.Entities.MenuAgg;
+using Domain.Entities.RoleAgg;
 
 namespace Domain.IComm
 {
@@ -18,15 +18,15 @@ namespace Domain.IComm
         DbSet<MenuInfo> Menus { get; set; }
         DbSet<RoleInfo> Roles { get; set; }
         DbSet<RoleMenu> RoleMenus { get; set; }
-        DbSet<UserRole> UserRoles { get; set; }
+        DbSet<UserBase> UserBases { get; set; }
         DbSet<AdminInfo> Admins { get; set; }
         DbSet<TeacherInfo> Teachers { get; set; }
         DbSet<StudentInfo> Students { get; set; }
-        DbSet<ClassInfo> ClassInfos { get; set; }
-        DbSet<ClassExam> ClassExams { get; set; }
+        DbSet<ClassInfo> Classes { get; set; }
+        DbSet<ClassExamination> ClassExaminations { get; set; }
         DbSet<ClassTeacher> ClassTeachers { get; set; }
-        DbSet<QuestionInfo> QuestionInfos { get; set; }
-        DbSet<ExamInfo> ExamInfos { get; set; }
-        DbSet<AnswerInfo> AnswerInfos { get; set; }
+        DbSet<QuestionInfo> Questions { get; set; }
+        DbSet<ExaminationInfo> Examinations { get; set; }
+        DbSet<AnswerInfo> Answers { get; set; }
     }
 }

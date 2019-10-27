@@ -7,7 +7,7 @@ namespace Application.IServices
     /// <summary>
     /// 班级应用服务接口
     /// </summary>
-    public interface IClassService<TSource, TDest> where TSource : ClassRoot where TDest : class
+    public interface IClassService<TSource, TDest> where TSource : ClassBase where TDest : class
     {
         bool InsertOrUpdate(TDest inf);
 

@@ -2,7 +2,7 @@
 
 namespace Domain.Entities.ClassAgg
 {
-    public class ClassTeacher : ClassRoot
+    public class ClassTeacher : ClassBase
     {
         public virtual ClassInfo ClassInfomation { get; set; } = EntityFactory.Create<ClassInfo>();
 

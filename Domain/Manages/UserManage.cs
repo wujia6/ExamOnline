@@ -9,7 +9,7 @@ namespace Domain.Manages
     /// 用户领域服务实现类
     /// </summary>
     /// <typeparam name="T">类型</typeparam>
-    internal class UserManage<T> : IUserManage<T> where T : UserRoot
+    internal class UserManage<T> : IUserManage<T> where T : UserBase
     {
         private readonly IEfCoreRepository<T> efCore;
 

@@ -14,28 +14,28 @@ namespace ExamUI.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IUserService<UserRoot, UserRootDTO> userService;
+        private readonly IUserService<UserBase, UserBaseDTO> userService;
 
         //依赖注入
-        public UserController(IUserService<UserRoot,UserRootDTO> service)
+        public UserController(IUserService<UserBase, UserBaseDTO> service)
         {
             this.userService = service;
         }
 
         [HttpPost]
-        public IActionResult Login(UserRootDTO model)
+        public IActionResult Login(UserBaseDTO model)
         {
-            if (!ModelState.IsValid)
-            {
-                foreach (var key in ModelState.Keys)
-                {
-                    var modelState = ModelState[key];
-                    if (modelState.Errors.Any())
-                        return Content(modelState.Errors.FirstOrDefault().ErrorMessage);
-                }
-            }
-            var loginDto = model.MapTo<UserRootDTO>();
-            var loginer = userService.UserLogin(loginDto);
+            //if (!ModelState.IsValid)
+            //{
+            //    foreach (var key in ModelState.Keys)
+            //    {
+            //        var modelState = ModelState[key];
+            //        if (modelState.Errors.Any())
+            //            return Content(modelState.Errors.FirstOrDefault().ErrorMessage);
+            //    }
+            //}
+            //var loginDto = model.MapTo<UserRootDTO>();
+            //var loginer = userService.UserLogin(loginDto);
             return View();
         }
 

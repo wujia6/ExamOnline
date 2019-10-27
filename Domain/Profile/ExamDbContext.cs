@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using System.Linq;
 using Domain.Entities.AnwserAgg;
 using Domain.Entities.ClassAgg;
 using Domain.Entities.ExamAgg;
@@ -22,26 +23,39 @@ namespace Domain.Profile
                 .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
                 .Build();
-            optionsBuilder.UseSqlServer(config.GetConnectionString("SQLLocalDB"));
+            optionsBuilder.UseSqlServer(config.GetConnectionString("ExamDbConn"));
             base.OnConfiguring(optionsBuilder);
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder model)
         {
-            modelBuilder.ApplyConfiguration(new MenuConfig());
-            modelBuilder.ApplyConfiguration(new RoleConfig());
-            modelBuilder.ApplyConfiguration(new RoleMenuConfig());
-            modelBuilder.ApplyConfiguration(new UserRoleConfig());
-            modelBuilder.ApplyConfiguration(new AdminConfig());
-            modelBuilder.ApplyConfiguration(new TeacherConfig());
-            modelBuilder.ApplyConfiguration(new StudentConfig());
-            modelBuilder.ApplyConfiguration(new ClassConifg());
-            modelBuilder.ApplyConfiguration(new ClassTeacherConfig());
-            modelBuilder.ApplyConfiguration(new ClassExamConfig());
-            modelBuilder.ApplyConfiguration(new QuestionInfoConfig());
-            modelBuilder.ApplyConfiguration(new ExamInfoConfig());
-            modelBuilder.ApplyConfiguration(new AnswerInfoConfig());
-            base.OnModelCreating(modelBuilder);
+            //menus
+            model.ApplyConfiguration(new MenuConfig());
+            //roles
+            model.ApplyConfiguration(new RoleConfig());
+            model.ApplyConfiguration(new RoleMenuConfig());
+            //users
+            model.ApplyConfiguration(new UserBaseConfig())
+                .Entity<UserBase>()
+                .HasDiscriminator<string>("UserType")
+                .HasValue<AdminInfo>("adm")
+                .HasValue<TeacherInfo>("thr")
+                .HasValue<StudentInfo>("stu");
+            model.ApplyConfiguration(new UserRoleConfig());
+            model.ApplyConfiguration(new AdminConfig());
+            model.ApplyConfiguration(new TeacherConfig());
+            model.ApplyConfiguration(new StudentConfig());
+            //classes
+            model.ApplyConfiguration(new ClassConifg());
+            model.ApplyConfiguration(new ClassTeacherConfig());
+            model.ApplyConfiguration(new ClassExaminationConfig());
+            //questions
+            model.ApplyConfiguration(new QuestionInfoConfig());
+            //exams
+            model.ApplyConfiguration(new ExaminationConfig());
+            //answers
+            model.ApplyConfiguration(new AnswerInfoConfig());
+            base.OnModelCreating(model);
         }
 
         #region ###实现IExamDbContext接口
@@ -64,20 +78,21 @@ namespace Domain.Profile
         {
             this.Database.RollbackTransaction();
         }
-
+        
         public DbSet<MenuInfo> Menus { get; set; }
         public DbSet<RoleInfo> Roles { get; set; }
         public DbSet<RoleMenu> RoleMenus { get; set; }
+        public DbSet<UserBase> UserBases { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<AdminInfo> Admins { get; set; }
         public DbSet<TeacherInfo> Teachers { get; set; }
         public DbSet<StudentInfo> Students { get; set; }
-        public DbSet<ClassInfo> ClassInfos { get; set; }
+        public DbSet<ClassInfo> Classes { get; set; }
         public DbSet<ClassTeacher> ClassTeachers { get; set; }
-        public DbSet<ClassExam> ClassExams { get; set; }
-        public DbSet<QuestionInfo> QuestionInfos { get; set; }
-        public DbSet<ExamInfo> ExamInfos { get; set; }
-        public DbSet<AnswerInfo> AnswerInfos { get; set; }
+        public DbSet<ClassExamination> ClassExaminations { get; set; }
+        public DbSet<QuestionInfo> Questions { get; set; }
+        public DbSet<ExaminationInfo> Examinations { get; set; }
+        public DbSet<AnswerInfo> Answers { get; set; }
         #endregion
     }
 }

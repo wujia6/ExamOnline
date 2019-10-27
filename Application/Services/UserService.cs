@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 namespace Application.Services
 {
     internal class UserService<TSource, TDest> : IUserService<TSource, TDest> 
-        where TSource : UserRoot 
+        where TSource : UserBase 
         where TDest : class
     {
         private readonly IUserManage<TSource> userManage;
@@ -34,7 +34,7 @@ namespace Application.Services
 
         public bool Remove(TDest model)
         {
-            var userDto = model.MapTo<TDest>() as UserRootDTO;
+            var userDto = model.MapTo<TDest>() as UserBaseDTO;
             ISpecification<TSource> spec = Specification<TSource>.Eval(e => e.ID == userDto.ID);
             return userManage.Remove(spec) ? examContext.SaveChanges() > 0 : false;
         }
@@ -53,7 +53,7 @@ namespace Application.Services
 
         public TDest UserLogin(TDest model)
         {
-            var userDto = model.MapTo<TDest>() as UserRootDTO;
+            var userDto = model.MapTo<TDest>() as UserBaseDTO;
             var spec = Specification<TSource>.Eval(e => e.Account == userDto.Account && e.Pwd == userDto.Pwd);
             return userManage.FindBySpec(spec).MapTo<TDest>();
         }

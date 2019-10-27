@@ -8,7 +8,7 @@ using Infrastructure.Utils;
 namespace Application.Services
 {
     internal class ClassService<TSource, TDest> : IClassService<TSource, TDest> 
-        where TSource : ClassRoot 
+        where TSource : ClassBase 
         where TDest : class
     {
         private readonly IClassManage<TSource> classManage;

@@ -15,27 +15,27 @@ namespace Application.IServices
         /// </summary>
         /// <param name="inf">实体对象</param>
         /// <returns></returns>
-        bool InsertOrUpdate(ExamDTO inf);
+        bool InsertOrUpdate(ExaminationDTO inf);
 
         /// <summary>
         /// 删除
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        bool Remove(ISpecification<ExamInfo> spec);
+        bool Remove(ISpecification<ExaminationInfo> spec);
 
         /// <summary>
         /// 查询单个
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        ExamDTO Single(ISpecification<ExamInfo> spec);
+        ExaminationDTO Single(ISpecification<ExaminationInfo> spec);
 
         /// <summary>
         /// 查询
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        List<ExamDTO> Query(ISpecification<ExamInfo> spec);
+        List<ExaminationDTO> Query(ISpecification<ExaminationInfo> spec);
     }
 }

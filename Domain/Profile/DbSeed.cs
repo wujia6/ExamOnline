@@ -11,7 +11,7 @@ namespace Domain.Profile
     {
         public static void Initialize(IExamDbContext context)
         {
-            if (context.ClassInfos.Any())
+            if (context.Classes.Any())
                 return;
             var classInfo = EntityFactory.Create<ClassInfo>(new object[] {
                 "1701",
@@ -22,7 +22,7 @@ namespace Domain.Profile
                 1,
                 "暂无"
             });
-            context.ClassInfos.Add(classInfo);
+            context.Classes.Add(classInfo);
 
             if (context.ClassTeachers.Any())
                 return;

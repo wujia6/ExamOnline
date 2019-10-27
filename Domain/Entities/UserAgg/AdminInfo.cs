@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities.UserAgg
 {
-    public class AdminInfo : UserRoot
+    public class AdminInfo : UserBase
     {
     }
 }

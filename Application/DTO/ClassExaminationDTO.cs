@@ -2,13 +2,12 @@
 
 namespace Application.DTO
 {
-    public class ClassExamDTO
+    public class ClassExaminationDTO
     {
-        [DataMember]
         public int ID { get; set; }
 
         public ClassDTO ClassDto { get; set; }
 
-        public ExamDTO ExamDto { get; set; }
+        public ExaminationDTO ExaminationDto { get; set; }
     }
 }

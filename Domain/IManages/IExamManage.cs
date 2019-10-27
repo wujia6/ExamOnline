@@ -14,27 +14,27 @@ namespace Domain.IManages
         /// </summary>
         /// <param name="inf">实体对象</param>
         /// <returns></returns>
-        bool InsertOrUpdate(ExamInfo inf);
+        bool InsertOrUpdate(ExaminationInfo inf);
 
         /// <summary>
         /// 删除
         /// </summary>
         /// <param name="spec">规约表达式</param>
         /// <returns></returns>
-        bool Remove(ISpecification<ExamInfo> spec);
+        bool Remove(ISpecification<ExaminationInfo> spec);
 
         /// <summary>
         /// 单个查找
         /// </summary>
         /// <param name="spec">规约表达式</param>
         /// <returns></returns>
-        ExamInfo FindBySpec(ISpecification<ExamInfo> spec);
+        ExaminationInfo FindBySpec(ISpecification<ExaminationInfo> spec);
 
         /// <summary>
         /// 查询
         /// </summary>
         /// <param name="spec">规约表达式</param>
         /// <returns></returns>
-        IQueryable<ExamInfo> QueryBySpec(ISpecification<ExamInfo> spec);
+        IQueryable<ExaminationInfo> QueryBySpec(ISpecification<ExaminationInfo> spec);
     }
 }

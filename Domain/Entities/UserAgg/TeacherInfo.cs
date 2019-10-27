@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Domain.Entities.ClassAgg;
 
 namespace Domain.Entities.UserAgg
@@ -7,21 +6,13 @@ namespace Domain.Entities.UserAgg
     /// <summary>
     /// 教师实体类
     /// </summary>
-    public class TeacherInfo : UserRoot
+    public class TeacherInfo : UserBase
     {
-        /// <summary>
-        /// 专业
-        /// </summary>
+        //专业
         public string Profssion { get; set; }
-
-        /// <summary>
-        /// 课程
-        /// </summary>
+        //课程
         public CommType Course { get; set; } = CommType.C语言;
-
-        /// <summary>
-        /// 导航属性
-        /// </summary>
-        public virtual IQueryable<ClassTeacher> ClassTeachers { get; set; } = new List<ClassTeacher>().AsQueryable();
+        //导航属性
+        public virtual IQueryable<ClassTeacher> ClassTeachers { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Domain.Entities.RoleAgg;
 using Domain.IComm;
 
 namespace Domain.Entities.UserAgg
@@ -8,7 +7,7 @@ namespace Domain.Entities.UserAgg
     /// <summary>
     /// 用户实体类（聚合根）
     /// </summary>
-    public abstract class UserRoot : BaseEntity, IAggregateRoot
+    public class UserBase : BaseEntity, IAggregateRoot
     {
         //账号
         public string Account { get; set; }
