@@ -31,7 +31,7 @@ namespace Application.IServices
         /// </summary>
         /// <param name="id">主键</param>
         /// <returns></returns>
-        TDest FindById(int id);
+        TDest FindBy(Expression<Func<TSource, bool>> express);
 
         /// <summary>
         /// 查询
@@ -39,19 +39,5 @@ namespace Application.IServices
         /// <param name="spec">条件委托</param>
         /// <returns></returns>
         List<TDest> QueryBySet(Expression<Func<TSource,bool>> express);
-
-        /// <summary>
-        /// 用户登录
-        /// </summary>
-        /// <param name="spec">规约对象</param>
-        /// <returns></returns>
-        TDest UserLogin(TDest model);
-
-        /// <summary>
-        /// 用户注册
-        /// </summary>
-        /// <param name="model">用户对象</param>
-        /// <returns></returns>
-        bool UserRegister(TDest model);
     }
 }

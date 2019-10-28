@@ -9,6 +9,9 @@ using Domain.Entities.UserAgg;
 using Application.DTO;
 using Domain.IComm;
 using Infrastructure.Utils;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ExamUI.Controllers
 {
@@ -22,21 +25,29 @@ namespace ExamUI.Controllers
             this.userService = service;
         }
 
-        [HttpPost]
-        public IActionResult Login(UserDTO model)
+        public IActionResult Login()
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    foreach (var key in ModelState.Keys)
-            //    {
-            //        var modelState = ModelState[key];
-            //        if (modelState.Errors.Any())
-            //            return Content(modelState.Errors.FirstOrDefault().ErrorMessage);
-            //    }
-            //}
-            //var loginDto = model.MapTo<UserRootDTO>();
-            //var loginer = userService.UserLogin(loginDto);
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(SignInViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return Json(new { result = false, message = "账号或密码格式错误" });
+            var loginer = userService.QueryBySet(express: usr => usr.Account == model.Account && usr.Pwd == model.Password);
+            var claims = new List<Claim>{
+                new Claim(ClaimTypes.Name,model.Account),
+                new Claim("password",model.Password)
+            };
+            var userPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims,"ApplicationUser"));
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal, new AuthenticationProperties
+            {
+                ExpiresUtc = DateTime.UtcNow.AddMinutes(model.ExpireMin),
+                IsPersistent = true,
+                AllowRefresh = true
+            });
+            return RedirectToAction(nameof(HomeController.Index), "Home");   
         }
 
         [HttpPost]

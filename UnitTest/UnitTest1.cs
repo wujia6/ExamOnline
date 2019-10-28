@@ -108,9 +108,9 @@ namespace UnitTest
         [TestMethod]
         public void GetClassInstanceTest()
         {
-            var classInstance = Assembly.LoadFrom("Application.dll").CreateInstance("Application.DTO.RuleConfig");
-            classInstance.GetType().GetMethod("Initialize").Invoke(classInstance, null);
-            //AutoMapperHelper.InitMaps();
+            //var classInstance = Assembly.LoadFrom("Application.dll").CreateInstance("Application.DTO.RuleConfig");
+            //classInstance.GetType().GetMethod("Initialize").Invoke(classInstance, null);
+            AutoMapperHelper.SetMappings();
         }
     }
 }

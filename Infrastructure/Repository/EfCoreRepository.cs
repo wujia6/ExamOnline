@@ -13,7 +13,7 @@ namespace Infrastructure.Repository
             this.DBContext = context;
         }
 
-        public IExamDbContext DBContext { get; }
+        public IExamDbContext DBContext { get; private set; }
 
         public IQueryable<T> EntitySet => DBContext.Set<T>().AsQueryable();
 

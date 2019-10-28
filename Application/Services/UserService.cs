@@ -39,9 +39,9 @@ namespace Application.Services
             return userManage.Remove(spec) ? examContext.SaveChanges() > 0 : false;
         }
 
-        public TDest FindById(int id)
+        public TDest FindBy(Expression<Func<TSource, bool>> express)
         {
-            var spec = Specification<TSource>.Eval(e => e.ID == id);
+            var spec = Specification<TSource>.Eval(express);
             return userManage.FindBySpec(spec).MapTo<TDest>();
         }
 
@@ -49,21 +49,6 @@ namespace Application.Services
         {
             var spec = Specification<TSource>.Eval(express);
             return userManage.QueryBySpec(spec).MapToList<TDest>();
-        }
-
-        public TDest UserLogin(TDest model)
-        {
-            var userDto = model.MapTo<TDest>() as UserDTO;
-            var spec = Specification<TSource>.Eval(e => e.Account == userDto.Account && e.Pwd == userDto.Pwd);
-            return userManage.FindBySpec(spec).MapTo<TDest>();
-        }
-
-        public bool UserRegister(TDest model)
-        {
-            if (model==null)
-                return false;
-            var entity = model.MapTo<TSource>();
-            return userManage.InsertOrUpdate(entity);
         }
     }
 }

@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ExamUI.Models;
 
+
 namespace ExamUI.Controllers
 {
     public class HomeController : Controller
     {
+        
+
         public IActionResult Index()
         {
             return View();
