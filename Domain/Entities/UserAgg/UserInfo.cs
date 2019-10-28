@@ -7,7 +7,7 @@ namespace Domain.Entities.UserAgg
     /// <summary>
     /// 用户实体类（聚合根）
     /// </summary>
-    public class UserBase : BaseEntity, IAggregateRoot
+    public class UserInfo : BaseEntity, IAggregateRoot
     {
         //账号
         public string Account { get; set; }

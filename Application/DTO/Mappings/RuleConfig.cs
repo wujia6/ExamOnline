@@ -44,7 +44,7 @@ namespace Application.DTO
                     opts.MapFrom(src => Mapper.Map<IEnumerable<AnswerInfo>, List<AnswerDTO>>(src.AnswerInfomations)));
 
             CreateMap<QuestionInfo, QuestionDTO>()
-                .ForMember(dest => dest.ExaminationDto, opts => opts.MapFrom(src => src.ExamInfomation));
+                .ForMember(dest => dest.ExaminationDto, opts => opts.MapFrom(src => src.ExaminationInfomation));
 
             CreateMap<ExaminationInfo, ExaminationDTO>()
                 .ForMember(dest => dest.TeacherDtos, opts =>
@@ -89,7 +89,7 @@ namespace Application.DTO
                     opts.MapFrom(src => Mapper.Map<List<AnswerDTO>, IEnumerable<AnswerInfo>>(src.AnswerDtos)));
 
             CreateMap<QuestionDTO, QuestionInfo>()
-                .ForMember(dest => dest.ExamInfomation, opts => opts.MapFrom(src => src.ExaminationDto));
+                .ForMember(dest => dest.ExaminationInfomation, opts => opts.MapFrom(src => src.ExaminationDto));
 
             CreateMap<ExaminationDTO, ExaminationInfo>()
                 .ForMember(dest => dest.TeacherInfomations, opts =>

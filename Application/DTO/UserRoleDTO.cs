@@ -6,7 +6,7 @@
 
         public string Remark { get; set; }
 
-        public UserBaseDTO UserDto { get; set; }
+        public UserDTO UserDto { get; set; }
 
         public RoleDTO RoleDto { get; set; }
     }

@@ -6,7 +6,7 @@ namespace Domain.Entities.UserAgg
     /// <summary>
     /// 教师实体类
     /// </summary>
-    public class TeacherInfo : UserBase
+    public class TeacherInfo : UserInfo
     {
         //专业
         public string Profssion { get; set; }

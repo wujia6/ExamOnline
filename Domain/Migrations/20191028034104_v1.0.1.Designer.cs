@@ -4,14 +4,16 @@ using Domain.Profile;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Domain.Migrations
 {
     [DbContext(typeof(ExamDbContext))]
-    partial class ExamDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191028034104_v1.0.1")]
+    partial class v101
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,7 +184,7 @@ namespace Domain.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.Property<int?>("ExaminationInfomationID");
+                    b.Property<int?>("ExamInfomationID");
 
                     b.Property<int>("Level");
 
@@ -195,7 +197,7 @@ namespace Domain.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("ExaminationInfomationID");
+                    b.HasIndex("ExamInfomationID");
 
                     b.ToTable("Questions");
                 });
@@ -243,7 +245,7 @@ namespace Domain.Migrations
                     b.ToTable("RoleMenus");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserAgg.UserInfo", b =>
+            modelBuilder.Entity("Domain.Entities.UserAgg.User", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -256,6 +258,9 @@ namespace Domain.Migrations
                     b.Property<int>("Age");
 
                     b.Property<DateTime>("CreateDate");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
 
                     b.Property<int>("Gender");
 
@@ -274,14 +279,11 @@ namespace Domain.Migrations
                         .IsRequired()
                         .HasMaxLength(11);
 
-                    b.Property<string>("UserType")
-                        .IsRequired();
-
                     b.HasKey("ID");
 
-                    b.ToTable("Users");
+                    b.ToTable("UserBases");
 
-                    b.HasDiscriminator<string>("UserType").HasValue("UserInfo");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserAgg.UserRole", b =>
@@ -307,14 +309,14 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserAgg.AdminInfo", b =>
                 {
-                    b.HasBaseType("Domain.Entities.UserAgg.UserInfo");
+                    b.HasBaseType("Domain.Entities.UserAgg.User");
 
-                    b.HasDiscriminator().HasValue("admin");
+                    b.HasDiscriminator().HasValue("AdminInfo");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserAgg.StudentInfo", b =>
                 {
-                    b.HasBaseType("Domain.Entities.UserAgg.UserInfo");
+                    b.HasBaseType("Domain.Entities.UserAgg.User");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -344,12 +346,12 @@ namespace Domain.Migrations
 
                     b.HasIndex("ClassInfomationID");
 
-                    b.HasDiscriminator().HasValue("student");
+                    b.HasDiscriminator().HasValue("StudentInfo");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserAgg.TeacherInfo", b =>
                 {
-                    b.HasBaseType("Domain.Entities.UserAgg.UserInfo");
+                    b.HasBaseType("Domain.Entities.UserAgg.User");
 
                     b.Property<int>("Course");
 
@@ -361,7 +363,7 @@ namespace Domain.Migrations
 
                     b.HasIndex("ExaminationInfoID");
 
-                    b.HasDiscriminator().HasValue("teacher");
+                    b.HasDiscriminator().HasValue("TeacherInfo");
                 });
 
             modelBuilder.Entity("Domain.Entities.AnwserAgg.AnswerInfo", b =>
@@ -399,9 +401,9 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.Entities.QuestionAgg.QuestionInfo", b =>
                 {
-                    b.HasOne("Domain.Entities.ExamAgg.ExaminationInfo", "ExaminationInfomation")
+                    b.HasOne("Domain.Entities.ExamAgg.ExaminationInfo", "ExamInfomation")
                         .WithMany("QuestionInfomations")
-                        .HasForeignKey("ExaminationInfomationID");
+                        .HasForeignKey("ExamInfomationID");
                 });
 
             modelBuilder.Entity("Domain.Entities.RoleAgg.RoleMenu", b =>
@@ -421,7 +423,7 @@ namespace Domain.Migrations
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleInfomationID");
 
-                    b.HasOne("Domain.Entities.UserAgg.UserInfo", "UserInfomation")
+                    b.HasOne("Domain.Entities.UserAgg.User", "UserInfomation")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserInfomationID");
                 });

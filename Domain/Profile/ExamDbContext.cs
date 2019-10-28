@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using System.Linq;
 using Domain.Entities.AnwserAgg;
 using Domain.Entities.ClassAgg;
 using Domain.Entities.ExamAgg;
@@ -35,12 +34,12 @@ namespace Domain.Profile
             model.ApplyConfiguration(new RoleConfig());
             model.ApplyConfiguration(new RoleMenuConfig());
             //users
-            model.ApplyConfiguration(new UserBaseConfig())
-                .Entity<UserBase>()
+            model.ApplyConfiguration(new UserConfig())
+                .Entity<UserInfo>()
                 .HasDiscriminator<string>("UserType")
-                .HasValue<AdminInfo>("adm")
-                .HasValue<TeacherInfo>("thr")
-                .HasValue<StudentInfo>("stu");
+                .HasValue<AdminInfo>("admin")
+                .HasValue<TeacherInfo>("teacher")
+                .HasValue<StudentInfo>("student");
             model.ApplyConfiguration(new UserRoleConfig());
             model.ApplyConfiguration(new AdminConfig());
             model.ApplyConfiguration(new TeacherConfig());
@@ -82,7 +81,7 @@ namespace Domain.Profile
         public DbSet<MenuInfo> Menus { get; set; }
         public DbSet<RoleInfo> Roles { get; set; }
         public DbSet<RoleMenu> RoleMenus { get; set; }
-        public DbSet<UserBase> UserBases { get; set; }
+        public DbSet<UserInfo> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<AdminInfo> Admins { get; set; }
         public DbSet<TeacherInfo> Teachers { get; set; }

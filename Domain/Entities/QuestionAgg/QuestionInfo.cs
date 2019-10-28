@@ -36,6 +36,6 @@ namespace Domain.Entities.QuestionAgg
         /// <summary>
         /// 考试信息（导航属性）
         /// </summary>
-        public virtual ExaminationInfo ExamInfomation { get; set; }
+        public virtual ExaminationInfo ExaminationInfomation { get; set; }
     }
 }

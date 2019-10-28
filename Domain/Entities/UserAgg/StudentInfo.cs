@@ -7,7 +7,7 @@ namespace Domain.Entities.UserAgg
     /// <summary>
     /// 学生实体类
     /// </summary>
-    public class StudentInfo : UserBase
+    public class StudentInfo : UserInfo
     {
         //学号
         public string StudentNo { get; set; }

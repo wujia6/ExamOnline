@@ -2,7 +2,7 @@
 
 namespace Application.DTO
 {
-    public class StudentDTO : UserBaseDTO
+    public class StudentDTO : UserDTO
     {
         public string StudentNo { get; set; }
         

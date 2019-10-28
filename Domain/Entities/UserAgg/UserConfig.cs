@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Domain.Entities.UserAgg
 {
-    public class UserBaseConfig : IEntityTypeConfiguration<UserBase>
+    public class UserConfig : IEntityTypeConfiguration<UserInfo>
     {
-        public void Configure(EntityTypeBuilder<UserBase> builder)
+        public void Configure(EntityTypeBuilder<UserInfo> builder)
         {
             builder.HasKey(e => e.ID);
             builder.Property(e => e.Account).IsRequired().HasMaxLength(30);

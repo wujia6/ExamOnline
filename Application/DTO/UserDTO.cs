@@ -4,7 +4,7 @@ using Domain.Entities;
 
 namespace Application.DTO
 {
-    public class UserBaseDTO
+    public class UserDTO
     {
         public int ID { get; set; }
 

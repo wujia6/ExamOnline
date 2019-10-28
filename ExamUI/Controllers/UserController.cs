@@ -14,16 +14,16 @@ namespace ExamUI.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IUserService<UserBase, UserBaseDTO> userService;
+        private readonly IUserService<UserInfo, UserDTO> userService;
 
         //依赖注入
-        public UserController(IUserService<UserBase, UserBaseDTO> service)
+        public UserController(IUserService<UserInfo, UserDTO> service)
         {
             this.userService = service;
         }
 
         [HttpPost]
-        public IActionResult Login(UserBaseDTO model)
+        public IActionResult Login(UserDTO model)
         {
             //if (!ModelState.IsValid)
             //{

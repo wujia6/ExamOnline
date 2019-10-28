@@ -6,11 +6,11 @@ namespace Domain.Entities.UserAgg
     {
         public UserRole()
         {
-            this.UserInfomation = EntityFactory.Create<UserBase>();
+            this.UserInfomation = EntityFactory.Create<UserInfo>();
             this.RoleInfomation = EntityFactory.Create<RoleInfo>();
         }
         //导航属性
-        public virtual UserBase UserInfomation { get; set; }
+        public virtual UserInfo UserInfomation { get; set; }
         //导航属性
         public virtual RoleInfo RoleInfomation { get; set; }
     }

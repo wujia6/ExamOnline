@@ -10,7 +10,7 @@ namespace Application.IServices
     /// </summary>
     /// <typeparam name="TSource">实体类型</typeparam>
     /// <typeparam name="TDest">DTO类型</typeparam>
-    public interface IUserService<TSource, TDest> where TSource : UserBase where TDest : class
+    public interface IUserService<TSource, TDest> where TSource : UserInfo where TDest : class
     {
         /// <summary>
         /// 插入或更新
