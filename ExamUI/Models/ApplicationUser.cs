@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace ExamUI.Models
 {
-    public class SignInViewModel
+    public class ApplicationUser : IdentityUser
     {
         [Required]
-        [StringLength(20,ErrorMessage = "账号6-20个字符，字母开头并包含字母、数字或下划线",MinimumLength =6)]
+        [StringLength(20, ErrorMessage = "账号6-20个字符，字母开头并包含字母、数字或下划线", MinimumLength = 6)]
         public string Account { get; set; }
 
         [Required]
@@ -20,5 +21,7 @@ namespace ExamUI.Models
         public bool RememberMe { get; set; } = false;
 
         public int ExpireMin { get; set; } = 15;
+
+        public string ReturnUrl { get; set; } = string.Empty;
     }
 }

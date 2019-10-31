@@ -18,7 +18,7 @@ namespace ExamUI
     {
         public Startup()
         {
-            AutoMapperHelper.SetMappings();    //加载DTO转换配置
+            //AutoMapperHelper.SetMappings();    //加载DTO转换配置
         }
 
         public IConfiguration Configuration => ConfigurationUtils.Configuration;
@@ -31,7 +31,7 @@ namespace ExamUI
             //添加授权支持，并添加使用Cookie的方式，配置登录页面和没有权限时的跳转页面
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,opts=> {
-                    opts.LoginPath = new PathString("User/Login");//登录路径：这是当用户试图访问资源但未经过身份验证时，程序将会将请求重定向到这个相对路径。
+                    opts.LoginPath = new PathString("/Account/Login");//登录路径：这是当用户试图访问资源但未经过身份验证时，程序将会将请求重定向到这个相对路径。
                     opts.AccessDeniedPath = new PathString("/Shared/Error");//禁止访问路径：当用户试图访问资源时，但未通过该资源的任何授权策略，请求将被重定向到这个相对路径。
                     //Cookie可以分为永久性的和临时性的。 临时性的是指只在当前浏览器进程里有效，浏览器一旦关闭就失效（被浏览器删除）。
                     //永久性的是指Cookie指定了一个过期时间，在这个时间到达之前，此cookie一直有效（浏览器一直记录着此cookie的存在）。 
