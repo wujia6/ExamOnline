@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using Domain.Entities.ClassAgg;
+using Domain.Entities;
 using Domain.IComm;
 using Domain.IManages;
 
 namespace Domain.Manages
 {
-    internal class ClassManage<T> : IClassManage<T> where T : ClassBase
+    public class ClassManage<T> : IClassManage<T> where T : BaseEntity, IAggregateRoot
     {
         private readonly IEfCoreRepository<T> efCore;
 
@@ -14,25 +14,25 @@ namespace Domain.Manages
             this.efCore = ef;
         }
 
-        public bool InsertOrUpdate(T inf)
+        public bool AddOrEdit(T entity)
         {
-            if (inf == null)
+            if (entity == null)
                 return false;
-            return inf.ID > 0 ? efCore.InsertEntity(inf) : efCore.UpdateEntity(inf);
+            return entity.ID > 0 ? efCore.InsertEntity(entity) : efCore.UpdateEntity(entity);
         }
 
         public bool Remove(ISpecification<T> spec)
         {
-            var entity = FindBySpec(spec);
+            var entity = FindBy(spec);
             return entity == null ? false : efCore.RemoveEntity(entity);
         }
 
-        public T FindBySpec(ISpecification<T> spec)
+        public T FindBy(ISpecification<T> spec)
         {
             return efCore.FindBySpec(spec);
         }
 
-        public IQueryable<T> QueryBySpec(ISpecification<T> spec)
+        public IQueryable<T> QuerySet(ISpecification<T> spec)
         {
             return efCore.QueryBySpec(spec);
         }

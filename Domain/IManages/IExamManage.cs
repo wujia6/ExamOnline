@@ -12,9 +12,9 @@ namespace Domain.IManages
         /// <summary>
         /// 添加或修改
         /// </summary>
-        /// <param name="inf">实体对象</param>
+        /// <param name="entity">实体对象</param>
         /// <returns></returns>
-        bool InsertOrUpdate(ExaminationInfo inf);
+        bool AddOrEdit(ExaminationInfo entity);
 
         /// <summary>
         /// 删除
@@ -28,13 +28,13 @@ namespace Domain.IManages
         /// </summary>
         /// <param name="spec">规约表达式</param>
         /// <returns></returns>
-        ExaminationInfo FindBySpec(ISpecification<ExaminationInfo> spec);
+        ExaminationInfo FindBy(ISpecification<ExaminationInfo> spec);
 
         /// <summary>
         /// 查询
         /// </summary>
         /// <param name="spec">规约表达式</param>
         /// <returns></returns>
-        IQueryable<ExaminationInfo> QueryBySpec(ISpecification<ExaminationInfo> spec);
+        IQueryable<ExaminationInfo> QuerySet(ISpecification<ExaminationInfo> spec);
     }
 }

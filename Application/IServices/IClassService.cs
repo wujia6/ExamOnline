@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Domain.Entities.ClassAgg;
+using Domain.Entities;
 using Domain.IComm;
 
 namespace Application.IServices
@@ -7,14 +7,16 @@ namespace Application.IServices
     /// <summary>
     /// 班级应用服务接口
     /// </summary>
-    public interface IClassService<TSource, TDest> where TSource : ClassBase where TDest : class
+    public interface IClassService<TSource, TDest> 
+        where TSource : BaseEntity, IAggregateRoot 
+        where TDest : class
     {
-        bool InsertOrUpdate(TDest inf);
+        bool AddOrEdit(TDest model);
 
         bool Remove(ISpecification<TSource> spec);
 
-        TDest Single(ISpecification<TSource> spec);
+        TDest FindBy(ISpecification<TSource> spec);
 
-        List<TDest> Query(ISpecification<TSource> spec);
+        List<TDest> QuerySet(ISpecification<TSource> spec);
     }
 }

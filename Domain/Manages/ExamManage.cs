@@ -5,7 +5,7 @@ using Domain.IManages;
 
 namespace Domain.Manages
 {
-    internal class ExamManage : IExamManage
+    public class ExamManage : IExamManage
     {
         private readonly IEfCoreRepository<ExaminationInfo> efCore;
 
@@ -14,25 +14,25 @@ namespace Domain.Manages
             this.efCore = ef;
         }
 
-        public bool InsertOrUpdate(ExaminationInfo inf)
+        public bool AddOrEdit(ExaminationInfo entity)
         {
-            if (inf == null)
+            if (entity == null)
                 return false;
-            return inf.ID > 0 ? efCore.InsertEntity(inf) : efCore.UpdateEntity(inf);
+            return entity.ID > 0 ? efCore.UpdateEntity(entity) : efCore.InsertEntity(entity);
         }
 
         public bool Remove(ISpecification<ExaminationInfo> spec)
         {
-            var entity = FindBySpec(spec);
+            var entity = FindBy(spec);
             return entity == null ? false : efCore.RemoveEntity(entity);
         }
 
-        public ExaminationInfo FindBySpec(ISpecification<ExaminationInfo> spec)
+        public ExaminationInfo FindBy(ISpecification<ExaminationInfo> spec)
         {
             return efCore.FindBySpec(spec);
         }
 
-        public IQueryable<ExaminationInfo> QueryBySpec(ISpecification<ExaminationInfo> spec)
+        public IQueryable<ExaminationInfo> QuerySet(ISpecification<ExaminationInfo> spec)
         {
             return efCore.QueryBySpec(spec);
         }

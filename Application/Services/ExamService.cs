@@ -8,7 +8,7 @@ using Infrastructure.Utils;
 
 namespace Application.Services
 {
-    internal class ExamService : IExamService
+    public class ExamService : IExamService
     {
         private readonly IExamManage examManage;
         private readonly IExamDbContext examContext;
@@ -19,12 +19,12 @@ namespace Application.Services
             this.examContext = context;
         }
 
-        public bool InsertOrUpdate(ExaminationDTO inf)
+        public bool AddOrEdit(ExaminationDTO model)
         {
-            if (inf == null)
+            if (model == null)
                 return false;
-            var entity = inf.MapTo<ExaminationInfo>();
-            return examManage.InsertOrUpdate(entity) ? examContext.SaveChanges() > 0 : false;
+            var entity = model.MapTo<ExaminationInfo>();
+            return examManage.AddOrEdit(entity) ? examContext.SaveChanges() > 0 : false;
         }
 
         public bool Remove(ISpecification<ExaminationInfo> spec)
@@ -32,14 +32,14 @@ namespace Application.Services
             return examManage.Remove(spec) ? examContext.SaveChanges() > 0 : false;
         }
 
-        public ExaminationDTO Single(ISpecification<ExaminationInfo> spec)
+        public ExaminationDTO FindBy(ISpecification<ExaminationInfo> spec)
         {
-            return examManage.FindBySpec(spec).MapTo<ExaminationDTO>();
+            return examManage.FindBy(spec).MapTo<ExaminationDTO>();
         }
 
-        public List<ExaminationDTO> Query(ISpecification<ExaminationInfo> spec)
+        public List<ExaminationDTO> QuerySet(ISpecification<ExaminationInfo> spec)
         {
-            return examManage.QueryBySpec(spec).MapToList<ExaminationDTO>();
+            return examManage.QuerySet(spec).MapToList<ExaminationDTO>();
         }
     }
 }

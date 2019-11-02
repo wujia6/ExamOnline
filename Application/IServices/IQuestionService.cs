@@ -13,9 +13,9 @@ namespace Application.IServices
         /// <summary>
         /// 插入或更新
         /// </summary>
-        /// <param name="inf">实体对象</param>
+        /// <param name="model">实体对象</param>
         /// <returns></returns>
-        bool InsertOrUpdate(QuestionDTO inf);
+        bool AddOrEdit(QuestionDTO model);
 
         /// <summary>
         /// 删除
@@ -29,13 +29,13 @@ namespace Application.IServices
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        QuestionDTO Single(ISpecification<QuestionInfo> spec);
+        QuestionDTO FindBy(ISpecification<QuestionInfo> spec);
 
         /// <summary>
         /// 查询
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        List<QuestionDTO> Query(ISpecification<QuestionInfo> spec);
+        List<QuestionDTO> QuerySet(ISpecification<QuestionInfo> spec);
     }
 }

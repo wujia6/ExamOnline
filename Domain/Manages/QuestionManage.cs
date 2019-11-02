@@ -5,7 +5,7 @@ using Domain.IManages;
 
 namespace Domain.Manages
 {
-    internal class QuestionManage : IQuestionManage
+    public class QuestionManage : IQuestionManage
     {
         private readonly IEfCoreRepository<QuestionInfo> efCore;
 
@@ -14,25 +14,25 @@ namespace Domain.Manages
             this.efCore = ef;
         }
 
-        public bool InsertOrUpdate(QuestionInfo inf)
+        public bool AddOrEdit(QuestionInfo entity)
         {
-            if (inf == null)
+            if (entity == null)
                 return false;
-            return inf.ID > 0 ? efCore.InsertEntity(inf) : efCore.UpdateEntity(inf);
+            return entity.ID > 0 ? efCore.InsertEntity(entity) : efCore.UpdateEntity(entity);
         }
 
         public bool Remove(ISpecification<QuestionInfo> spec)
         {
-            var entity = FindBySpec(spec);
+            var entity = FindBy(spec);
             return entity == null ? false : efCore.RemoveEntity(entity);
         }
 
-        public QuestionInfo FindBySpec(ISpecification<QuestionInfo> spec)
+        public QuestionInfo FindBy(ISpecification<QuestionInfo> spec)
         {
             return efCore.FindBySpec(spec);
         }
 
-        public IQueryable<QuestionInfo> QueryBySpec(ISpecification<QuestionInfo> spec)
+        public IQueryable<QuestionInfo> QuerySet(ISpecification<QuestionInfo> spec)
         {
             return efCore.QueryBySpec(spec);
         }

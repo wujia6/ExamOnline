@@ -8,7 +8,7 @@ using Infrastructure.Utils;
 
 namespace Application.Services
 {
-    internal class AnswerService : IAnswerService
+    public class AnswerService : IAnswerService
     {
         private readonly IAnswerManage answerManage;
         private readonly IExamDbContext examContext;
@@ -19,12 +19,12 @@ namespace Application.Services
             this.examContext = context;
         }
 
-        public bool InsertOrUpdate(AnswerDTO inf)
+        public bool AddOrEdit(AnswerDTO model)
         {
-            if (inf == null)
+            if (model == null)
                 return false;
-            var entity = inf.MapTo<AnswerInfo>();
-            return answerManage.InsertOrUpdate(entity) ? examContext.SaveChanges() > 0 : false;
+            var entity = model.MapTo<AnswerInfo>();
+            return answerManage.AddOrEdit(entity) ? examContext.SaveChanges() > 0 : false;
         }
 
         public bool Remove(ISpecification<AnswerInfo> spec)
@@ -32,14 +32,14 @@ namespace Application.Services
             return answerManage.Remove(spec) ? examContext.SaveChanges() > 0 : false;
         }
 
-        public AnswerDTO Single(ISpecification<AnswerInfo> spec)
+        public AnswerDTO FindBy(ISpecification<AnswerInfo> spec)
         {
-            return answerManage.FindBySpec(spec).MapTo<AnswerDTO>();
+            return answerManage.FindBy(spec).MapTo<AnswerDTO>();
         }
 
-        public List<AnswerDTO> Query(ISpecification<AnswerInfo> spec)
+        public List<AnswerDTO> QuerySet(ISpecification<AnswerInfo> spec)
         {
-            return answerManage.QueryBySpec(spec).MapToList<AnswerDTO>();
+            return answerManage.QuerySet(spec).MapToList<AnswerDTO>();
         }
     }
 }

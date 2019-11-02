@@ -8,37 +8,36 @@ namespace Domain.Manages
     /// <summary>
     /// 用户领域服务实现类
     /// </summary>
-    /// <typeparam name="T">类型</typeparam>
-    internal class UserManage<T> : IUserManage<T> where T : UserInfo
+    public class UserManage : IUserManage
     {
-        private readonly IEfCoreRepository<T> efCore;
+        private readonly IEfCoreRepository<UserInfo> efCore;
 
-        public UserManage(IEfCoreRepository<T> ef)
+        public UserManage(IEfCoreRepository<UserInfo> ef)
         {
             this.efCore = ef;
         }
 
-        public bool InsertOrUpdate(T inf)
-        {
-            if (inf == null)
-                return false;
-            return inf.ID > 0 ? efCore.UpdateEntity(inf) : efCore.InsertEntity(inf);
-        }
-
-        public bool Remove(ISpecification<T> spec)
-        {
-            var entity = FindBySpec(spec);
-            return entity == null ? false : efCore.RemoveEntity(entity);
-        }
-
-        public T FindBySpec(ISpecification<T> spec)
+        public UserInfo FindBy(ISpecification<UserInfo> spec)
         {
             return efCore.FindBySpec(spec);
         }
 
-        public IQueryable<T> QueryBySpec(ISpecification<T> spec)
+        public bool AddOrEdit(UserInfo entity)
+        {
+            if (entity == null)
+                return false;
+            return entity.ID > 0 ? efCore.UpdateEntity(entity) : efCore.InsertEntity(entity);
+        }
+
+        public IQueryable<UserInfo> QuerySet(ISpecification<UserInfo> spec)
         {
             return efCore.QueryBySpec(spec);
+        }
+
+        public bool Remove(ISpecification<UserInfo> spec)
+        {
+            var entity = FindBy(spec);
+            return entity == null ? false : efCore.RemoveEntity(entity);
         }
     }
 }

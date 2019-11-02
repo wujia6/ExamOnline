@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using Domain.Entities.UserAgg;
+using Domain.IComm;
 
 namespace Domain.Entities.ClassAgg
 {
     /// <summary>
     /// 班级实体类（聚合根）
     /// </summary>
-    public class ClassInfo : ClassBase
+    public class ClassInfo : ClassBase, IAggregateRoot
     {
         /// <summary>
         /// 名称

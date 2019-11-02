@@ -17,12 +17,12 @@ namespace ExamUI.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IUserService<UserInfo, UserDTO> userService;
+        //private readonly IUserService userService;
 
-        //依赖注入
-        public UserController(IUserService<UserInfo, UserDTO> service)
-        {
-            this.userService = service;
-        }
+        ////依赖注入
+        //public UserController(IUserService service)
+        //{
+        //    this.userService = service;
+        //}
     }
 }
