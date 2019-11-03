@@ -13,7 +13,8 @@ namespace ExamUI
     {
         public Startup()
         {
-            AutoMapperHelper.SetMappings();    //加载DTO转换配置
+            //加载DTO转换配置
+            AutoMapperHelper.SetMappings();
             //数据初始化
             //using (var scope = ApplicationContainer.BeginLifetimeScope())
             //{
@@ -30,9 +31,8 @@ namespace ExamUI
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             //添加授权支持，并添加使用Cookie的方式，配置登录页面和没有权限时的跳转页面
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                opts =>
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,opts =>
                 {
                     opts.LoginPath = new PathString("/Account/Login");//登录路径：这是当用户试图访问资源但未经过身份验证时，程序将会将请求重定向到这个相对路径。
                     opts.LogoutPath = new PathString("/Account/Login");

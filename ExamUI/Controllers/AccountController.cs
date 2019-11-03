@@ -17,7 +17,8 @@ namespace ExamUI.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private IUserService userService;
+        private readonly IUserService userService;
+
         public AccountController(IUserService service)
         {
             userService = service;
@@ -43,10 +44,11 @@ namespace ExamUI.Controllers
             try
             {
                 if (!ModelState.IsValid)
-                    return Json(new { result = false, message = "账号或密码格式错误" });
-
+                {
+                    ModelState.AddModelError(string.Empty, "输入错误，请按格式填写");
+                    return View(model);
+                }
                 var userInfo = userService.FindBy(express: usr => usr.Account == model.Account && usr.Pwd == model.Password);
-
                 if (userInfo == null)
                     return Json(new { result = false, message = "错误的账号或密码" });
                 //获取用户角色集合

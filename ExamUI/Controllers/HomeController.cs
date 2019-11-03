@@ -1,21 +1,20 @@
 ﻿using System.Diagnostics;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using ExamUI.Models;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
-using Application.Authentication;
 
 namespace ExamUI.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
-    { 
+    {
         public IActionResult Index()
         {
             //var identityUser = userManager.GetUserAsync(HttpContext.User);
             //string userJson = User.FindFirst(ClaimTypes.UserData).Value;
             //CustomIdentity identity = User.Identity as CustomIdentity;
-            return RedirectToAction(nameof(AccountController.Login), "Account");
+            //return RedirectToAction(nameof(AccountController.Login), "Account");
+            return View();
         }
 
         public IActionResult Privacy()
