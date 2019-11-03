@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using AutoMapper;
 
@@ -15,7 +14,7 @@ namespace Infrastructure.Utils
         /// </summary>
         public static void SetMappings()
         {
-            var classInstance = Assembly.LoadFrom("Application.dll").CreateInstance("Application.DTO.RuleConfig");
+            var classInstance = Common.GetAssembly("Application").CreateInstance("Application.DTO.RuleConfig");
             classInstance.GetType().GetMethod("Initialize").Invoke(classInstance, null);
         }
 

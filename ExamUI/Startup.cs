@@ -5,18 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using AutoMapper;
 using Infrastructure.Utils;
-using Domain.IComm;
-using Infrastructure.Repository;
-using Domain.Profile;
-using System.Reflection;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Application.IServices;
-using Application.Services;
 
 namespace ExamUI
 {
@@ -24,7 +13,7 @@ namespace ExamUI
     {
         public Startup()
         {
-            //AutoMapperHelper.SetMappings();    //加载DTO转换配置
+            AutoMapperHelper.SetMappings();    //加载DTO转换配置
             //数据初始化
             //using (var scope = ApplicationContainer.BeginLifetimeScope())
             //{
@@ -35,7 +24,7 @@ namespace ExamUI
 
         public IConfiguration Configuration => ConfigurationUtils.Configuration;
 
-        public IContainer ApplicationContainer { get; private set; }
+        //public IContainer ApplicationContainer { get; private set; }
         
         //DI注册容器组件服务
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -51,19 +40,7 @@ namespace ExamUI
                     opts.SlidingExpiration = true;
                 });
             services.AddMvc().AddControllersAsServices();
-            //注册Autofac
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
-            #region 注册应用层服务
-            builder.RegisterGeneric(typeof(ClassService<,>)).As(typeof(IClassService<,>)).InstancePerLifetimeScope();
-            builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
-            builder.RegisterType<ExamService>().As<IExamService>().InstancePerLifetimeScope();
-            builder.RegisterType<QuestionService>().As<IQuestionService>().InstancePerLifetimeScope();
-            builder.RegisterType<AnswerService>().As<IAnswerService>().InstancePerLifetimeScope();
-            #endregion
-            builder.RegisterModule(new AutofacModule());
-            this.ApplicationContainer = builder.Build();
-            return new AutofacServiceProvider(this.ApplicationContainer);
+            return AutofacIoc.ServiceInjection(services);
         }
 
         //请求管道配置

@@ -18,10 +18,13 @@ namespace ExamUI.Models
         [RegularExpression(@"^\w{4,}$", ErrorMessage = "请输入正确的验证码")]
         public string VerificyCode { get; set; }
 
+        //记住我
         public bool RememberMe { get; set; } = false;
 
+        //cookie过期时间
         public int ExpireMin { get; set; } = 15;
 
+        //返回rul
         public string ReturnUrl { get; set; } = string.Empty;
     }
 }
