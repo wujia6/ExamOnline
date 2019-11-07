@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ExamUI.Models;
+using System.Security.Claims;
+using Newtonsoft.Json;
 
 namespace ExamUI.Controllers
 {
@@ -10,10 +12,12 @@ namespace ExamUI.Controllers
     {
         public IActionResult Index()
         {
-            //var identityUser = userManager.GetUserAsync(HttpContext.User);
-            //string userJson = User.FindFirst(ClaimTypes.UserData).Value;
-            //CustomIdentity identity = User.Identity as CustomIdentity;
-            //return RedirectToAction(nameof(AccountController.Login), "Account");
+            int userId = int.Parse(User.FindFirstValue(ClaimTypes.Sid));
+            string userName = User.FindFirstValue(ClaimTypes.Name);
+            string roleName = User.FindFirstValue(ClaimTypes.Role);
+            string userJson = User.FindFirstValue(ClaimTypes.UserData);
+            var userInfo = JsonConvert.DeserializeObject(userJson);
+
             return View();
         }
 

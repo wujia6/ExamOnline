@@ -81,9 +81,6 @@
                     type: 'post',
                     url: '/Account/Login',
                     data: $("#frmlogin").serializeObject(),
-                    beforeSend: function (XMLHttpRequest) {   //表单提交前触发事件
-                        this.data.RememberMe = $("#remember").is(":checked");
-                    },
                     success: function (data) {
                         if (!data.result) {
                             layer.msg(data.message, { iocn: 5 });
