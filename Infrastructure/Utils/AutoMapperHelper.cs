@@ -14,7 +14,7 @@ namespace Infrastructure.Utils
         /// </summary>
         public static void SetMappings()
         {
-            var classInstance = Common.GetAssembly("Application").CreateInstance("Application.DTO.RuleConfig");
+            var classInstance = Common.Instance.GetAssembly("Application").CreateInstance("Application.DTO.RuleConfig");
             classInstance.GetType().GetMethod("Initialize").Invoke(classInstance, null);
         }
 

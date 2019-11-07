@@ -8,9 +8,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Newtonsoft.Json;
 using ExamUI.Models;
 using Application.IServices;
-using Domain.Entities.UserAgg;
-using Application.DTO;
 using Application.Authentication;
+using Infrastructure.Utils;
 
 namespace ExamUI.Controllers
 {
@@ -45,7 +44,7 @@ namespace ExamUI.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    ModelState.AddModelError(string.Empty, "输入错误，请按格式填写");
+                    ModelState.AddModelError(string.Empty, "格式验证错误，请仔细核对输入项");
                     return View(model);
                 }
                 var userInfo = userService.FindBy(express: usr => usr.Account == model.Account && usr.Pwd == model.Password);
@@ -79,6 +78,15 @@ namespace ExamUI.Controllers
             {
                 return LocalRedirect("~/View/Shared/Error.cshtml");
             }
+        }
+
+        [HttpGet]
+        public FileResult VerifyCodeBuilder()
+        {
+            string code = Common.Instance.GenCode(5);
+            //将验证码加入session中
+            var bytes = Common.Instance.Builder(code);
+            return File(bytes, @"image/jpge");
         }
     }
 }

@@ -11,15 +11,15 @@ namespace ExamUI.Models
 
         [Required]
         [DataType(DataType.Password)]
-        [RegularExpression(@"^\w+${6，30}", ErrorMessage = "密码格式有误,只能是字母、数字或者下划线")]
+        //[RegularExpression(@"/^([a-z0-9\_\.\@\!\#\$\%\^\&\*\(\)]){7,23}$/", ErrorMessage = "登陆密码包含8-24个字母、数字或特殊符号(_!@#$%^&*())")]
         public string Password { get; set; }
 
-        [Required]
-        [RegularExpression(@"^\w{4,}$", ErrorMessage = "请输入正确的验证码")]
-        public string VerificyCode { get; set; }
+        //[Required]
+        //[RegularExpression(@"^\w{4,}$", ErrorMessage = "请输入正确的验证码")]
+        //public string VerificyCode { get; set; }
 
         //记住我
-        public bool RememberMe { get; set; } = false;
+        public bool RememberMe { get; set; }
 
         //cookie过期时间
         public int ExpireMin { get; set; } = 15;

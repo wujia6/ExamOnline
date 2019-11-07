@@ -39,6 +39,7 @@ namespace ExamUI
                     opts.AccessDeniedPath = new PathString("/Shared/Error");//禁止访问路径：当用户试图访问资源时，但未通过该资源的任何授权策略，请求将被重定向到这个相对路径。
                     opts.SlidingExpiration = true;
                 });
+            services.AddSession();
             services.AddMvc().AddControllersAsServices();
             return AutofacIoc.ServiceInjection(services);
         }
@@ -56,7 +57,7 @@ namespace ExamUI
                 app.UseHsts();
             }
             app.UseStaticFiles();
-            //app.UseSession();
+            app.UseSession();
             app.UseAuthentication();    //身份验证中间件
             app.UseMvc(routes =>
             {
