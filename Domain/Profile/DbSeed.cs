@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Domain.Entities;
 using Domain.Entities.ClassAgg;
+using Domain.Entities.MenuAgg;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 
@@ -82,6 +84,27 @@ namespace Domain.Profile
             });
             context.Students.Add(studentInfo);
 
+            context.SaveChanges();
+        }
+
+        public static void InitializeMenus(IExamDbContext context)
+        {
+            if (context.Menus.Any())
+                return;
+            var lstMenus = new List<MenuInfo>
+            {
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.action, Title="首页", Controller="Home", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.action, Title="班级管理", Controller="Class", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.action, Title="教师管理", Controller="Teacher", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.action, Title="学生管理", Controller="Student", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.action, Title="考试管理", Controller="Examination", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.action, Title="试卷管理", Controller="Answer", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.action, Title="题库管理", Controller="Question", Action="Index" }
+            };
+            foreach (var menu in lstMenus)
+            {
+                context.Menus.Add(menu);
+            }
             context.SaveChanges();
         }
     }

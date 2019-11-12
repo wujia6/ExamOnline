@@ -1,5 +1,4 @@
-﻿using System.Runtime.Serialization;
-using Domain.Entities.ExamAgg;
+﻿using Domain.Entities.ExamAgg;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 

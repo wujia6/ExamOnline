@@ -12,14 +12,14 @@ namespace Domain.Entities.MenuAgg
         //父ID
         public int ParentId { get; set; }
         //菜单类型
-        public CommType MenuType { get; set; } = CommType.menu;
+        public CommType MenuType { get; set; }
         //菜单标题
         public string Title { get; set; }
+        //控制器名称
+        public string Controller { get; set; }
         //菜单代码
-        public string Code { get; set; }
-        //菜单路径
-        public string Url { get; set; }
+        public string Action { get; set; }
         //导航属性
-        public virtual IQueryable<RoleMenu> RoleMenus { get; set; }
+        public virtual RoleMenu RoleMenu { get; set; }
     }
 }

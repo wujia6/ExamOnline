@@ -4,11 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Newtonsoft.Json;
-using ExamUI.Models;
 using Application.IServices;
-using Application.Authentication;
 using Infrastructure.Utils;
 using Application.DTO;
 using Domain.Entities;
@@ -27,9 +24,8 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register(string returnUrl=null)
+        public IActionResult Register()
         {
-            TempData["returnUrl"] = returnUrl;
             return View();
         }
 
@@ -40,21 +36,27 @@ namespace ExamUI.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction(nameof(Login));
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Login(ApplicationUser model)
+        public async Task<IActionResult> Login(Models.ApplicationUser model)
         {
             try
             {
                 if (!ModelState.IsValid)
-                    return Json(new { result = false, message = "格式错误，请重新检查格式" });
-
+                    return Json(new { result = false, message = "用户名或密码格式错误" });
                 //var userInfo = userService.FindBy(express: usr => usr.Account == model.Account && usr.Pwd == model.Password);
                 var userInfo = new UserDTO
                 {
                     ID = 1,
                     Account = "admin1",
                     Pwd = "a1234567",
-                    Name = "吴嘉",
+                    Name = "张三",
                     Gender = Gender.男,
                     Age = 38,
                     Tel = "18673968186",
@@ -66,16 +68,12 @@ namespace ExamUI.Controllers
                         RoleDto = new RoleDTO { ID = 1, Name = "admin" }
                     }}
                 };
-
                 if (userInfo == null)
                     return Json(new { result = false, message = "错误的账号或密码" });
-
-                //var identity = new CustomIdentity(new Claim(ClaimTypes.UserData, JsonConvert.SerializeObject(userInfo)));
-                //var principal = new ClaimsPrincipal(identity);
-                //获取用户角色集合
-                //string roles = string.Empty;
-                //userInfo.UserRoleDtos.ForEach(x => roles += x.RoleDto.ID + ",");
-                //roles.Remove(-1, 1);
+                //获取用户角色
+                string roleName = string.Empty;
+                userInfo.UserRoleDtos.ForEach(x => roleName += x.RoleDto.Name + ",");
+                roleName = roleName.Remove(roleName.LastIndexOf(','), 1);
                 //创建身份证件单元：一张身份证由许多证件单元组成
                 //创建身份证件，添加证件单元
                 //创建身份证件使用者，添加身份证
@@ -83,21 +81,23 @@ namespace ExamUI.Controllers
                 {
                     new Claim(ClaimTypes.Sid,userInfo.ID.ToString()),
                     new Claim(ClaimTypes.Name,model.Account),
-                    new Claim("password",model.Password),
-                    new Claim(ClaimTypes.Role,userInfo.UserRoleDtos[0].RoleDto.Name),
+                    //new Claim("Password",model.Password),
+                    new Claim(ClaimTypes.Role,roleName),
                     new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(userInfo.UserRoleDtos))
                 });
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity), new AuthenticationProperties
+                //写入客户端cookie
+                await HttpContext.SignInAsync(identity.AuthenticationType, new ClaimsPrincipal(identity), new AuthenticationProperties
                 {
                     ExpiresUtc = DateTime.UtcNow.AddMinutes(model.ExpireMin),
                     IsPersistent = true,
                     AllowRefresh = true
                 });
-                return Json(new { result = true, message = "登录成功", url = "/Home/Index" });
+                return Json(new { result = true, message = "登录成功", path = "/Home/Index" });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return LocalRedirect("~/View/Shared/Error.cshtml");
+                //return LocalRedirect("~/Views/Shared/Error.cshtml");
+                throw ex;
             }
         }
 

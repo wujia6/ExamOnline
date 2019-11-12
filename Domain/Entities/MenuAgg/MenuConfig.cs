@@ -12,7 +12,7 @@ namespace Domain.Entities.MenuAgg
             builder.Property(e => e.ParentId).IsRequired();
             builder.Property(e => e.MenuType).IsRequired();
             builder.Property(e => e.Title).IsRequired().HasMaxLength(20);
-            builder.Property(e => e.Code).IsRequired().HasMaxLength(20);
+            builder.Property(e => e.Action).IsRequired().HasMaxLength(20);
             builder.Property(e => e.Url).IsRequired().HasMaxLength(50);
             builder.Property(e => e.Remarks).HasMaxLength(50);
         }

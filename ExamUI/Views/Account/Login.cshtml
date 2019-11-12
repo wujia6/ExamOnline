@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link href="~/lib/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/adminlte.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    @*<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">*@
     <link href="~/lib/layer/skin/layer.css" rel="stylesheet" />
 </head>
 <body class="hold-transition login-page">
@@ -28,7 +28,7 @@
                 <p class="login-box-msg">用户登录</p>
                 <form id="frmlogin">
                     <div class="input-group mb-3">
-                        <input type="email" name="Account" class="form-control" placeholder="用户名">
+                        <input type="text" name="Account" class="form-control" placeholder="用户名">
                         <div class="input-group-append">
                             <div class="input-group-text"><span class="fas fa-envelope"></span></div>
                         </div>
@@ -84,10 +84,9 @@
                     success: function (data) {
                         if (!data.result) {
                             layer.msg(data.message, { iocn: 5 });
-                            window.location.reload();
+                            return;
                         }
-                        else
-                            window.location.href = encodeURI(data.url);
+                        window.location.href = encodeURI(data.path);
                     }
                 });
             });

@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
 
 namespace ExamUI.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser
     {
         [Required]
         [StringLength(24, ErrorMessage = "账号6-24个字符，字母开头并包含字母、数字或下划线", MinimumLength = 6)]
@@ -25,6 +24,6 @@ namespace ExamUI.Models
         public int ExpireMin { get; set; } = 15;
 
         //返回rul
-        public string ReturnUrl { get; set; }
+        //public string ReturnUrl { get; set; }
     }
 }

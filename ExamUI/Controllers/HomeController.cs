@@ -4,20 +4,20 @@ using Microsoft.AspNetCore.Authorization;
 using ExamUI.Models;
 using System.Security.Claims;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using Application.DTO;
 
 namespace ExamUI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="admin,teacher,student")]
     public class HomeController : Controller
     {
         public IActionResult Index()
         {
             int userId = int.Parse(User.FindFirstValue(ClaimTypes.Sid));
             string userName = User.FindFirstValue(ClaimTypes.Name);
-            string roleName = User.FindFirstValue(ClaimTypes.Role);
-            string userJson = User.FindFirstValue(ClaimTypes.UserData);
-            var userInfo = JsonConvert.DeserializeObject(userJson);
-
+            string roles = User.FindFirstValue(ClaimTypes.UserData);
+            var lstRoles = JsonConvert.DeserializeObject<List<UserRoleDTO>>(roles);
             return View();
         }
 
