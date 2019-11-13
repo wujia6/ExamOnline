@@ -143,7 +143,11 @@ namespace Domain.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Code")
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(20);
+
+                    b.Property<string>("Controller")
                         .IsRequired()
                         .HasMaxLength(20);
 
@@ -157,10 +161,6 @@ namespace Domain.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(20);
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasMaxLength(50);
 
                     b.HasKey("ID");
 

@@ -20,6 +20,6 @@ namespace Domain.Entities.MenuAgg
         //菜单代码
         public string Action { get; set; }
         //导航属性
-        public virtual RoleMenu RoleMenu { get; set; }
+        public virtual IQueryable<RoleMenu> RoleMenus { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace Domain.Entities.RoleAgg
         {
             builder.HasKey(e => e.ID);
             builder.HasOne(e => e.RoleInfomation).WithMany(s => s.RoleMenus);
-            builder.HasOne(e => e.MenuInfomation).WithOne(s => s.RoleMenu);
+            builder.HasOne(e => e.MenuInfomation).WithMany(s => s.RoleMenus);
         }
     }
 }

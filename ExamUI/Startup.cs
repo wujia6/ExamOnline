@@ -5,7 +5,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Autofac;
 using Infrastructure.Utils;
+using ExamUI.Filters;
+using Domain.IComm;
+using Domain.Profile;
 
 namespace ExamUI
 {
@@ -19,28 +23,33 @@ namespace ExamUI
             //using (var scope = ApplicationContainer.BeginLifetimeScope())
             //{
             //    var context = scope.Resolve<IExamDbContext>();
-            //    SeedData.Initialize(context);
+            //    SeedData.InitializeMenus(context);
+            //    SeedData.InitializeRoles(context);
+            //    SeedData.InitializeRoleMenus(context);
+            //    SeedData.InitializeClasses(context);
+            //    SeedData.InitializeUsers(context);
             //}
         }
 
-        public IConfiguration Configuration => ConfigurationUtils.Configuration;
-
-        //public IContainer ApplicationContainer { get; private set; }
+        //public IConfiguration Configuration => ConfigurationUtils.Configuration;
+        
+        public IContainer ApplicationContainer { get; private set; }
         
         //DI注册容器组件服务
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            //添加授权支持，并添加使用Cookie的方式，配置登录页面和没有权限时的跳转页面
+            //添加Cookie验证授权支持
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,opts =>
                 {
-                    opts.LoginPath = new PathString("/Account/Login");//登录路径：这是当用户试图访问资源但未经过身份验证时，程序将会将请求重定向到这个相对路径。
-                    opts.LogoutPath = new PathString("/Account/Login");
-                    opts.AccessDeniedPath = new PathString("/Shared/Error");//禁止访问路径：当用户试图访问资源时，但未通过该资源的任何授权策略，请求将被重定向到这个相对路径。
+                    opts.LoginPath = new PathString("/Account/Login");  //用户未登录重定向路径
+                    opts.LogoutPath = new PathString("/Account/Login"); //退出登录重定向路径
+                    opts.AccessDeniedPath = new PathString("/Shared/Error");    //未授权访问重定向路径
                     opts.SlidingExpiration = true;
                 });
             services.AddSession();
-            services.AddMvc().AddControllersAsServices();
+            //添加mvc服务与模型验证过滤器
+            services.AddMvc(options=>options.Filters.Add<ModelVerifyActionFilter>()).AddControllersAsServices();
             return AutofacIoc.ServiceInjection(services);
         }
 

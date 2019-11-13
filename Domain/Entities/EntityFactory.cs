@@ -31,5 +31,17 @@ namespace Domain.Entities
             }
             return (T)obj;
         }
+
+        /// <summary>
+        /// 创建对象
+        /// </summary>
+        /// <typeparam name="T">对象类型</typeparam>
+        /// <param name="func">委托(回调方法)</param>
+        /// <returns></returns>
+        public static T Create<T>(Func<T,T> func)
+        {
+            T TClass = (T)Activator.CreateInstance(typeof(T));
+            return func(TClass);
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +11,6 @@ using Application.IServices;
 using Infrastructure.Utils;
 using Application.DTO;
 using Domain.Entities;
-using System.Collections.Generic;
 
 namespace ExamUI.Controllers
 {
@@ -24,9 +25,13 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public FileResult VerifyCodeBuilder()
         {
-            return View();
+            string code = Common.Instance.GenCode(5);
+            //将验证码加入session中
+            HttpContext.Session.SetString("vcode", code);
+            var bytes = Common.Instance.Builder(code);
+            return File(bytes, @"image/jpge");
         }
 
         [HttpGet]
@@ -48,8 +53,8 @@ namespace ExamUI.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                    return Json(new { result = false, message = "用户名或密码格式错误" });
+                //if (!ModelState.IsValid)
+                //    return Json(new { result = false, message = "用户名或密码格式错误" });
                 //var userInfo = userService.FindBy(express: usr => usr.Account == model.Account && usr.Pwd == model.Password);
                 var userInfo = new UserDTO
                 {
@@ -71,22 +76,22 @@ namespace ExamUI.Controllers
                 if (userInfo == null)
                     return Json(new { result = false, message = "错误的账号或密码" });
                 //获取用户角色
-                string roleName = string.Empty;
-                userInfo.UserRoleDtos.ForEach(x => roleName += x.RoleDto.Name + ",");
-                roleName = roleName.Remove(roleName.LastIndexOf(','), 1);
+                string roleCodes = string.Empty;
+                userInfo.UserRoleDtos.ForEach(x => roleCodes += x.RoleDto.Code + ",");
+                roleCodes = roleCodes.Remove(roleCodes.LastIndexOf(','), 1);
                 //创建身份证件单元：一张身份证由许多证件单元组成
                 //创建身份证件，添加证件单元
                 //创建身份证件使用者，添加身份证
-                var identity = new ClaimsIdentity(new List<Claim>
+                var identitys = new ClaimsIdentity(new List<Claim>
                 {
                     new Claim(ClaimTypes.Sid,userInfo.ID.ToString()),
                     new Claim(ClaimTypes.Name,model.Account),
                     //new Claim("Password",model.Password),
-                    new Claim(ClaimTypes.Role,roleName),
+                    new Claim(ClaimTypes.Role,roleCodes),
                     new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(userInfo.UserRoleDtos))
                 });
                 //写入客户端cookie
-                await HttpContext.SignInAsync(identity.AuthenticationType, new ClaimsPrincipal(identity), new AuthenticationProperties
+                await HttpContext.SignInAsync(identitys.AuthenticationType, new ClaimsPrincipal(identitys), new AuthenticationProperties
                 {
                     ExpiresUtc = DateTime.UtcNow.AddMinutes(model.ExpireMin),
                     IsPersistent = true,
@@ -99,15 +104,6 @@ namespace ExamUI.Controllers
                 //return LocalRedirect("~/Views/Shared/Error.cshtml");
                 throw ex;
             }
-        }
-
-        [HttpGet]
-        public FileResult VerifyCodeBuilder()
-        {
-            string code = Common.Instance.GenCode(5);
-            //将验证码加入session中
-            var bytes = Common.Instance.Builder(code);
-            return File(bytes, @"image/jpge");
         }
     }
 }
