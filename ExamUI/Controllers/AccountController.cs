@@ -9,8 +9,6 @@ using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;
 using Application.IServices;
 using Infrastructure.Utils;
-using Application.DTO;
-using Domain.Entities;
 
 namespace ExamUI.Controllers
 {
@@ -53,8 +51,6 @@ namespace ExamUI.Controllers
         {
             try
             {
-                //if (!ModelState.IsValid)
-                //    return Json(new { result = false, message = "用户名或密码格式错误" });
                 var userInfo = userService.FindBy(express: usr => usr.Account == model.Account && usr.Pwd == model.Password);
                 if (userInfo == null)
                     return Json(new { result = false, message = "错误的账号或密码" });

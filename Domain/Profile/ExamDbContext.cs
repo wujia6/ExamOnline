@@ -1,6 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Domain.Entities.AnwserAgg;
 using Domain.Entities.ClassAgg;
 using Domain.Entities.ExamAgg;
@@ -9,19 +8,20 @@ using Domain.Entities.QuestionAgg;
 using Domain.Entities.RoleAgg;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Domain.Profile
 {
     public class ExamDbContext: DbContext, IExamDbContext
     {
-        //public ExamDbContext(DbContextOptions<ExamDbContext> options) : base(options) { }
+        public ExamDbContext(DbContextOptions<ExamDbContext> options) : base(options) { }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
-        //    string CONNECTION_STRING = AppSettings.GetConfig("ConnectionStrings:ExamDbConnection");
-        //    optionsBuilder.UseSqlServer(CONNECTION_STRING);
+        //    var config = new ConfigurationBuilder()
+        //        .SetBasePath(Directory.GetCurrentDirectory())
+        //        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        //        .Build();
+        //    optionsBuilder.UseSqlServer(config.GetConnectionString("ExamDbConnection"));
         //    base.OnConfiguring(optionsBuilder);
         //}
 

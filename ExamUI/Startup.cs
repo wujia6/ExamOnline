@@ -9,8 +9,8 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Infrastructure.Utils;
 using ExamUI.Filters;
-using Domain.IComm;
 using Domain.Profile;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExamUI
 {
@@ -18,22 +18,18 @@ namespace ExamUI
     {
         public Startup(IHostingEnvironment env)
         {
-            string path = env.ContentRootPath;
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables();
-            this.Configuration = builder.Build();
-
+            //设置配置工具类系统路径
+            ConfigurationUtils.HostEnv = env;
             //加载DTO转换配置
             AutoMapperHelper.SetMappings();
         }
+
         public IContainer ApplicationContainer { get; private set; }
-        public IConfiguration Configuration { get; private set; }
-        
+
         //DI注册容器组件服务
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ExamDbContext>(options => options.UseSqlServer(ConfigurationUtils.Settings.GetConfig("ConnectionStrings:ExamDbConnection")));
             //添加Cookie验证授权支持
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,opts =>
@@ -43,35 +39,32 @@ namespace ExamUI
                     opts.AccessDeniedPath = new PathString("/Shared/Error");    //未授权访问重定向路径
                     opts.SlidingExpiration = true;
                 });
-            services.AddAutofac();
+            //添加session服务
             services.AddSession();
             //添加mvc服务与模型验证过滤器
             services.AddMvc(options=>options.Filters.Add<ModelVerifyActionFilter>()).AddControllersAsServices();
-            return AutofacIoc.ServiceInjection(services);
+            //创建autofac服务容器
+            var builder = new ContainerBuilder();
+            builder.RegisterModule(new AutofacModuel());
+            builder.Populate(services);
+            ApplicationContainer = builder.Build();
+            return new AutofacServiceProvider(ApplicationContainer);
         }
 
         //请求管道配置
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
             app.UseStaticFiles();
-            app.UseSession();
+            app.UseSession();   //启用session中间件
             app.UseAuthentication();    //身份验证中间件
-            app.UseMvcWithDefaultRoute();
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
-            //});
+            app.UseMvcWithDefaultRoute();   //启用mvc默认路由中间件
         }  
     }
 }

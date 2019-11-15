@@ -102,7 +102,7 @@ namespace UnitTest
         [TestMethod]
         public void ConnectionStringsTest()
         {
-            string connString = ConfigurationUtils.GetConfig("ConnectionStrings:ExamDbConn");
+            //string connString = ConfigUtils.GetConfig("ConnectionStrings:ExamDbConn");
         }
 
         [TestMethod]
@@ -110,7 +110,7 @@ namespace UnitTest
         {
             //var classInstance = Assembly.LoadFrom("Application.dll").CreateInstance("Application.DTO.RuleConfig");
             //classInstance.GetType().GetMethod("Initialize").Invoke(classInstance, null);
-            AutoMapperHelper.SetMappings();
+            //AutoMapperHelper.SetMappings();
         }
     }
 }
