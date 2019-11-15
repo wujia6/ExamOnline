@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Autofac.Extensions.DependencyInjection;
 
 namespace ExamUI
 {
@@ -14,19 +15,14 @@ namespace ExamUI
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
-            //var host = new WebHostBuilder()
-            //    .UseKestrel()
-            //    .ConfigureServices(services => services.AddAutofac())
-            //    .UseContentRoot(System.IO.Directory.GetCurrentDirectory())
-            //    .UseIISIntegration()
-            //    .UseStartup<Startup>()
-            //    .Build();
-            //host.Run();
+            //这里的ConfigureServices调用允许在启动时使用强类型的ContainerBuilder来支持ConfigureContainer。
+            //如果您在这里没有调用AddAutofac，您将无法获得ConfigureContainer支持。
+            //这还会自动调用Populate来将您在ConfigureServices期间注册的服务放入Autofac。
+            var host = WebHost.CreateDefaultBuilder(args)
+                //.ConfigureServices(services => services.AddAutofac())
+                .UseStartup<Startup>()
+                .Build();
+            host.Run();
         }
-
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
     }
 }

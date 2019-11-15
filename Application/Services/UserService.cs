@@ -17,12 +17,12 @@ namespace Application.Services
     public class UserService : IUserService
     {
         private readonly IUserManage userManage;
-        private readonly IExamDbContext examContext;
+        private readonly IExamDbContext db;
 
         public UserService(IUserManage manage, IExamDbContext context)
         {
             userManage = manage;
-            this.examContext = context;
+            this.db = context;
         }
 
         public bool AddOrEdit(UserDTO model)
@@ -30,7 +30,7 @@ namespace Application.Services
             if (model == null)
                 return false;
             var entity = model.MapTo<UserInfo>();
-            return userManage.AddOrEdit(entity) ? examContext.SaveChanges() > 0 : false;
+            return userManage.AddOrEdit(entity) ? db.SaveChanges() > 0 : false;
         }
 
         public List<UserDTO> QuerySet(Expression<Func<UserInfo, bool>> express)
@@ -43,7 +43,7 @@ namespace Application.Services
         {
             var userDto = model.MapTo<UserDTO>();
             var spec = Specification<UserInfo>.Eval(e => e.ID == userDto.ID);
-            return userManage.Remove(spec) ? examContext.SaveChanges() > 0 : false;
+            return userManage.Remove(spec) ? db.SaveChanges() > 0 : false;
         }
 
         public UserDTO FindBy(Expression<Func<UserInfo, bool>> express)

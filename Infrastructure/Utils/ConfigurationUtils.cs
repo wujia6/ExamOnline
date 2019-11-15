@@ -1,7 +1,5 @@
-﻿using System.IO;
+﻿using System;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Utils
 {
@@ -12,27 +10,23 @@ namespace Infrastructure.Utils
     {
         static ConfigurationUtils()
         {
-            Configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+            string domain = Environment.CurrentDirectory;
+            Config = new ConfigurationBuilder()
+                .SetBasePath(domain)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
         }
 
-        public static IConfiguration Configuration { get; private set; }
+        private static IConfiguration Config { get; set; }
 
-        public static T GetSection<T>(string key) where T : class, new()
+        /// <summary>
+        /// 获取appsettings.json配置项
+        /// </summary>
+        /// <param name="key">键名</param>
+        /// <returns></returns>
+        public static string GetConfig(string key)
         {
-            return new ServiceCollection()
-                .AddOptions()
-                .Configure<T>(configureOptions => Configuration.GetSection(key))
-                .BuildServiceProvider()
-                .GetService<IOptions<T>>()
-                .Value;
-        }
-
-        public static string GetSection(string key)
-        {
-            return Configuration.GetValue<string>(key);
+            return Config.GetSection(key).Value;
         }
     }
 }

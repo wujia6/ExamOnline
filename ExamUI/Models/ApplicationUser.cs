@@ -24,6 +24,6 @@ namespace ExamUI.Models
         public int ExpireMin { get; set; } = 15;
 
         //返回rul
-        //public string ReturnUrl { get; set; }
+        public string ReturnUrl { get; set; }
     }
 }

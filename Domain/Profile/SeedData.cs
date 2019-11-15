@@ -10,13 +10,20 @@ using Domain.IComm;
 
 namespace Domain.Profile
 {
-    public static class SeedData
+    public class SeedData
     {
+        private readonly IExamDbContext context;
+
+        public SeedData(IExamDbContext cxt)
+        {
+            this.context = cxt;
+        }
+
         /// <summary>
         /// 初始化菜单
         /// </summary>
         /// <param name="context">数据上下文</param>
-        public static void InitializeMenus(IExamDbContext context)
+        public void InitializeMenus()
         {
             if (context.Menus.Any())
                 return;
@@ -42,7 +49,7 @@ namespace Domain.Profile
         /// 初始化角色
         /// </summary>
         /// <param name="context">数据上下文</param>
-        public static void InitializeRoles(IExamDbContext context)
+        public void InitializeRoles()
         {
             if (context.Roles.Any())
                 return;
@@ -74,7 +81,7 @@ namespace Domain.Profile
         /// 初始化角色菜单
         /// </summary>
         /// <param name="context">数据上下文</param>
-        public static void InitializeRoleMenus(IExamDbContext context)
+        public void InitializeRoleMenus()
         {
             if (context.RoleMenus.Any())
                 return;
@@ -156,12 +163,12 @@ namespace Domain.Profile
                 #endregion
                 #region student
                 EntityFactory.Create<RoleMenu>(func:e=>{
-                    e.RoleInfomation.ID=2;
+                    e.RoleInfomation.ID=3;
                     e.MenuInfomation.ID=1;
                     return e;
                 }),
                 EntityFactory.Create<RoleMenu>(func:e=>{
-                    e.RoleInfomation.ID=2;
+                    e.RoleInfomation.ID=3;
                     e.MenuInfomation.ID=6;
                     return e;
                 })
@@ -178,7 +185,7 @@ namespace Domain.Profile
         /// 初始化班级数据
         /// </summary>
         /// <param name="context">数据上下文</param>
-        public static void InitializeClasses(IExamDbContext context)
+        public void InitializeClasses()
         {
             if (context.Classes.Any())
                 return;
@@ -199,7 +206,7 @@ namespace Domain.Profile
         /// 初始化用户
         /// </summary>
         /// <param name="context">数据上下文</param>
-        public static void InitializeUsers(IExamDbContext context)
+        public void InitializeUsers()
         {
             if (context.Admins.Any())
                 return;

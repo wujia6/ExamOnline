@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Infrastructure.Utils;
 using ExamUI.Filters;
 using Domain.IComm;
@@ -15,25 +16,20 @@ namespace ExamUI
 {
     public class Startup
     {
-        public Startup()
+        public Startup(IHostingEnvironment env)
         {
+            string path = env.ContentRootPath;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+            this.Configuration = builder.Build();
+
             //加载DTO转换配置
             AutoMapperHelper.SetMappings();
-            //数据初始化
-            //using (var scope = ApplicationContainer.BeginLifetimeScope())
-            //{
-            //    var context = scope.Resolve<IExamDbContext>();
-            //    SeedData.InitializeMenus(context);
-            //    SeedData.InitializeRoles(context);
-            //    SeedData.InitializeRoleMenus(context);
-            //    SeedData.InitializeClasses(context);
-            //    SeedData.InitializeUsers(context);
-            //}
         }
-
-        //public IConfiguration Configuration => ConfigurationUtils.Configuration;
-        
         public IContainer ApplicationContainer { get; private set; }
+        public IConfiguration Configuration { get; private set; }
         
         //DI注册容器组件服务
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -47,6 +43,7 @@ namespace ExamUI
                     opts.AccessDeniedPath = new PathString("/Shared/Error");    //未授权访问重定向路径
                     opts.SlidingExpiration = true;
                 });
+            services.AddAutofac();
             services.AddSession();
             //添加mvc服务与模型验证过滤器
             services.AddMvc(options=>options.Filters.Add<ModelVerifyActionFilter>()).AddControllersAsServices();
@@ -68,12 +65,13 @@ namespace ExamUI
             app.UseStaticFiles();
             app.UseSession();
             app.UseAuthentication();    //身份验证中间件
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvcWithDefaultRoute();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //});
         }  
     }
 }

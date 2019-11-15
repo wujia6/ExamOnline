@@ -55,24 +55,7 @@ namespace ExamUI.Controllers
             {
                 //if (!ModelState.IsValid)
                 //    return Json(new { result = false, message = "用户名或密码格式错误" });
-                //var userInfo = userService.FindBy(express: usr => usr.Account == model.Account && usr.Pwd == model.Password);
-                var userInfo = new UserDTO
-                {
-                    ID = 1,
-                    Account = "admin1",
-                    Pwd = "a1234567",
-                    Name = "张三",
-                    Gender = Gender.男,
-                    Age = 38,
-                    Tel = "18673968186",
-                    CreateDate = DateTime.Now,
-                    Remarks = "暂无",
-                    UserRoleDtos = new List<UserRoleDTO> { new UserRoleDTO
-                    {
-                        ID = 1,
-                        RoleDto = new RoleDTO { ID = 1, Name = "admin" }
-                    }}
-                };
+                var userInfo = userService.FindBy(express: usr => usr.Account == model.Account && usr.Pwd == model.Password);
                 if (userInfo == null)
                     return Json(new { result = false, message = "错误的账号或密码" });
                 //获取用户角色

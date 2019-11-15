@@ -23,7 +23,7 @@ namespace Infrastructure.Utils
             {
                 //注册数据库上下文服务
                 builder.Register(options => new DbContextOptionsBuilder<ExamDbContext>()
-                    .UseSqlServer(ConfigurationUtils.Configuration.GetConnectionString("ExamDbConn")).Options)
+                    .UseSqlServer(ConfigurationUtils.GetConfig("ConnectionStrings:ExamDbConnection")).Options)
                     .InstancePerLifetimeScope();
                 builder.RegisterType<ExamDbContext>().As<IExamDbContext>().InstancePerLifetimeScope();
                 //注册仓储服务
@@ -38,21 +38,6 @@ namespace Infrastructure.Utils
                     .Where(tp => tp.Name.EndsWith("Service") && !tp.IsInterface && !tp.IsAbstract)
                     .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();
-
-                #region 注册应用层服务
-                //builder.RegisterGeneric(typeof(ClassService<,>)).As(typeof(IClassService<,>)).InstancePerLifetimeScope();
-                //builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
-                //builder.RegisterType<ExamService>().As<IExamService>().InstancePerLifetimeScope();
-                //builder.RegisterType<QuestionService>().As<IQuestionService>().InstancePerLifetimeScope();
-                //builder.RegisterType<AnswerService>().As<IAnswerService>().InstancePerLifetimeScope();
-                #endregion
-                #region 注册领域层服务
-                //builder.RegisterGeneric(typeof(ClassManage<>)).As(typeof(IClassManage<>)).InstancePerLifetimeScope();
-                //builder.RegisterType<UserManage>().As<IUserManage>().InstancePerLifetimeScope();
-                //builder.RegisterType<ExamManage>().As<IExamManage>().InstancePerLifetimeScope();
-                //builder.RegisterType<QuestionManage>().As<IQuestionManage>().InstancePerLifetimeScope();
-                //builder.RegisterType<AnswerManage>().As<IAnswerManage>().InstancePerLifetimeScope();
-                #endregion
             }
             catch (DependencyResolutionException ex)
             {

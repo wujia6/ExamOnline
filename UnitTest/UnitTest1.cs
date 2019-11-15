@@ -102,7 +102,7 @@ namespace UnitTest
         [TestMethod]
         public void ConnectionStringsTest()
         {
-            string connString = ConfigurationUtils.GetSection("ConnectionStrings");
+            string connString = ConfigurationUtils.GetConfig("ConnectionStrings:ExamDbConn");
         }
 
         [TestMethod]
