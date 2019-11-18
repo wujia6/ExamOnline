@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 using Domain.Entities.AnwserAgg;
 using Domain.Entities.ClassAgg;
 using Domain.Entities.ExamAgg;
@@ -8,22 +8,25 @@ using Domain.Entities.QuestionAgg;
 using Domain.Entities.RoleAgg;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
+using Microsoft.Extensions.Configuration;
+using Infrastructure.Utils;
 
-namespace Domain.Profile
+namespace Infrastructure.EfCore
 {
-    public class ExamDbContext: DbContext, IExamDbContext
+    public class ExamDbContext : DbContext, IExamDbContext
     {
-        public ExamDbContext(DbContextOptions<ExamDbContext> options) : base(options) { }
+        //public ExamDbContext(DbContextOptions<ExamDbContext> options) : base(options) { }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    var config = new ConfigurationBuilder()
-        //        .SetBasePath(Directory.GetCurrentDirectory())
-        //        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-        //        .Build();
-        //    optionsBuilder.UseSqlServer(config.GetConnectionString("ExamDbConnection"));
-        //    base.OnConfiguring(optionsBuilder);
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
+            //var connectionString = ConfigurationUtils.Settings.GetConfig("ConnectionStrings:ExamDbConnection");
+            optionsBuilder.UseSqlServer(config.GetConnectionString("ExamDbConnection"));
+            base.OnConfiguring(optionsBuilder);
+        }
 
         protected override void OnModelCreating(ModelBuilder model)
         {
@@ -76,7 +79,7 @@ namespace Domain.Profile
         {
             this.Database.RollbackTransaction();
         }
-        
+
         public DbSet<MenuInfo> Menus { get; set; }
         public DbSet<RoleInfo> Roles { get; set; }
         public DbSet<RoleMenu> RoleMenus { get; set; }

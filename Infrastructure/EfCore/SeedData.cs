@@ -8,7 +8,7 @@ using Domain.Entities.RoleAgg;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 
-namespace Domain.Profile
+namespace Infrastructure.EfCore
 {
     public class SeedData
     {

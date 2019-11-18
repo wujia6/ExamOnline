@@ -1,10 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+﻿using System.Linq;
 using Autofac;
 using Autofac.Core;
 using Domain.IComm;
-using Domain.Profile;
+using Infrastructure.EfCore;
 using Infrastructure.Repository;
 
 namespace Infrastructure.Utils

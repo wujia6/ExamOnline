@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Infrastructure.Utils;
 using ExamUI.Filters;
-using Domain.Profile;
-using Microsoft.EntityFrameworkCore;
+using Infrastructure.Utils;
+using Infrastructure.EfCore;
 
 namespace ExamUI
 {
@@ -29,7 +29,8 @@ namespace ExamUI
         //DI注册容器组件服务
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ExamDbContext>(options => options.UseSqlServer(ConfigurationUtils.Settings.GetConfig("ConnectionStrings:ExamDbConnection")));
+            services.AddDbContext<ExamDbContext>(options => 
+                options.UseSqlServer(ConfigurationUtils.Settings.GetConfig("ConnectionStrings:ExamDbConnection")));
             //添加Cookie验证授权支持
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,opts =>

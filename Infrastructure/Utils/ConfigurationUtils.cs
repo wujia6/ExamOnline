@@ -17,6 +17,7 @@ namespace Infrastructure.Utils
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(HostEnv.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
                 .Build();
         }
 
