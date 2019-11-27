@@ -33,10 +33,10 @@ namespace Application.Services
             return userManage.AddOrEdit(entity) ? db.SaveChanges() > 0 : false;
         }
 
-        public List<UserDTO> QuerySet(Expression<Func<UserInfo, bool>> express)
+        public List<UserDTO> QueryBy(Expression<Func<UserInfo, bool>> express)
         {
             var spec = Specification<UserInfo>.Eval(express);
-            return userManage.QuerySet(spec).MapToList<UserDTO>();
+            return userManage.QueryBy(spec).MapToList<UserDTO>();
         }
 
         public bool Remove(UserDTO model)
@@ -49,7 +49,8 @@ namespace Application.Services
         public UserDTO FindBy(Expression<Func<UserInfo, bool>> express)
         {
             var spec = Specification<UserInfo>.Eval(express);
-            return userManage.FindBy(spec).MapTo<UserDTO>();
+            var user = userManage.FindBy(spec);
+            return user.MapTo<UserDTO>();
         }
     }
 }

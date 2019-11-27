@@ -27,7 +27,7 @@ namespace ExamUI.Controllers
         {
             string code = Common.Instance.GenCode(5);
             //将验证码加入session中
-            HttpContext.Session.SetString("vcode", code);
+            HttpContext.Session.SetString("VCode", code);
             var bytes = Common.Instance.Builder(code);
             return File(bytes, @"image/jpge");
         }
@@ -51,23 +51,29 @@ namespace ExamUI.Controllers
         {
             try
             {
-                var userInfo = userService.FindBy(express: usr => usr.Account == model.Account && usr.Pwd == model.Password);
-                if (userInfo == null)
-                    return Json(new { result = false, message = "错误的账号或密码" });
+                var scode = HttpContext.Session.GetString("VCode").ToLower();
+                if (string.Compare(scode, model.VerificyCode) != 0)
+                    return Json(new { result = false, message = "验证码错误" });
+                
+                var loginer = userService.FindBy(express: usr => usr.Account == model.Account && usr.Pwd == model.Password);
+
+                if (loginer == null)
+                    return Json(new { result = false, message = "错误的用户名或密码" });
+
                 //获取用户角色
                 string roleCodes = string.Empty;
-                userInfo.UserRoleDtos.ForEach(x => roleCodes += x.RoleDto.Code + ",");
-                roleCodes = roleCodes.Remove(roleCodes.LastIndexOf(','), 1);
-                //创建身份证件单元：一张身份证由许多证件单元组成
+                loginer.UserRoleDtos.ForEach(x => roleCodes += x.RoleDto.Code + ",");
+                roleCodes.Remove(roleCodes.LastIndexOf(','), 1);
+                //创建身份证件单元：一张身份证由多个证件单元组成
                 //创建身份证件，添加证件单元
                 //创建身份证件使用者，添加身份证
                 var identitys = new ClaimsIdentity(new List<Claim>
                 {
-                    new Claim(ClaimTypes.Sid,userInfo.ID.ToString()),
+                    new Claim(ClaimTypes.Sid,loginer.ID.ToString()),
                     new Claim(ClaimTypes.Name,model.Account),
                     //new Claim("Password",model.Password),
                     new Claim(ClaimTypes.Role,roleCodes),
-                    new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(userInfo.UserRoleDtos))
+                    new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(loginer.UserRoleDtos))
                 });
                 //写入客户端cookie
                 await HttpContext.SignInAsync(identitys.AuthenticationType, new ClaimsPrincipal(identitys), new AuthenticationProperties

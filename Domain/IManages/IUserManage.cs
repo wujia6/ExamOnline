@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 
@@ -35,6 +36,6 @@ namespace Domain.IManages
         /// </summary>
         /// <param name="spec">规约表达式</param>
         /// <returns></returns>
-        IQueryable<UserInfo> QuerySet(ISpecification<UserInfo> spec);
+        IQueryable<UserInfo> QueryBy(ISpecification<UserInfo> spec);
     }
 }

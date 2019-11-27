@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Application.DTO;
 using Domain.Entities.UserAgg;
@@ -17,6 +18,6 @@ namespace Application.IServices
 
         UserDTO FindBy(Expression<Func<UserInfo, bool>> express);
 
-        List<UserDTO> QuerySet(Expression<Func<UserInfo, bool>> express);
+        List<UserDTO> QueryBy(Expression<Func<UserInfo, bool>> express);
     }
 }

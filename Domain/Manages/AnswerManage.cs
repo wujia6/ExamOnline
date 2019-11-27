@@ -29,12 +29,12 @@ namespace Domain.Manages
 
         public AnswerInfo FindBy(ISpecification<AnswerInfo> spec)
         {
-            return efCore.FindBySpec(spec);
+            return efCore.SingleEntity(spec);
         }
 
         public IQueryable<AnswerInfo> QuerySet(ISpecification<AnswerInfo> spec)
         {
-            return efCore.QueryBySpec(spec);
+            return efCore.QueryEntity(spec);
         }
     }
 }

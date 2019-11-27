@@ -19,7 +19,7 @@ namespace Domain.Manages
 
         public UserInfo FindBy(ISpecification<UserInfo> spec)
         {
-            return efCore.FindBySpec(spec);
+            return efCore.SingleEntity(spec);
         }
 
         public bool AddOrEdit(UserInfo entity)
@@ -29,9 +29,9 @@ namespace Domain.Manages
             return entity.ID > 0 ? efCore.UpdateEntity(entity) : efCore.InsertEntity(entity);
         }
 
-        public IQueryable<UserInfo> QuerySet(ISpecification<UserInfo> spec)
+        public IQueryable<UserInfo> QueryBy(ISpecification<UserInfo> spec)
         {
-            return efCore.QueryBySpec(spec);
+            return efCore.QueryEntity(spec);
         }
 
         public bool Remove(ISpecification<UserInfo> spec)

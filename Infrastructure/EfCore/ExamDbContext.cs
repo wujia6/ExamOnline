@@ -15,18 +15,18 @@ namespace Infrastructure.EfCore
 {
     public class ExamDbContext : DbContext, IExamDbContext
     {
-        //public ExamDbContext(DbContextOptions<ExamDbContext> options) : base(options) { }
+        public ExamDbContext(DbContextOptions<ExamDbContext> options) : base(options) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(System.IO.Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .Build();
-            //var connectionString = ConfigurationUtils.Settings.GetConfig("ConnectionStrings:ExamDbConnection");
-            optionsBuilder.UseSqlServer(config.GetConnectionString("ExamDbConnection"));
-            base.OnConfiguring(optionsBuilder);
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    var config = new ConfigurationBuilder()
+        //        .SetBasePath(System.IO.Directory.GetCurrentDirectory())
+        //        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+        //        .Build();
+        //    //var connectionString = ConfigurationUtils.Settings.GetConfig("ConnectionStrings:ExamDbConnection");
+        //    optionsBuilder.UseSqlServer(config.GetConnectionString("ExamDbConnection"));
+        //    base.OnConfiguring(optionsBuilder);
+        //}
 
         protected override void OnModelCreating(ModelBuilder model)
         {

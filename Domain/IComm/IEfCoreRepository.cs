@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.IComm
 {
@@ -13,7 +15,7 @@ namespace Domain.IComm
         /// <summary>
         /// 对象集合
         /// </summary>
-        IQueryable<T> EntitySet { get; }
+        //IQueryable<T> Query { get; }
 
         /// <summary>
         /// 插入
@@ -41,13 +43,31 @@ namespace Domain.IComm
         /// </summary>
         /// <param name="spec">规约表达式</param>
         /// <returns></returns>
-        T FindBySpec(ISpecification<T> spec);
+        T SingleEntity(ISpecification<T> spec);
+
+        /// <summary>
+        /// 单个实体
+        /// </summary>
+        /// <param name="spec">规约表达式</param>
+        /// <param name="include">包含导航属性</param>
+        /// <returns></returns>
+        T SingleEntity(ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T,object>> include = null);
 
         /// <summary>
         /// 查找集合
         /// </summary>
         /// <param name="spec">规约表达式</param>
         /// <returns></returns>
-        IQueryable<T> QueryBySpec(ISpecification<T> spec);
+        IQueryable<T> QueryEntity(ISpecification<T> spec);
+
+        /// <summary>
+        /// 获取实体集合
+        /// </summary>
+        /// <param name="spec">规约表达式</param>
+        /// <param name="include">包含导航属性</param>
+        /// <returns></returns>
+        IQueryable<T> QuerySet(ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
     }
 }

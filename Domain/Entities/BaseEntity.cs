@@ -1,4 +1,7 @@
-﻿namespace Domain.Entities
+﻿using System;
+using System.Linq;
+
+namespace Domain.Entities
 {
     public abstract class BaseEntity
     {

@@ -32,6 +32,10 @@ namespace Application.DTO
                 .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
                 .ForMember(dest => dest.TeacherDto, opts => opts.MapFrom(src => src.TeacherInfomation));
 
+            CreateMap<UserInfo, UserDTO>()
+                .ForMember(dest => dest.UserRoleDtos, opts =>
+                    opts.MapFrom(src => Mapper.Map<IEnumerable<UserRole>, List<UserRoleDTO>>(src.UserRoles)));
+
             CreateMap<AdminInfo, AdminDTO>();
 
             CreateMap<TeacherInfo, TeacherDTO>()
@@ -76,6 +80,10 @@ namespace Application.DTO
             CreateMap<ClassTeacherDTO, ClassTeacher>()
                 .ForMember(dest => dest.ClassInfomation, opts => opts.MapFrom(src => src.ClassDto))
                 .ForMember(dest => dest.TeacherInfomation, opts => opts.MapFrom(src => src.TeacherDto));
+
+            CreateMap<UserDTO, UserInfo>()
+                .ForMember(dest => dest.UserRoles, opts =>
+                    opts.MapFrom(src => Mapper.Map<List<UserRoleDTO>, IEnumerable<UserRole>>(src.UserRoleDtos)));
 
             CreateMap<AdminDTO, AdminInfo>();
 

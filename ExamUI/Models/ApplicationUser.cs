@@ -13,9 +13,9 @@ namespace ExamUI.Models
         [RegularExpression(@"^[a-zA-Z0-9_\.\@\!\#\$\%\^\&\*\(\)]{5,31}$", ErrorMessage = "登陆密码包含6-32个字母、数字或特殊符号(_!@#$%^&*())")]
         public string Password { get; set; }
 
-        //[Required]
-        //[RegularExpression(@"^\w{4,}$", ErrorMessage = "请输入正确的验证码")]
-        //public string VerificyCode { get; set; }
+        [Required]
+        [RegularExpression(@"^\w{5,5}$", ErrorMessage = "请输入正确的验证码")]
+        public string VerificyCode { get; set; }
 
         //记住我
         public string RememberMe { get; set; }

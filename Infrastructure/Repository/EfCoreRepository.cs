@@ -1,21 +1,24 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Domain.Entities;
 using Domain.IComm;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Infrastructure.Repository
 {
     public class EfCoreRepository<T> : IEfCoreRepository<T> where T : BaseEntity, IAggregateRoot
     {
+        private readonly IQueryable<T> query;
+
         //构造方法
         public EfCoreRepository(IExamDbContext context)
         {
             this.DBContext = context;
+            this.query = DBContext.Set<T>();
         }
 
         public IExamDbContext DBContext { get; private set; }
-
-        public IQueryable<T> EntitySet => DBContext.Set<T>().AsQueryable();
 
         /// <summary>
         /// 插入
@@ -54,10 +57,18 @@ namespace Infrastructure.Repository
         /// 查找单个
         /// </summary>
         /// <param name="spec">规约表达式</param>
+        /// <param name="navigatePropertys">导航属性名称</param>
         /// <returns></returns>
-        public T FindBySpec(ISpecification<T> spec)
+        public T SingleEntity(ISpecification<T> spec)
         {
-            return EntitySet.FirstOrDefault(spec.Expression);
+            return query.FirstOrDefault(spec.Expression);
+        }
+
+        public T SingleEntity(ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            include?.Invoke(query);
+            return query.FirstOrDefault(spec.Expression);
         }
 
         /// <summary>
@@ -65,9 +76,16 @@ namespace Infrastructure.Repository
         /// </summary>
         /// <param name="spec">规约表达式</param>
         /// <returns></returns>
-        public IQueryable<T> QueryBySpec(ISpecification<T> spec)
+        public IQueryable<T> QueryEntity(ISpecification<T> spec)
         {
-            return EntitySet.Where(spec.Expression);
+            return query.Where(spec.Expression);
+        }
+
+        public IQueryable<T> QuerySet(ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            include?.Invoke(query);
+            return query.Where(spec?.Expression);
         }
     }
 }

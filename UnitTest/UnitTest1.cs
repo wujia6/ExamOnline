@@ -83,34 +83,5 @@ namespace UnitTest
                 "暂无"
             });
         }
-
-        [TestMethod]
-        public void ClassAggTest()
-        {
-            var classEntity=EntityFactory.Create<ClassInfo>(new object[]{
-                "1701",
-                ClassGrade.三年级,
-                CommType.高考班,
-                DateTime.Now,
-                ClassStatus.未启用,
-                1,
-                "暂无"
-            });
-            var clsDto = Mapper.Map<ClassInfo, ClassDTO>(classEntity);
-        }
-
-        [TestMethod]
-        public void ConnectionStringsTest()
-        {
-            //string connString = ConfigUtils.GetConfig("ConnectionStrings:ExamDbConn");
-        }
-
-        [TestMethod]
-        public void GetClassInstanceTest()
-        {
-            //var classInstance = Assembly.LoadFrom("Application.dll").CreateInstance("Application.DTO.RuleConfig");
-            //classInstance.GetType().GetMethod("Initialize").Invoke(classInstance, null);
-            //AutoMapperHelper.SetMappings();
-        }
     }
 }
