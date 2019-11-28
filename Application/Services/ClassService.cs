@@ -1,9 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Application.IServices;
 using Domain.Entities;
 using Domain.IComm;
 using Domain.IManages;
+using Infrastructure.Repository;
 using Infrastructure.Utils;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.Services
 {
@@ -12,12 +17,12 @@ namespace Application.Services
         where TDest : class
     {
         private readonly IClassManage<TSource> classManage;
-        private readonly IExamDbContext examContext;
+        private readonly IExamDbContext context;
 
-        public ClassService(IClassManage<TSource> manage, IExamDbContext context)
+        public ClassService(IClassManage<TSource> manage, IExamDbContext cxt)
         {
             this.classManage = manage;
-            this.examContext = context;
+            this.context = cxt;
         }
 
         public bool AddOrEdit(TDest inf)
@@ -25,22 +30,27 @@ namespace Application.Services
             if (inf == null)
                 return false;
             var entity = inf.MapTo<TSource>();
-            return classManage.AddOrEdit(entity) ? examContext.SaveChanges() > 0 : false;
+            return classManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
         }
 
-        public bool Remove(ISpecification<TSource> spec)
+        public bool Remove(Expression<Func<TSource, bool>> express)
         {
-            return classManage.Remove(spec) ? examContext.SaveChanges() > 0 : false;
+            var spec = Specification<TSource>.Eval(express);
+            return classManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 
-        public TDest FindBy(ISpecification<TSource> spec)
+        public TDest Single(Expression<Func<TSource, bool>> express = null,
+            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
         {
-            return classManage.FindBy(spec).MapTo<TDest>();
+            var spec = Specification<TSource>.Eval(express);
+            return classManage.Single(spec, include).MapTo<TDest>();
         }
 
-        public List<TDest> QuerySet(ISpecification<TSource> spec)
+        public List<TDest> Lists(Expression<Func<TSource, bool>> express = null,
+            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
         {
-            return classManage.QuerySet(spec).MapToList<TDest>();
+            var spec = Specification<TSource>.Eval(express);
+            return classManage.Lists(spec, include).MapToList<TDest>();
         }
     }
 }

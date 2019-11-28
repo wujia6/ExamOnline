@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Query;
 using Application.DTO;
 using Domain.Entities.UserAgg;
 
@@ -14,10 +15,12 @@ namespace Application.IServices
     {
         bool AddOrEdit(UserDTO model);
 
-        bool Remove(UserDTO model);
+        bool Remove(Expression<Func<UserInfo, bool>> express);
 
-        UserDTO FindBy(Expression<Func<UserInfo, bool>> express);
+        UserDTO Single(Expression<Func<UserInfo, bool>> express = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
-        List<UserDTO> QueryBy(Expression<Func<UserInfo, bool>> express);
+        List<UserDTO> Lists(Expression<Func<UserInfo, bool>> express = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }
 }

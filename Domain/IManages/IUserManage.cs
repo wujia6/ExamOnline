@@ -2,6 +2,7 @@
 using System.Linq;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.IManages
 {
@@ -28,14 +29,18 @@ namespace Domain.IManages
         /// 单个查找
         /// </summary>
         /// <param name="spec">规约表达式</param>
+        /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        UserInfo FindBy(ISpecification<UserInfo> spec);
+        UserInfo Single(ISpecification<UserInfo> spec = null, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
         /// <summary>
         /// 查询
         /// </summary>
         /// <param name="spec">规约表达式</param>
+        /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        IQueryable<UserInfo> QueryBy(ISpecification<UserInfo> spec);
+        IQueryable<UserInfo> Lists(ISpecification<UserInfo> spec = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }
 }

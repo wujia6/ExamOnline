@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Domain.IManages;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.Manages
 {
@@ -17,27 +19,29 @@ namespace Domain.Manages
             this.efCore = ef;
         }
 
-        public UserInfo FindBy(ISpecification<UserInfo> spec)
+        public UserInfo Single(ISpecification<UserInfo> spec = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
-            return efCore.SingleEntity(spec);
+            return efCore.Single(spec, include);
         }
 
         public bool AddOrEdit(UserInfo entity)
         {
             if (entity == null)
                 return false;
-            return entity.ID > 0 ? efCore.UpdateEntity(entity) : efCore.InsertEntity(entity);
+            return entity.ID > 0 ? efCore.ModifyAt(entity) : efCore.AddAt(entity);
         }
 
-        public IQueryable<UserInfo> QueryBy(ISpecification<UserInfo> spec)
+        public IQueryable<UserInfo> Lists(ISpecification<UserInfo> spec = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
-            return efCore.QueryEntity(spec);
+            return efCore.Lists(spec, include);
         }
 
         public bool Remove(ISpecification<UserInfo> spec)
         {
-            var entity = FindBy(spec);
-            return entity == null ? false : efCore.RemoveEntity(entity);
+            var entity = Single(spec);
+            return entity == null ? false : efCore.RemoveAt(entity);
         }
     }
 }

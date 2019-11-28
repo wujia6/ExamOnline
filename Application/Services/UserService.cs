@@ -8,6 +8,10 @@ using Domain.IManages;
 using Infrastructure.Utils;
 using Application.DTO;
 using Infrastructure.Repository;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore;
+using Domain.Entities.RoleAgg;
 
 namespace Application.Services
 {
@@ -33,24 +37,25 @@ namespace Application.Services
             return userManage.AddOrEdit(entity) ? db.SaveChanges() > 0 : false;
         }
 
-        public List<UserDTO> QueryBy(Expression<Func<UserInfo, bool>> express)
+        public bool Remove(Expression<Func<UserInfo, bool>> express)
         {
             var spec = Specification<UserInfo>.Eval(express);
-            return userManage.QueryBy(spec).MapToList<UserDTO>();
-        }
-
-        public bool Remove(UserDTO model)
-        {
-            var userDto = model.MapTo<UserDTO>();
-            var spec = Specification<UserInfo>.Eval(e => e.ID == userDto.ID);
             return userManage.Remove(spec) ? db.SaveChanges() > 0 : false;
         }
 
-        public UserDTO FindBy(Expression<Func<UserInfo, bool>> express)
+        public UserDTO Single(Expression<Func<UserInfo, bool>> express = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
-            var user = userManage.FindBy(spec);
+            var user = userManage.Single(spec, include);
             return user.MapTo<UserDTO>();
+        }
+
+        public List<UserDTO> Lists(Expression<Func<UserInfo, bool>> express = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        {
+            var spec = Specification<UserInfo>.Eval(express);
+            return userManage.Lists(spec, include).MapToList<UserDTO>();
         }
     }
 }

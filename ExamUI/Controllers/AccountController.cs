@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;
 using Application.IServices;
 using Infrastructure.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExamUI.Controllers
 {
@@ -54,8 +55,11 @@ namespace ExamUI.Controllers
                 var scode = HttpContext.Session.GetString("VCode").ToLower();
                 if (string.Compare(scode, model.VerificyCode) != 0)
                     return Json(new { result = false, message = "验证码错误" });
-                
-                var loginer = userService.FindBy(express: usr => usr.Account == model.Account && usr.Pwd == model.Password);
+
+                var loginer = userService.Single(
+                    express: usr => usr.Account == model.Account && usr.Pwd == model.Password,
+                    include: src => src.Include(u => u.UserRoles.Include(r => r.RoleInfomation))
+                );
 
                 if (loginer == null)
                     return Json(new { result = false, message = "错误的用户名或密码" });

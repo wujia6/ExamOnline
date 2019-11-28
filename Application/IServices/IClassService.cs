@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Domain.Entities;
 using Domain.IComm;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.IServices
 {
@@ -13,10 +17,24 @@ namespace Application.IServices
     {
         bool AddOrEdit(TDest model);
 
-        bool Remove(ISpecification<TSource> spec);
+        bool Remove(Expression<Func<TSource, bool>> express);
 
-        TDest FindBy(ISpecification<TSource> spec);
+        /// <summary>
+        /// 获取单个模型
+        /// </summary>
+        /// <param name="express">表达式</param>
+        /// <param name="include">包含导航属性</param>
+        /// <returns></returns>
+        TDest Single(Expression<Func<TSource, bool>> express = null,
+            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null);
 
-        List<TDest> QuerySet(ISpecification<TSource> spec);
+        /// <summary>
+        /// 获取模型集合
+        /// </summary>
+        /// <param name="express">表达式</param>
+        /// <param name="include">包含导航属性</param>
+        /// <returns></returns>
+        List<TDest> Lists(Expression<Func<TSource, bool>> express = null,
+            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null);
     }
 }

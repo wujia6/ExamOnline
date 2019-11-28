@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Application.DTO;
 using Domain.Entities.QuestionAgg;
 using Domain.IComm;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.IServices
 {
@@ -22,20 +26,24 @@ namespace Application.IServices
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        bool Remove(ISpecification<QuestionInfo> spec);
+        bool Remove(Expression<Func<QuestionInfo, bool>> express);
 
         /// <summary>
-        /// 查询单个
+        /// 获取单个模型
         /// </summary>
-        /// <param name="spec">规约对象</param>
+        /// <param name="express">表达式</param>
+        /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        QuestionDTO FindBy(ISpecification<QuestionInfo> spec);
+        QuestionDTO Single(Expression<Func<QuestionInfo, bool>> express = null,
+            Func<IQueryable<QuestionInfo>, IIncludableQueryable<QuestionInfo, object>> include = null);
 
         /// <summary>
-        /// 查询
+        /// 获取模型集合
         /// </summary>
-        /// <param name="spec">规约对象</param>
+        /// <param name="express">表达式</param>
+        /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        List<QuestionDTO> QuerySet(ISpecification<QuestionInfo> spec);
+        List<QuestionDTO> Lists(Expression<Func<QuestionInfo, bool>> express = null,
+            Func<IQueryable<QuestionInfo>, IIncludableQueryable<QuestionInfo, object>> include = null);
     }
 }

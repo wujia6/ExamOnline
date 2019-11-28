@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Query;
 using Domain.Entities;
 using Domain.IComm;
 using Domain.IManages;
@@ -18,23 +20,25 @@ namespace Domain.Manages
         {
             if (entity == null)
                 return false;
-            return entity.ID > 0 ? efCore.InsertEntity(entity) : efCore.UpdateEntity(entity);
+            return entity.ID > 0 ? efCore.AddAt(entity) : efCore.ModifyAt(entity);
         }
 
         public bool Remove(ISpecification<T> spec)
         {
-            var entity = FindBy(spec);
-            return entity == null ? false : efCore.RemoveEntity(entity);
+            var entity = Single(spec);
+            return entity == null ? false : efCore.RemoveAt(entity);
         }
 
-        public T FindBy(ISpecification<T> spec)
+        public T Single(ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return efCore.SingleEntity(spec);
+            return efCore.Single(spec);
         }
 
-        public IQueryable<T> QuerySet(ISpecification<T> spec)
+        public IQueryable<T> Lists(ISpecification<T> spec = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return efCore.QueryEntity(spec);
+            return efCore.Lists(spec, include);
         }
     }
 }

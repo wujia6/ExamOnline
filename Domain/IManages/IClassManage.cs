@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Domain.Entities;
 using Domain.IComm;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.IManages
 {
@@ -27,14 +29,18 @@ namespace Domain.IManages
         /// 查询单个
         /// </summary>
         /// <param name="spec">规约对象</param>
+        /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        T FindBy(ISpecification<T> spec);
+        T Single(ISpecification<T> spec = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
 
         /// <summary>
         /// 查询
         /// </summary>
         /// <param name="spec">规约对象</param>
+        /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        IQueryable<T> QuerySet(ISpecification<T> spec);
+        IQueryable<T> Lists(ISpecification<T> spec = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
     }
 }

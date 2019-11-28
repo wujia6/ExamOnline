@@ -1,22 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Application.DTO;
 using Application.IServices;
 using Domain.Entities.ExamAgg;
 using Domain.IComm;
 using Domain.IManages;
+using Infrastructure.Repository;
 using Infrastructure.Utils;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.Services
 {
     public class ExamService : IExamService
     {
         private readonly IExamManage examManage;
-        private readonly IExamDbContext examContext;
+        private readonly IExamDbContext context;
 
-        public ExamService(IExamManage manage, IExamDbContext context)
+        public ExamService(IExamManage manage, IExamDbContext cxt)
         {
             this.examManage = manage;
-            this.examContext = context;
+            this.context = cxt;
         }
 
         public bool AddOrEdit(ExaminationDTO model)
@@ -24,22 +29,28 @@ namespace Application.Services
             if (model == null)
                 return false;
             var entity = model.MapTo<ExaminationInfo>();
-            return examManage.AddOrEdit(entity) ? examContext.SaveChanges() > 0 : false;
+            return examManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
         }
 
-        public bool Remove(ISpecification<ExaminationInfo> spec)
+        public bool Remove(Expression<Func<ExaminationInfo, bool>> express)
         {
-            return examManage.Remove(spec) ? examContext.SaveChanges() > 0 : false;
+            var spec = Specification<ExaminationInfo>.Eval(express);
+            return examManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 
-        public ExaminationDTO FindBy(ISpecification<ExaminationInfo> spec)
+        public ExaminationDTO Single(Expression<Func<ExaminationInfo, bool>> express = null,
+            Func<IQueryable<ExaminationInfo>, IIncludableQueryable<ExaminationInfo, object>> include = null)
         {
-            return examManage.FindBy(spec).MapTo<ExaminationDTO>();
+            var spec = Specification<ExaminationInfo>.Eval(express);
+            return examManage.Single(spec, include).MapTo<ExaminationDTO>();
         }
 
-        public List<ExaminationDTO> QuerySet(ISpecification<ExaminationInfo> spec)
+        public List<ExaminationDTO> Lists(Expression<Func<ExaminationInfo, bool>> express = null,
+            Func<IQueryable<ExaminationInfo>, IIncludableQueryable<ExaminationInfo, object>> include = null)
         {
-            return examManage.QuerySet(spec).MapToList<ExaminationDTO>();
+            var spec = Specification<ExaminationInfo>.Eval(express);
+            return examManage.Lists(spec, include).MapToList<ExaminationDTO>();
+            
         }
     }
 }

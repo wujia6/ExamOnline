@@ -25,7 +25,7 @@ namespace Infrastructure.Repository
         /// </summary>
         /// <param name="entity">实体类</param>
         /// <returns></returns>
-        public bool InsertEntity(T entity)
+        public bool AddAt(T entity)
         {
             DBContext.Entry(entity).State = EntityState.Added;
             return true;
@@ -36,7 +36,7 @@ namespace Infrastructure.Repository
         /// </summary>
         /// <param name="entity">实体类</param>
         /// <returns></returns>
-        public bool RemoveEntity(T entity)
+        public bool RemoveAt(T entity)
         {
             DBContext.Entry(entity).State = EntityState.Deleted;
             return true;
@@ -47,7 +47,7 @@ namespace Infrastructure.Repository
         /// </summary>
         /// <param name="entity">实体类</param>
         /// <returns></returns>
-        public bool UpdateEntity(T entity)
+        public bool ModifyAt(T entity)
         {
             DBContext.Entry(entity).State = EntityState.Modified;
             return true;
@@ -57,14 +57,9 @@ namespace Infrastructure.Repository
         /// 查找单个
         /// </summary>
         /// <param name="spec">规约表达式</param>
-        /// <param name="navigatePropertys">导航属性名称</param>
+        /// <param name="include">要包含的导航属性</param>
         /// <returns></returns>
-        public T SingleEntity(ISpecification<T> spec)
-        {
-            return query.FirstOrDefault(spec.Expression);
-        }
-
-        public T SingleEntity(ISpecification<T> spec = null, 
+        public T Single(ISpecification<T> spec = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             include?.Invoke(query);
@@ -75,13 +70,9 @@ namespace Infrastructure.Repository
         /// 查找集合
         /// </summary>
         /// <param name="spec">规约表达式</param>
+        /// <param name="include">要包含的导航属性</param>
         /// <returns></returns>
-        public IQueryable<T> QueryEntity(ISpecification<T> spec)
-        {
-            return query.Where(spec.Expression);
-        }
-
-        public IQueryable<T> QuerySet(ISpecification<T> spec = null, 
+        public IQueryable<T> Lists(ISpecification<T> spec = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             include?.Invoke(query);

@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Domain.Entities.AnwserAgg;
 using Domain.IComm;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.IManages
 {
@@ -24,17 +26,21 @@ namespace Domain.IManages
         bool Remove(ISpecification<AnswerInfo> spec);
 
         /// <summary>
-        /// 单个查找
+        /// 查询单个
         /// </summary>
-        /// <param name="spec">规约表达式</param>
+        /// <param name="spec">规约对象</param>
+        /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        AnswerInfo FindBy(ISpecification<AnswerInfo> spec);
+        AnswerInfo Single(ISpecification<AnswerInfo> spec = null,
+            Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null);
 
         /// <summary>
         /// 查询
         /// </summary>
-        /// <param name="spec">规约表达式</param>
+        /// <param name="spec">规约对象</param>
+        /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        IQueryable<AnswerInfo> QuerySet(ISpecification<AnswerInfo> spec);
+        IQueryable<AnswerInfo> Lists(ISpecification<AnswerInfo> spec = null,
+            Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null);
     }
 }

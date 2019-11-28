@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Application.DTO;
 using Domain.Entities.AnwserAgg;
-using Domain.IComm;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.IServices
 {
@@ -22,20 +25,24 @@ namespace Application.IServices
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        bool Remove(ISpecification<AnswerInfo> spec);
+        bool Remove(Expression<Func<AnswerInfo, bool>> express);
 
         /// <summary>
-        /// 查询单个
+        /// 获取单个模型
         /// </summary>
-        /// <param name="spec">规约对象</param>
+        /// <param name="express">表达式</param>
+        /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        AnswerDTO FindBy(ISpecification<AnswerInfo> spec);
+        AnswerDTO Single(Expression<Func<AnswerInfo, bool>> express = null,
+            Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null);
 
         /// <summary>
-        /// 查询
+        /// 获取模型集合
         /// </summary>
-        /// <param name="spec">规约对象</param>
+        /// <param name="express">表达式</param>
+        /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        List<AnswerDTO> QuerySet(ISpecification<AnswerInfo> spec);
+        List<AnswerDTO> Lists(Expression<Func<AnswerInfo, bool>> express = null,
+            Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null);
     }
 }
