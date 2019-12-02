@@ -62,6 +62,7 @@ namespace Infrastructure.Repository
         public T Single(ISpecification<T> spec = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
+            var user = DBContext.Users.Include(usr => usr.UserRoles).ThenInclude(r=>r.RoleInfomation).FirstOrDefault(usr => usr.Account == "sysadmin" && usr.Pwd == "a1234567");
             include?.Invoke(query);
             return query.FirstOrDefault(spec.Expression);
         }

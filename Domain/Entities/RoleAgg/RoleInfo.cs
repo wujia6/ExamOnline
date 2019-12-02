@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 
@@ -12,6 +13,6 @@ namespace Domain.Entities.RoleAgg
 
         public virtual IQueryable<RoleMenu> RoleMenus { get; set; }
 
-        public virtual IQueryable<UserRole> UserRoles { get; set; } 
+        public virtual IEnumerable<UserRole> UserRoles { get; set; } 
     }
 }

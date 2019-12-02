@@ -58,8 +58,7 @@ namespace ExamUI.Controllers
 
                 var loginer = userService.Single(
                     express: usr => usr.Account == model.Account && usr.Pwd == model.Password,
-                    include: src => src.Include(u => u.UserRoles.Include(r => r.RoleInfomation))
-                );
+                    include: src => src.Include(u => u.UserRoles).ThenInclude(r => r.RoleInfomation));
 
                 if (loginer == null)
                     return Json(new { result = false, message = "错误的用户名或密码" });

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using Domain.IComm;
 
 namespace Domain.Entities.UserAgg
@@ -24,6 +24,6 @@ namespace Domain.Entities.UserAgg
         //创建日期
         public DateTime CreateDate { get; set; }
         //导航属性
-        public virtual IQueryable<UserRole> UserRoles { get; set; }
+        public virtual IEnumerable<UserRole> UserRoles { get; set; }
     }
 }
