@@ -4,8 +4,8 @@ namespace Domain.Entities.ClassAgg
 {
     public class ClassExamination : ClassBase
     {
-        public virtual ClassInfo ClassInfomation { get; set; } = EntityFactory.Create<ClassInfo>();
+        public virtual ClassInfo ClassInfomation { get; set; }
 
-        public virtual ExaminationInfo ExamInfomation { get; set; } = EntityFactory.Create<ExaminationInfo>();
+        public virtual ExaminationInfo ExamInfomation { get; set; }
     }
 }

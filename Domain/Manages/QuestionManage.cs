@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Domain.Entities.QuestionAgg;
 using Domain.IComm;
@@ -35,7 +36,7 @@ namespace Domain.Manages
             return efCore.Single(spec, include);
         }
 
-        public IQueryable<QuestionInfo> Lists(ISpecification<QuestionInfo> spec = null,
+        public IEnumerable<QuestionInfo> Lists(ISpecification<QuestionInfo> spec = null,
             Func<IQueryable<QuestionInfo>, IIncludableQueryable<QuestionInfo, object>> include = null)
         {
             return efCore.Lists(spec, include);

@@ -19,11 +19,11 @@ namespace Domain.Entities.AnwserAgg
         /// <summary>
         /// 考试信息（导航属性）
         /// </summary>
-        public virtual ExaminationInfo ExamInfomation { get; set; } = EntityFactory.Create<ExaminationInfo>();
+        public virtual ExaminationInfo ExamInfomation { get; set; }
 
         /// <summary>
         /// 学生信息（导航属性）
         /// </summary>
-        public virtual StudentInfo StudentInfomation { get; set; } = EntityFactory.Create<StudentInfo>();
+        public virtual StudentInfo StudentInfomation { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Domain.Entities;
 using Domain.IComm;
@@ -9,7 +10,7 @@ namespace Infrastructure.Repository
 {
     public class EfCoreRepository<T> : IEfCoreRepository<T> where T : BaseEntity, IAggregateRoot
     {
-        private readonly IQueryable<T> query;
+        private IQueryable<T> query;
 
         //构造方法
         public EfCoreRepository(IExamDbContext context)
@@ -62,8 +63,8 @@ namespace Infrastructure.Repository
         public T Single(ISpecification<T> spec = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            var user = DBContext.Users.Include(usr => usr.UserRoles).ThenInclude(r=>r.RoleInfomation).FirstOrDefault(usr => usr.Account == "sysadmin" && usr.Pwd == "a1234567");
-            include?.Invoke(query);
+            if (include != null)
+                query = include(query);
             return query.FirstOrDefault(spec.Expression);
         }
 
@@ -73,7 +74,7 @@ namespace Infrastructure.Repository
         /// <param name="spec">规约表达式</param>
         /// <param name="include">要包含的导航属性</param>
         /// <returns></returns>
-        public IQueryable<T> Lists(ISpecification<T> spec = null, 
+        public IEnumerable<T> Lists(ISpecification<T> spec = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             include?.Invoke(query);

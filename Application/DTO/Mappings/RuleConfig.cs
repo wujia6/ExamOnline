@@ -17,14 +17,14 @@ namespace Application.DTO
     {
         public RuleConfig()
         {
-            #region entity ==> dto
+            #region ###实体模型=>数据模型
             CreateMap<ClassInfo, ClassDTO>()
                 .ForMember(dest => dest.ClassExaminationDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IQueryable<ClassExamination>, List<ClassExaminationDTO>>(src.ClassExams)))
+                    opts.MapFrom(src => Mapper.Map<IEnumerable<ClassExamination>, List<ClassExaminationDTO>>(src.ClassExams)))
                 .ForMember(dest => dest.ClassTeacherDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IQueryable<ClassTeacher>, List<ClassTeacherDTO>>(src.ClassTeachers)))
+                    opts.MapFrom(src => Mapper.Map<IEnumerable<ClassTeacher>, List<ClassTeacherDTO>>(src.ClassTeachers)))
                 .ForMember(dest => dest.StudentDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IQueryable<StudentInfo>, List<StudentDTO>>(src.StudentInfomations)));
+                    opts.MapFrom(src => Mapper.Map<IEnumerable<StudentInfo>, List<StudentDTO>>(src.StudentInfomations)));
 
             CreateMap<ClassExamination, ClassExaminationDTO>()
                 .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
@@ -35,7 +35,7 @@ namespace Application.DTO
                 .ForMember(dest => dest.TeacherDto, opts => opts.MapFrom(src => src.TeacherInfomation));
 
             CreateMap<RoleInfo, RoleDTO>()
-                .ForMember(dest => dest.RoleMenuDtos, opts => opts.MapFrom(src => Mapper.Map<IQueryable<RoleMenu>, List<RoleMenuDTO>>(src.RoleMenus)))
+                .ForMember(dest => dest.RoleMenuDtos, opts => opts.MapFrom(src => Mapper.Map<IEnumerable<RoleMenu>, List<RoleMenuDTO>>(src.RoleMenus)))
                 .ForMember(dest => dest.UserRoleDtos, opts => opts.MapFrom(src => Mapper.Map<IEnumerable<UserRole>, List<UserRoleDTO>>(src.UserRoles)));
 
             CreateMap<UserRole, UserRoleDTO>()
@@ -43,35 +43,41 @@ namespace Application.DTO
                 .ForMember(dest => dest.UserDto, opts => opts.MapFrom(src => src.UserInfomation));
 
             CreateMap<UserInfo, UserDTO>()
+                .Include<AdminInfo,UserDTO>()
+                .ForMember(dest => dest.UserRoleDtos, opts => opts.MapFrom(src => Mapper.Map<IEnumerable<UserRole>, List<UserRoleDTO>>(src.UserRoles)));
+
+            CreateMap<AdminInfo, UserDTO>()
+                .IncludeBase<UserInfo, UserDTO>()
                 .ForMember(dest => dest.UserRoleDtos, opts => opts.MapFrom(src => Mapper.Map<IEnumerable<UserRole>, List<UserRoleDTO>>(src.UserRoles)));
 
             CreateMap<TeacherInfo, TeacherDTO>()
                 .ForMember(dest => dest.ClassTeacherDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IQueryable<ClassTeacher>, List<ClassTeacherDTO>>(src.ClassTeachers)));
+                    opts.MapFrom(src => Mapper.Map<IEnumerable<ClassTeacher>, List<ClassTeacherDTO>>(src.ClassTeachers)));
 
             CreateMap<StudentInfo, StudentDTO>()
                 .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
                 .ForMember(dest => dest.AnswerDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IQueryable<AnswerInfo>, List<AnswerDTO>>(src.AnswerInfomations)));
+                    opts.MapFrom(src => Mapper.Map<IEnumerable<AnswerInfo>, List<AnswerDTO>>(src.AnswerInfomations)));
 
             CreateMap<QuestionInfo, QuestionDTO>()
                 .ForMember(dest => dest.ExaminationDto, opts => opts.MapFrom(src => src.ExaminationInfomation));
 
             CreateMap<ExaminationInfo, ExaminationDTO>()
                 .ForMember(dest => dest.TeacherDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IQueryable<TeacherInfo>, List<TeacherDTO>>(src.TeacherInfomations)))
+                    opts.MapFrom(src => Mapper.Map<IEnumerable<TeacherInfo>, List<TeacherDTO>>(src.TeacherInfomations)))
                 .ForMember(dest => dest.ClassExamDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IQueryable<ClassExamination>, List<ClassExaminationDTO>>(src.ClassExams)))
+                    opts.MapFrom(src => Mapper.Map<IEnumerable<ClassExamination>, List<ClassExaminationDTO>>(src.ClassExams)))
                 .ForMember(dest => dest.QuestionDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IQueryable<QuestionInfo>, List<QuestionDTO>>(src.QuestionInfomations)))
+                    opts.MapFrom(src => Mapper.Map<IEnumerable<QuestionInfo>, List<QuestionDTO>>(src.QuestionInfomations)))
                 .ForMember(dest => dest.AnswerDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IQueryable<AnswerInfo>, List<AnswerDTO>>(src.AnswerInfomations)));
+                    opts.MapFrom(src => Mapper.Map<IEnumerable<AnswerInfo>, List<AnswerDTO>>(src.AnswerInfomations)));
 
             CreateMap<AnswerInfo, AnswerDTO>()
                 .ForMember(dest => dest.ExamDto, opts => opts.MapFrom(src => src.ExamInfomation))
                 .ForMember(dest => dest.StudentDto, opts => opts.MapFrom(src => src.StudentInfomation));
             #endregion
-            #region dto ==> entity
+
+            #region ###数据模型=>实体模型
             CreateMap<ClassDTO, ClassInfo>()
                 .ForMember(dest => dest.ClassExams, opts =>
                     opts.MapFrom(src => Mapper.Map<List<ClassExaminationDTO>, IQueryable<ClassExamination>>(src.ClassExaminationDtos)))

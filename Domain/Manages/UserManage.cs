@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
@@ -19,12 +20,6 @@ namespace Domain.Manages
             this.efCore = ef;
         }
 
-        public UserInfo Single(ISpecification<UserInfo> spec = null,
-            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
-        {
-            return efCore.Single(spec, include);
-        }
-
         public bool AddOrEdit(UserInfo entity)
         {
             if (entity == null)
@@ -32,16 +27,22 @@ namespace Domain.Manages
             return entity.ID > 0 ? efCore.ModifyAt(entity) : efCore.AddAt(entity);
         }
 
-        public IQueryable<UserInfo> Lists(ISpecification<UserInfo> spec = null,
-            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
-        {
-            return efCore.Lists(spec, include);
-        }
-
         public bool Remove(ISpecification<UserInfo> spec)
         {
             var entity = Single(spec);
             return entity == null ? false : efCore.RemoveAt(entity);
+        }
+
+        public UserInfo Single(ISpecification<UserInfo> spec = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        {
+            return efCore.Single(spec, include);
+        }
+
+        public IEnumerable<UserInfo> Lists(ISpecification<UserInfo> spec = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        {
+            return efCore.Lists(spec, include);
         }
     }
 }

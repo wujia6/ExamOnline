@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Domain.Entities;
 using Domain.IComm;
 using Domain.IManages;
+using System.Collections.Generic;
 
 namespace Domain.Manages
 {
@@ -35,7 +36,7 @@ namespace Domain.Manages
             return efCore.Single(spec);
         }
 
-        public IQueryable<T> Lists(ISpecification<T> spec = null,
+        public IEnumerable<T> Lists(ISpecification<T> spec = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             return efCore.Lists(spec, include);

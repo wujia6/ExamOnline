@@ -20,6 +20,9 @@ namespace Application.IServices
         UserDTO Single(Expression<Func<UserInfo, bool>> express = null,
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
+        T Single<T>(Expression<Func<UserInfo, bool>> express,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+
         List<UserDTO> Lists(Expression<Func<UserInfo, bool>> express = null,
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }

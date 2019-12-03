@@ -10,8 +10,6 @@ using Application.DTO;
 using Infrastructure.Repository;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore;
-using Domain.Entities.RoleAgg;
 
 namespace Application.Services
 {
@@ -49,6 +47,14 @@ namespace Application.Services
             var spec = Specification<UserInfo>.Eval(express);
             var user = userManage.Single(spec, include);
             return user.MapTo<UserDTO>();
+        }
+
+        public T Single<T>(Expression<Func<UserInfo, bool>> express,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        {
+            var spec = Specification<UserInfo>.Eval(express);
+            var user = userManage.Single(spec, include);
+            return user.MapTo<T>();
         }
 
         public List<UserDTO> Lists(Expression<Func<UserInfo, bool>> express = null,

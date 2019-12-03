@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
@@ -40,7 +41,7 @@ namespace Domain.IManages
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        IQueryable<UserInfo> Lists(ISpecification<UserInfo> spec = null,
+        IEnumerable<UserInfo> Lists(ISpecification<UserInfo> spec = null,
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }
 }

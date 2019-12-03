@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 
@@ -38,16 +38,16 @@ namespace Domain.Entities.ClassAgg
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<ClassExamination> ClassExams { get; set; }
+        public virtual IEnumerable<ClassExamination> ClassExams { get; set; }
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<StudentInfo> StudentInfomations { get; set; }
+        public virtual IEnumerable<StudentInfo> StudentInfomations { get; set; }
 
         /// <summary>
         /// 导航属性
         /// </summary>
-        public virtual IQueryable<ClassTeacher> ClassTeachers { get; set; }
+        public virtual IEnumerable<ClassTeacher> ClassTeachers { get; set; }
     }
 }
