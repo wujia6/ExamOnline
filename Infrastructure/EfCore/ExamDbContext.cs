@@ -23,7 +23,6 @@ namespace Infrastructure.EfCore
         //        .SetBasePath(System.IO.Directory.GetCurrentDirectory())
         //        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
         //        .Build();
-        //    //var connectionString = ConfigurationUtils.Settings.GetConfig("ConnectionStrings:ExamDbConnection");
         //    optionsBuilder.UseSqlServer(config.GetConnectionString("ExamDbConnection"));
         //    base.OnConfiguring(optionsBuilder);
         //}

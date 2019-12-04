@@ -36,7 +36,7 @@ namespace ExamUI
                 options.UseSqlServer(ConfigurationUtils.Settings.GetConfig("ConnectionStrings:ExamDbConnection")));
             //添加Cookie验证授权支持
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,opts =>
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts =>
                 {
                     opts.LoginPath = new PathString("/Account/Login");  //用户未登录重定向路径
                     opts.LogoutPath = new PathString("/Account/Login"); //退出登录重定向路径

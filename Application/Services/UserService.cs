@@ -10,6 +10,7 @@ using Application.DTO;
 using Infrastructure.Repository;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Query;
+using AutoMapper;
 
 namespace Application.Services
 {
@@ -44,7 +45,7 @@ namespace Application.Services
         public UserDTO Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
-            dynamic entity = userManage.Single(spec, include);
+            UserInfo entity = userManage.Single(spec);
             return entity.MapTo<UserDTO>();
         }
 

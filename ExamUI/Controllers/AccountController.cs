@@ -48,7 +48,7 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(Models.ApplicationUser model)
+        public async Task<IActionResult> Login(Models.ApplicationUser model)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace ExamUI.Controllers
                     new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(loginer.UserRoleDtos))
                 });
                 //写入客户端cookie
-                HttpContext.SignInAsync(identitys.AuthenticationType, new ClaimsPrincipal(identitys), new AuthenticationProperties
+                await HttpContext.SignInAsync(identitys.AuthenticationType, new ClaimsPrincipal(identitys), new AuthenticationProperties
                 {
                     ExpiresUtc = DateTime.UtcNow.AddMinutes(model.ExpireMin),
                     IsPersistent = true,

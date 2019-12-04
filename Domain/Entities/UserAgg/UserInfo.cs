@@ -9,6 +9,17 @@ namespace Domain.Entities.UserAgg
     /// </summary>
     public class UserInfo : BaseEntity, IAggregateRoot
     {
+        private IEnumerable<UserRole> userRoles;
+
+        public UserInfo() { }
+
+        private UserInfo(Action<object, string> lazy)
+        {
+            LazyLoader = lazy;
+        }
+
+        private Action<object, string> LazyLoader { get; set; }
+
         //账号
         public string Account { get; set; }
 
@@ -31,6 +42,10 @@ namespace Domain.Entities.UserAgg
         public DateTime CreateDate { get; set; }
 
         //导航属性
-        public virtual IEnumerable<UserRole> UserRoles { get; set; }
+        public IEnumerable<UserRole> UserRoles
+        {
+            get => LazyLoader?.Load(this, ref userRoles);
+            set => userRoles = value;
+        }
     }
 }
