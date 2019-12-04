@@ -31,6 +31,6 @@ namespace Domain.Entities.UserAgg
         public DateTime CreateDate { get; set; }
 
         //导航属性
-        public IEnumerable<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public virtual IEnumerable<UserRole> UserRoles { get; set; }
     }
 }

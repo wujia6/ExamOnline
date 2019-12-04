@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using AutoMapper;
 
-namespace Infrastructure.Utils
+namespace Application.DTO.Mappings
 {
     /// <summary>
     /// AutoMapper帮助类
@@ -14,20 +14,21 @@ namespace Infrastructure.Utils
         /// </summary>
         public static void SetMappings()
         {
-            var classInstance = Common.Instance.GetAssembly("Application").CreateInstance("Application.DTO.RuleConfig");
-            classInstance.GetType().GetMethod("Initialize").Invoke(classInstance, null);
+            //var mappings = Common.Instance.GetAssembly("Application").CreateInstance("Application.DTO.RuleConfig") as Profile;
+            //profile.GetType().GetMethod("Initialize").Invoke(profile, null);
+            Mapper.Initialize(cfg => cfg.AddProfile(new RuleConfig()));
         }
 
         /// <summary>
         ///  类型映射
         /// </summary>
-        public static T MapTo<T>(this object source)
+        public static TDestination MapTo<TDestination>(this object source)
         {
-            if (source == null)    return default(T);
-            var map = Mapper.Configuration.FindTypeMapFor(source.GetType(), typeof(T));
+            if (source == null)    return default(TDestination);
+            var map = Mapper.Configuration.FindTypeMapFor(source.GetType(), typeof(TDestination));
             if(map == null)
-                Mapper.Initialize(cfg => cfg.CreateMap(source.GetType(), typeof(T)));
-            return Mapper.Map<T>(source);
+                Mapper.Initialize(cfg => cfg.CreateMap(source.GetType(), typeof(TDestination)));
+            return Mapper.Map<TDestination>(source);
         }
         
         /// <summary>

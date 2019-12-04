@@ -5,7 +5,7 @@ using Application.IServices;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Domain.IManages;
-using Infrastructure.Utils;
+using Application.DTO.Mappings;
 using Application.DTO;
 using Infrastructure.Repository;
 using System.Linq;
@@ -19,12 +19,12 @@ namespace Application.Services
     public class UserService : IUserService
     {
         private readonly IUserManage userManage;
-        private readonly IExamDbContext db;
+        private readonly IExamDbContext context;
 
-        public UserService(IUserManage manage, IExamDbContext context)
+        public UserService(IUserManage manage, IExamDbContext cxt)
         {
             userManage = manage;
-            this.db = context;
+            this.context = cxt;
         }
 
         public bool AddOrEdit(UserDTO model)
@@ -32,33 +32,23 @@ namespace Application.Services
             if (model == null)
                 return false;
             var entity = model.MapTo<UserInfo>();
-            return userManage.AddOrEdit(entity) ? db.SaveChanges() > 0 : false;
+            return userManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
         }
 
         public bool Remove(Expression<Func<UserInfo, bool>> express)
         {
             var spec = Specification<UserInfo>.Eval(express);
-            return userManage.Remove(spec) ? db.SaveChanges() > 0 : false;
+            return userManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 
-        public UserDTO Single(Expression<Func<UserInfo, bool>> express = null,
-            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public UserDTO Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
-            var user = userManage.Single(spec, include);
-            return user.MapTo<UserDTO>();
+            dynamic entity = userManage.Single(spec, include);
+            return entity.MapTo<UserDTO>();
         }
 
-        public T Single<T>(Expression<Func<UserInfo, bool>> express,
-            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
-        {
-            var spec = Specification<UserInfo>.Eval(express);
-            var user = userManage.Single(spec, include);
-            return user.MapTo<T>();
-        }
-
-        public List<UserDTO> Lists(Expression<Func<UserInfo, bool>> express = null,
-            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public List<UserDTO> Lists(Expression<Func<UserInfo, bool>> express = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
             return userManage.Lists(spec, include).MapToList<UserDTO>();

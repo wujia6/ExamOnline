@@ -7,7 +7,7 @@ using Domain.Entities;
 using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Repository;
-using Infrastructure.Utils;
+using Application.DTO.Mappings;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.Services

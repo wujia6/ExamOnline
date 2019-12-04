@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
 using Application.DTO;
 using Domain.Entities.UserAgg;
+using Domain.Entities;
+using Domain.IComm;
 
 namespace Application.IServices
 {
@@ -17,13 +19,8 @@ namespace Application.IServices
 
         bool Remove(Expression<Func<UserInfo, bool>> express);
 
-        UserDTO Single(Expression<Func<UserInfo, bool>> express = null,
-            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        UserDTO Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
-        T Single<T>(Expression<Func<UserInfo, bool>> express,
-            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
-
-        List<UserDTO> Lists(Expression<Func<UserInfo, bool>> express = null,
-            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        List<UserDTO> Lists(Expression<Func<UserInfo, bool>> express = null,Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }
 }

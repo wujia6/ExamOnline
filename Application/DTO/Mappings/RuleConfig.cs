@@ -8,7 +8,7 @@ using Domain.Entities.QuestionAgg;
 using Domain.Entities.RoleAgg;
 using Domain.Entities.UserAgg;
 
-namespace Application.DTO
+namespace Application.DTO.Mappings
 {
     /// <summary>
     /// DTO映射规则类
@@ -18,6 +18,7 @@ namespace Application.DTO
         public RuleConfig()
         {
             #region ###实体模型=>数据模型
+            #region 班级
             CreateMap<ClassInfo, ClassDTO>()
                 .ForMember(dest => dest.ClassExaminationDtos, opts =>
                     opts.MapFrom(src => Mapper.Map<IEnumerable<ClassExamination>, List<ClassExaminationDTO>>(src.ClassExams)))
@@ -33,15 +34,22 @@ namespace Application.DTO
             CreateMap<ClassTeacher, ClassTeacherDTO>()
                 .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
                 .ForMember(dest => dest.TeacherDto, opts => opts.MapFrom(src => src.TeacherInfomation));
-
+            #endregion
+            #region 用户角色
+            CreateMap<UserRole, UserRoleDTO>()
+                .ForMember(dest => dest.RoleDto, opts => opts.MapFrom(src => src.RoleInfomation))
+                .ForMember(dest => dest.UserDto, opts => opts.MapFrom(src => src.UserInfomation));
+            #endregion
+            #region 角色
             CreateMap<RoleInfo, RoleDTO>()
                 .ForMember(dest => dest.RoleMenuDtos, opts => opts.MapFrom(src => Mapper.Map<IEnumerable<RoleMenu>, List<RoleMenuDTO>>(src.RoleMenus)))
                 .ForMember(dest => dest.UserRoleDtos, opts => opts.MapFrom(src => Mapper.Map<IEnumerable<UserRole>, List<UserRoleDTO>>(src.UserRoles)));
 
-            CreateMap<UserRole, UserRoleDTO>()
+            CreateMap<RoleMenu, RoleMenuDTO>()
                 .ForMember(dest => dest.RoleDto, opts => opts.MapFrom(src => src.RoleInfomation))
-                .ForMember(dest => dest.UserDto, opts => opts.MapFrom(src => src.UserInfomation));
-
+                .ForMember(dest => dest.MenuDto, opts => opts.MapFrom(src => src.MenuInfomation));
+            #endregion
+            #region 用户
             CreateMap<UserInfo, UserDTO>()
                 .Include<AdminInfo,UserDTO>()
                 .ForMember(dest => dest.UserRoleDtos, opts => opts.MapFrom(src => Mapper.Map<IEnumerable<UserRole>, List<UserRoleDTO>>(src.UserRoles)));
@@ -58,10 +66,12 @@ namespace Application.DTO
                 .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
                 .ForMember(dest => dest.AnswerDtos, opts =>
                     opts.MapFrom(src => Mapper.Map<IEnumerable<AnswerInfo>, List<AnswerDTO>>(src.AnswerInfomations)));
-
+            #endregion
+            #region 题库
             CreateMap<QuestionInfo, QuestionDTO>()
                 .ForMember(dest => dest.ExaminationDto, opts => opts.MapFrom(src => src.ExaminationInfomation));
-
+            #endregion
+            #region 考试
             CreateMap<ExaminationInfo, ExaminationDTO>()
                 .ForMember(dest => dest.TeacherDtos, opts =>
                     opts.MapFrom(src => Mapper.Map<IEnumerable<TeacherInfo>, List<TeacherDTO>>(src.TeacherInfomations)))
@@ -71,10 +81,12 @@ namespace Application.DTO
                     opts.MapFrom(src => Mapper.Map<IEnumerable<QuestionInfo>, List<QuestionDTO>>(src.QuestionInfomations)))
                 .ForMember(dest => dest.AnswerDtos, opts =>
                     opts.MapFrom(src => Mapper.Map<IEnumerable<AnswerInfo>, List<AnswerDTO>>(src.AnswerInfomations)));
-
+            #endregion
+            #region 答卷
             CreateMap<AnswerInfo, AnswerDTO>()
                 .ForMember(dest => dest.ExamDto, opts => opts.MapFrom(src => src.ExamInfomation))
                 .ForMember(dest => dest.StudentDto, opts => opts.MapFrom(src => src.StudentInfomation));
+            #endregion
             #endregion
 
             #region ###数据模型=>实体模型
@@ -94,11 +106,21 @@ namespace Application.DTO
                 .ForMember(dest => dest.ClassInfomation, opts => opts.MapFrom(src => src.ClassDto))
                 .ForMember(dest => dest.TeacherInfomation, opts => opts.MapFrom(src => src.TeacherDto));
 
-            CreateMap<UserDTO, UserInfo>()
-                .ForMember(dest => dest.UserRoles, opts =>
-                    opts.MapFrom(src => Mapper.Map<List<UserRoleDTO>, IQueryable<UserRole>>(src.UserRoleDtos)));
+            CreateMap<RoleDTO, RoleInfo>()
+                .ForMember(dest => dest.RoleMenus, opts => opts.MapFrom(src => Mapper.Map<List<RoleMenuDTO>, IEnumerable<RoleMenu>>(src.RoleMenuDtos)))
+                .ForMember(dest => dest.UserRoles, opts => opts.MapFrom(src => Mapper.Map<List<UserRoleDTO>, IEnumerable<UserRole>>(src.UserRoleDtos)));
 
-            CreateMap<AdminDTO, AdminInfo>();
+            CreateMap<RoleMenuDTO, RoleMenu>()
+                .ForMember(dest => dest.RoleInfomation, opts => opts.MapFrom(src => src.RoleDto))
+                .ForMember(dest => dest.MenuInfomation, opts => opts.MapFrom(src => src.MenuDto));
+
+            CreateMap<UserDTO, UserInfo>()
+                //.Include<UserDTO,AdminInfo>()
+                .ForMember(dest => dest.UserRoles, opts => opts.MapFrom(src => Mapper.Map<List<UserRoleDTO>, IEnumerable<UserRole>>(src.UserRoleDtos)));
+
+            CreateMap<UserDTO, AdminInfo>()
+                .IncludeBase<UserDTO, UserInfo>()
+                .ForMember(dest => dest.UserRoles, opts => opts.MapFrom(src => Mapper.Map<List<UserRoleDTO>, IEnumerable<UserRole>>(src.UserRoleDtos)));
 
             CreateMap<TeacherDTO, TeacherInfo>()
                 .ForMember(dest => dest.ClassTeachers, opts =>
@@ -131,9 +153,9 @@ namespace Application.DTO
         /// <summary>
         /// 初始化DTO映射规则
         /// </summary>
-        public static void Initialize()
-        {
-            Mapper.Initialize(cfg => cfg.AddProfile(new RuleConfig()));
-        }
+        //public static void Initialize()
+        //{
+        //    Mapper.Initialize(cfg => cfg.AddProfile(new RuleConfig()));
+        //}
     }
 }

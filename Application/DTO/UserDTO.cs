@@ -4,10 +4,8 @@ using Domain.Entities;
 
 namespace Application.DTO
 {
-    public class UserDTO
+    public class UserDTO : BaseModel
     {
-        public int ID { get; set; }
-
         public string Account { get; set; }
 
         public string Pwd { get; set; }
@@ -21,8 +19,6 @@ namespace Application.DTO
         public string Tel { get; set; }
 
         public DateTime CreateDate { get; set; }
-
-        public string Remarks { get; set; }
 
         public List<UserRoleDTO> UserRoleDtos { get; set; }
     }

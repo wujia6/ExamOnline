@@ -8,9 +8,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using ExamUI.Filters;
 using Infrastructure.Utils;
 using Infrastructure.EfCore;
+using Application.DTO.Mappings;
+using Newtonsoft.Json;
 
 namespace ExamUI
 {
@@ -43,7 +46,11 @@ namespace ExamUI
             //添加session服务
             services.AddSession();
             //添加mvc服务与模型验证过滤器
-            services.AddMvc(options=>options.Filters.Add<ModelVerifyActionFilter>()).AddControllersAsServices();
+            services.AddMvc(options => options.Filters.Add<ModelVerifyActionFilter>())
+                .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore) //延迟加载避免循环引用
+                .AddControllersAsServices();
+            //添加automapper服务
+            services.AddAutoMapper();
             //创建autofac服务容器
             var builder = new ContainerBuilder();
             builder.RegisterModule(new AutofacModuel());

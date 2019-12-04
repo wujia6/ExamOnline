@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Domain.Entities.UserAgg
+﻿namespace Domain.Entities.UserAgg
 {
     public class AdminInfo : UserInfo
     {

@@ -10,8 +10,8 @@ namespace Domain.Entities.RoleAgg
 
         public string Code { get; set; }
 
-        public virtual IEnumerable<RoleMenu> RoleMenus { get; set; } = new List<RoleMenu>();
+        public virtual IEnumerable<RoleMenu> RoleMenus { get; set; }
 
-        public virtual IEnumerable<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public virtual IEnumerable<UserRole> UserRoles { get; set; }
     }
 }

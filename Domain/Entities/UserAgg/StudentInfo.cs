@@ -28,7 +28,7 @@ namespace Domain.Entities.UserAgg
         public string Dormitory { get; set; }
 
         //导航属性
-        public virtual ClassInfo ClassInfomation { get; set; }
+        public ClassInfo ClassInfomation { get; set; }
 
         //导航属性
         public virtual IEnumerable<AnswerInfo> AnswerInfomations { get; set; }

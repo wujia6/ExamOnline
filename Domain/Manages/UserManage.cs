@@ -33,14 +33,12 @@ namespace Domain.Manages
             return entity == null ? false : efCore.RemoveAt(entity);
         }
 
-        public UserInfo Single(ISpecification<UserInfo> spec = null,
-            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public UserInfo Single(ISpecification<UserInfo> spec, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             return efCore.Single(spec, include);
         }
 
-        public IEnumerable<UserInfo> Lists(ISpecification<UserInfo> spec = null,
-            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public IEnumerable<UserInfo> Lists(ISpecification<UserInfo> spec = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             return efCore.Lists(spec, include);
         }

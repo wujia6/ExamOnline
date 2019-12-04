@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Application.IServices;
 using Infrastructure.Utils;
-using Microsoft.EntityFrameworkCore;
 
 namespace ExamUI.Controllers
 {
@@ -48,7 +48,7 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(Models.ApplicationUser model)
+        public IActionResult Login(Models.ApplicationUser model)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace ExamUI.Controllers
                     new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(loginer.UserRoleDtos))
                 });
                 //写入客户端cookie
-                await HttpContext.SignInAsync(identitys.AuthenticationType, new ClaimsPrincipal(identitys), new AuthenticationProperties
+                HttpContext.SignInAsync(identitys.AuthenticationType, new ClaimsPrincipal(identitys), new AuthenticationProperties
                 {
                     ExpiresUtc = DateTime.UtcNow.AddMinutes(model.ExpireMin),
                     IsPersistent = true,

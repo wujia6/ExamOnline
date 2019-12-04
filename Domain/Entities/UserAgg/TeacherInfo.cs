@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Domain.Entities.ClassAgg;
 
 namespace Domain.Entities.UserAgg
@@ -15,6 +15,6 @@ namespace Domain.Entities.UserAgg
         public CommType Course { get; set; } = CommType.C语言;
 
         //导航属性
-        public virtual IQueryable<ClassTeacher> ClassTeachers { get; set; }
+        public virtual IEnumerable<ClassTeacher> ClassTeachers { get; set; }
     }
 }
