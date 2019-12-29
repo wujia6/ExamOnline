@@ -1,12 +1,9 @@
-﻿using System.Runtime.Serialization;
-using Domain.Entities;
+﻿using Domain.Entities;
 
 namespace Application.DTO
 {
-    public class QuestionDTO
+    public class QuestionDTO : BaseModel
     {
-        public int ID { get; set; }
-        
         public CommType Category { get; set; }
         
         public CommType Level { get; set; }
@@ -16,8 +13,6 @@ namespace Application.DTO
         public string Contents { get; set; }
         
         public string Answer { get; set; }
-        
-        public string Remarks { get; set; }
         
         public ExaminationDTO ExaminationDto { get; set; }
     }

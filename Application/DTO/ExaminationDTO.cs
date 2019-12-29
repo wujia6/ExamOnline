@@ -3,17 +3,13 @@ using System.Collections.Generic;
 
 namespace Application.DTO
 {
-    public class ExaminationDTO
+    public class ExaminationDTO : BaseModel
     {
-        public int ID { get; set; }
-        
         public string Title { get; set; }
         
         public DateTime BeginTime { get; set; }
         
         public DateTime EndTime { get; set; }
-        
-        public string Remarks { get; set; }
         
         public List<TeacherDTO> TeacherDtos { get; set; }
         

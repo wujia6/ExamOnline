@@ -3,10 +3,8 @@ using Domain.Entities;
 
 namespace Application.DTO
 {
-    public class MenuDTO
+    public class MenuDTO : BaseModel
     {
-        public int ID { get; set; }
-
         public int ParentId { get; set; }
 
         public CommType MenuType { get; set; } = CommType.menu;
@@ -16,8 +14,6 @@ namespace Application.DTO
         public string Code { get; set; }
 
         public string Url { get; set; }
-
-        public string Remarks { get; set; }
 
         public List<RoleMenuDTO> RoleMenuDtos { get; set; }
     }

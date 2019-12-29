@@ -1,11 +1,7 @@
-﻿using System.Runtime.Serialization;
-
-namespace Application.DTO
+﻿namespace Application.DTO
 {
-    public class ClassExaminationDTO
+    public class ClassExaminationDTO : BaseModel
     {
-        public int ID { get; set; }
-
         public ClassDTO ClassDto { get; set; }
 
         public ExaminationDTO ExaminationDto { get; set; }

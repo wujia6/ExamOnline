@@ -53,6 +53,7 @@ namespace Domain.Entities.UserAgg
         public void Configure(EntityTypeBuilder<UserRole> builder)
         {
             builder.HasKey(e => e.ID);
+            builder.Property(e => e.Remarks).HasMaxLength(50);
             builder.HasOne(e => e.UserInfomation).WithMany(s => s.UserRoles);
             builder.HasOne(e => e.RoleInfomation).WithMany(s => s.UserRoles);
         }

@@ -10,13 +10,20 @@ namespace Application.DTO.Mappings
     public static class AutoMapperHelper
     {
         /// <summary>
-        /// 初始化自定义profile
+        /// 源类型映射到目标类型
         /// </summary>
-        public static void SetMappings()
+        /// <typeparam name="TDestination">目标类型</typeparam>
+        /// <param name="src">源类型</param>
+        /// <returns></returns>
+        public static TDestination SingleTo<TDestination>(object src)
         {
-            //var mappings = Common.Instance.GetAssembly("Application").CreateInstance("Application.DTO.RuleConfig") as Profile;
-            //profile.GetType().GetMethod("Initialize").Invoke(profile, null);
-            Mapper.Initialize(cfg => cfg.AddProfile(new RuleConfig()));
+            if (src==null)
+                return default(TDestination);
+            
+            var map = Mapper.Configuration.FindTypeMapFor(src.GetType(), typeof(TDestination));
+            if (map == null)
+                Mapper.Initialize(cfg => cfg.CreateMap(src.GetType(), typeof(TDestination)));
+            return Mapper.Map<TDestination>(src);
         }
 
         /// <summary>

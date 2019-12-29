@@ -21,11 +21,13 @@ namespace Application.Services
     {
         private readonly IUserManage userManage;
         private readonly IExamDbContext context;
+        private readonly IMapper mapper;
 
-        public UserService(IUserManage manage, IExamDbContext cxt)
+        public UserService(IUserManage manage, IExamDbContext cxt, IMapper map)
         {
             userManage = manage;
             this.context = cxt;
+            this.mapper = map;
         }
 
         public bool AddOrEdit(UserDTO model)
@@ -42,14 +44,18 @@ namespace Application.Services
             return userManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 
-        public UserDTO Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public UserDTO Single(Expression<Func<UserInfo, bool>> express, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
-            UserInfo entity = userManage.Single(spec);
-            return entity.MapTo<UserDTO>();
+            UserInfo entity = userManage.Single(spec, include);
+            //var model = AutoMapperHelper.MapTo<UserDTO>(entity);
+            var model = mapper.Map<UserDTO>(entity);
+            return model;
         }
 
-        public List<UserDTO> Lists(Expression<Func<UserInfo, bool>> express = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public List<UserDTO> Lists(Expression<Func<UserInfo, bool>> express = null, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
             return userManage.Lists(spec, include).MapToList<UserDTO>();

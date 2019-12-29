@@ -25,7 +25,7 @@ namespace UnitTest
         [TestMethod]
         public void UserAggTest()
         {
-            AutoMapperHelper.SetMappings();
+            //AutoMapperHelper.SetMappings();
             var userInfo = EntityFactory.Create<AdminInfo>(usr =>
             {
                 usr.ID = 1;

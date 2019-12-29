@@ -5,8 +5,6 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
 using Application.DTO;
 using Domain.Entities.UserAgg;
-using Domain.Entities;
-using Domain.IComm;
 
 namespace Application.IServices
 {

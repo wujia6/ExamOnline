@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Autofac;
 using Autofac.Core;
+using AutoMapper;
 using Domain.IComm;
 using Infrastructure.EfCore;
 using Infrastructure.Repository;
@@ -19,8 +20,11 @@ namespace Infrastructure.Utils
                 //    .UseSqlServer(ConfigurationUtils.Settings.GetConfig("ConnectionStrings:ExamDbConnection")).Options)
                 //    .InstancePerLifetimeScope();
                 builder.RegisterType<ExamDbContext>().As<IExamDbContext>().InstancePerLifetimeScope();
+                //注册AutoMapper服务
+                //builder.RegisterType<Mapper>().As<IMapper>().InstancePerLifetimeScope();
                 //注册仓储服务
-                builder.RegisterGeneric(typeof(EfCoreRepository<>)).As(typeof(IEfCoreRepository<>)).InstancePerLifetimeScope();
+                builder.RegisterGeneric(typeof(EfCoreRepository<>))
+                    .As(typeof(IEfCoreRepository<>)).InstancePerLifetimeScope();
                 //注册领域层服务
                 builder.RegisterAssemblyTypes(Common.Instance.GetAssembly("Domain"))
                     .Where(tp => tp.Name.EndsWith("Manage") && !tp.IsInterface && !tp.IsAbstract)

@@ -1,9 +1,7 @@
 ﻿namespace Application.DTO
 {
-    public class AnswerDTO
+    public class AnswerDTO : BaseModel
     {
-        public int ID { get; set; }
-        
         public string Result { get; set; }
         
         public int Score { get; set; }

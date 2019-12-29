@@ -23,8 +23,6 @@ namespace ExamUI
         {
             //设置配置工具类系统路径
             ConfigurationUtils.HostEnv = env;
-            //加载DTO转换配置
-            AutoMapperHelper.SetMappings();
         }
 
         public IContainer ApplicationContainer { get; private set; }
@@ -69,6 +67,7 @@ namespace ExamUI
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+            ProfileBase.Initialize();   //初始化加载映射配置
             app.UseStaticFiles();
             app.UseSession();   //启用session中间件
             app.UseAuthentication();    //身份验证中间件

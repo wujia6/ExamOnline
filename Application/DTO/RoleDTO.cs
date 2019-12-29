@@ -2,15 +2,11 @@
 
 namespace Application.DTO
 {
-    public class RoleDTO
+    public class RoleDTO : BaseModel
     {
-        public int ID { get; set; }
-
         public string Name { get; set; }
 
         public string Code { get; set; }
-
-        public string Remarks { get; set; }
 
         public List<RoleMenuDTO> RoleMenuDtos { get; set; }
 

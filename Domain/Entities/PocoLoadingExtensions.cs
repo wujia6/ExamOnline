@@ -3,6 +3,9 @@ using System.Runtime.CompilerServices;
 
 namespace Domain.Entities
 {
+    /// <summary>
+    /// 延时加载扩展类
+    /// </summary>
     public static class PocoLoadingExtensions
     {
         public static TRelated Load<TRelated>(
