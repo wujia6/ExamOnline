@@ -8,8 +8,8 @@ using Domain.Entities.ExamAgg;
 using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Repository;
-using Application.DTO.Mappings;
 using Microsoft.EntityFrameworkCore.Query;
+using AutoMapper;
 
 namespace Application.Services
 {
@@ -17,18 +17,20 @@ namespace Application.Services
     {
         private readonly IExamManage examManage;
         private readonly IExamDbContext context;
+        private readonly IMapper mapper;
 
-        public ExamService(IExamManage manage, IExamDbContext cxt)
+        public ExamService(IExamManage manage, IExamDbContext cxt, IMapper map)
         {
             this.examManage = manage;
             this.context = cxt;
+            this.mapper = map;
         }
 
         public bool AddOrEdit(ExaminationDTO model)
         {
             if (model == null)
                 return false;
-            var entity = model.MapTo<ExaminationInfo>();
+            var entity = mapper.Map<ExaminationInfo>(model);
             return examManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
         }
 
@@ -42,15 +44,15 @@ namespace Application.Services
             Func<IQueryable<ExaminationInfo>, IIncludableQueryable<ExaminationInfo, object>> include = null)
         {
             var spec = Specification<ExaminationInfo>.Eval(express);
-            return examManage.Single(spec, include).MapTo<ExaminationDTO>();
+            return mapper.Map<ExaminationDTO>(examManage.Single(spec, include));
         }
 
         public List<ExaminationDTO> Lists(Expression<Func<ExaminationInfo, bool>> express = null,
             Func<IQueryable<ExaminationInfo>, IIncludableQueryable<ExaminationInfo, object>> include = null)
         {
             var spec = Specification<ExaminationInfo>.Eval(express);
-            return examManage.Lists(spec, include).MapToList<ExaminationDTO>();
-            
+            return mapper.Map<List<ExaminationDTO>>(examManage.Single(spec, include));
+
         }
     }
 }

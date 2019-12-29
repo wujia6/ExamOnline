@@ -33,7 +33,7 @@ namespace Domain.Manages
             return entity == null ? false : efCore.RemoveAt(entity);
         }
 
-        public dynamic Single(ISpecification<UserInfo> spec, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public UserInfo Single(ISpecification<UserInfo> spec, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             if (include != null)
                 return efCore.Single(spec, include);

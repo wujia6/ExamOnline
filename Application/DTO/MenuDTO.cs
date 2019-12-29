@@ -7,7 +7,7 @@ namespace Application.DTO
     {
         public int ParentId { get; set; }
 
-        public CommType MenuType { get; set; } = CommType.menu;
+        public CommType MenuType { get; set; }
 
         public string Title { get; set; }
 

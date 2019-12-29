@@ -16,7 +16,7 @@ namespace Domain.Entities.UserAgg
         //名字
         public string Name { get; set; }
         //性别
-        public Gender Gender { get; set; } = Gender.男;
+        public Gender Gender { get; set; }
         //年龄
         public int Age { get; set; }
         //电话

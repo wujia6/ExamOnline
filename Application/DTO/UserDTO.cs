@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Domain.Entities;
+﻿using System.Collections.Generic;
 
 namespace Application.DTO
 {
@@ -8,17 +6,17 @@ namespace Application.DTO
     {
         public string Account { get; set; }
 
-        public string Pwd { get; set; }
-
         public string Name { get; set; }
 
-        public Gender Gender { get; set; }
+        public string Gender { get; set; }
 
         public int Age { get; set; }
 
         public string Tel { get; set; }
 
-        public DateTime CreateDate { get; set; }
+        public string CreateDate { get; set; }
+
+        //public string TobeRoles { get; set; }
 
         public List<UserRoleDTO> UserRoleDtos { get; set; }
     }

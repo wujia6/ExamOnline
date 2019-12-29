@@ -50,7 +50,7 @@ namespace UnitTest
                 };
                 return usr;
             });
-            var userDto = userInfo.MapTo<UserDTO>();
+            //var userDto = userInfo.MapTo<UserDTO>();
             //var classInfo = EntityFactory.Create<ClassInfo>(new object[]{
             //    "1701",
             //    ClassGrade.三年级,

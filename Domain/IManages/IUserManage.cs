@@ -32,7 +32,7 @@ namespace Domain.IManages
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        dynamic Single(ISpecification<UserInfo> spec, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        UserInfo Single(ISpecification<UserInfo> spec, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
         /// <summary>
         /// 查询

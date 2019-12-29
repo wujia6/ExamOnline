@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Domain.Entities;
 using Domain.Entities.AnwserAgg;
 using Domain.Entities.ClassAgg;
 using Domain.Entities.ExamAgg;
@@ -18,22 +19,29 @@ namespace Application.DTO.Mappings
         public ProfileBase()
         {
             #region ###实体模型=>数据模型
+            CreateMap<BaseEntity, BaseModel>()
+                .Include<RoleInfo, RoleDTO>()
+                .Include<RoleMenu, RoleMenuDTO>()
+                .Include<UserInfo, UserDTO>()
+                .Include<UserRole, UserRoleDTO>()
+                .ReverseMap();
+
             #region 班级
-            CreateMap<ClassInfo, ClassDTO>()
-                .ForMember(dest => dest.ClassExaminationDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IEnumerable<ClassExamination>, List<ClassExaminationDTO>>(src.ClassExams)))
-                .ForMember(dest => dest.ClassTeacherDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IEnumerable<ClassTeacher>, List<ClassTeacherDTO>>(src.ClassTeachers)))
-                .ForMember(dest => dest.StudentDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IEnumerable<StudentInfo>, List<StudentDTO>>(src.StudentInfomations)));
+            //CreateMap<ClassInfo, ClassDTO>()
+            //    .ForMember(dest => dest.ClassExaminationDtos, opts =>
+            //        opts.MapFrom(src => Mapper.Map<IEnumerable<ClassExamination>, List<ClassExaminationDTO>>(src.ClassExams)))
+            //    .ForMember(dest => dest.ClassTeacherDtos, opts =>
+            //        opts.MapFrom(src => Mapper.Map<IEnumerable<ClassTeacher>, List<ClassTeacherDTO>>(src.ClassTeachers)))
+            //    .ForMember(dest => dest.StudentDtos, opts =>
+            //        opts.MapFrom(src => Mapper.Map<IEnumerable<StudentInfo>, List<StudentDTO>>(src.StudentInfomations)));
 
-            CreateMap<ClassExamination, ClassExaminationDTO>()
-                .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
-                .ForMember(dest => dest.ExaminationDto, opts => opts.MapFrom(src => src.ExamInfomation));
+            //CreateMap<ClassExamination, ClassExaminationDTO>()
+            //    .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
+            //    .ForMember(dest => dest.ExaminationDto, opts => opts.MapFrom(src => src.ExamInfomation));
 
-            CreateMap<ClassTeacher, ClassTeacherDTO>()
-                .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
-                .ForMember(dest => dest.TeacherDto, opts => opts.MapFrom(src => src.TeacherInfomation));
+            //CreateMap<ClassTeacher, ClassTeacherDTO>()
+            //    .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
+            //    .ForMember(dest => dest.TeacherDto, opts => opts.MapFrom(src => src.TeacherInfomation));
             #endregion
 
             #region 角色
@@ -50,17 +58,14 @@ namespace Application.DTO.Mappings
 
             #region 用户
             CreateMap<UserInfo, UserDTO>()
-                .ForMember(dest => dest.UserRoleDtos,opts => opts.MapFrom(src => Mapper.Map<IEnumerable<UserRole>, List<UserRoleDTO>>(src.UserRoles)))
-                .ReverseMap();
+                .Include<AdminInfo,AdminDTO>().ReverseMap();
 
-            CreateMap<AdminInfo, AdminDTO>()
-                .IncludeBase<UserInfo,UserDTO>()
-                .ForMember(dest => dest.UserRoleDtos,opts => opts.MapFrom(src => Mapper.Map<IEnumerable<UserRole>, List<UserRoleDTO>>(src.UserRoles)))
-                .ReverseMap();
+            CreateMap<AdminInfo, AdminDTO>().ReverseMap();
 
             CreateMap<AdminInfo, UserDTO>()
-                .IncludeBase<UserInfo,UserDTO>()
-                .ForMember(dest => dest.UserRoleDtos, opts => opts.MapFrom(src => Mapper.Map<IEnumerable<UserRole>, List<UserRoleDTO>>(src.UserRoles)))
+                .ForMember(dst => dst.Gender, opts => opts.MapFrom(src => src.Gender))
+                .ForMember(dst => dst.CreateDate, opts => opts.MapFrom(src => src.CreateDate.ToString("yyyy-MM-dd")))
+                .ForMember(dst => dst.UserRoleDtos, opts => opts.MapFrom(src => Mapper.Map<IEnumerable<UserRole>, List<UserRoleDTO>>(src.UserRoles)))
                 .ReverseMap();
 
             CreateMap<UserRole, UserRoleDTO>()
@@ -68,14 +73,14 @@ namespace Application.DTO.Mappings
                 .ForMember(dest => dest.UserDto, opts => opts.MapFrom(src => src.UserInfomation))
                 .ReverseMap();
 
-            CreateMap<TeacherInfo, TeacherDTO>()
-                .ForMember(dest => dest.ClassTeacherDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IEnumerable<ClassTeacher>, List<ClassTeacherDTO>>(src.ClassTeachers)));
+            //CreateMap<TeacherInfo, TeacherDTO>()
+            //    .ForMember(dest => dest.ClassTeacherDtos, opts =>
+            //        opts.MapFrom(src => Mapper.Map<IEnumerable<ClassTeacher>, List<ClassTeacherDTO>>(src.ClassTeachers)));
 
-            CreateMap<StudentInfo, StudentDTO>()
-                .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
-                .ForMember(dest => dest.AnswerDtos, opts =>
-                    opts.MapFrom(src => Mapper.Map<IEnumerable<AnswerInfo>, List<AnswerDTO>>(src.AnswerInfomations)));
+            //CreateMap<StudentInfo, StudentDTO>()
+            //    .ForMember(dest => dest.ClassDto, opts => opts.MapFrom(src => src.ClassInfomation))
+            //    .ForMember(dest => dest.AnswerDtos, opts =>
+            //        opts.MapFrom(src => Mapper.Map<IEnumerable<AnswerInfo>, List<AnswerDTO>>(src.AnswerInfomations)));
             #endregion
 
             #region 题库

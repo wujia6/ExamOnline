@@ -6,6 +6,7 @@ namespace Domain.Entities.UserAgg
     {
         //导航属性
         public virtual UserInfo UserInfomation { get; set; }
+
         //导航属性
         public virtual RoleInfo RoleInfomation { get; set; }
     }

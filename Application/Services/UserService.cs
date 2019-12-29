@@ -5,7 +5,6 @@ using Application.IServices;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Domain.IManages;
-using Application.DTO.Mappings;
 using Application.DTO;
 using Infrastructure.Repository;
 using System.Linq;
@@ -25,7 +24,7 @@ namespace Application.Services
 
         public UserService(IUserManage manage, IExamDbContext cxt, IMapper map)
         {
-            userManage = manage;
+            this.userManage = manage;
             this.context = cxt;
             this.mapper = map;
         }
@@ -34,7 +33,7 @@ namespace Application.Services
         {
             if (model == null)
                 return false;
-            var entity = model.MapTo<UserInfo>();
+            var entity = mapper.Map<UserInfo>(model);
             return userManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
         }
 
@@ -48,8 +47,7 @@ namespace Application.Services
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
-            UserInfo entity = userManage.Single(spec, include);
-            //var model = AutoMapperHelper.MapTo<UserDTO>(entity);
+            var entity = userManage.Single(spec,include);
             var model = mapper.Map<UserDTO>(entity);
             return model;
         }
@@ -58,7 +56,8 @@ namespace Application.Services
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
-            return userManage.Lists(spec, include).MapToList<UserDTO>();
+            //return userManage.Lists(spec, include).MapToList<UserDTO>();
+            return mapper.Map<List<UserDTO>>(userManage.Lists(spec, include));
         }
     }
 }

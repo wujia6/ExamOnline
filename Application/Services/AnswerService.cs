@@ -10,6 +10,7 @@ using Domain.IManages;
 using Infrastructure.Repository;
 using Application.DTO.Mappings;
 using Microsoft.EntityFrameworkCore.Query;
+using AutoMapper;
 
 namespace Application.Services
 {
@@ -17,18 +18,20 @@ namespace Application.Services
     {
         private readonly IAnswerManage answerManage;
         private readonly IExamDbContext context;
+        private readonly IMapper mapper;
 
-        public AnswerService(IAnswerManage manage, IExamDbContext cxt)
+        public AnswerService(IAnswerManage manage, IExamDbContext cxt, IMapper map)
         {
             this.answerManage = manage;
             this.context = cxt;
+            this.mapper = map;
         }
 
         public bool AddOrEdit(AnswerDTO model)
         {
             if (model == null)
                 return false;
-            var entity = model.MapTo<AnswerInfo>();
+            var entity = mapper.Map<AnswerInfo>(model);
             return answerManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
         }
 
@@ -42,14 +45,14 @@ namespace Application.Services
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null)
         {
             var spec = Specification<AnswerInfo>.Eval(express);
-            return answerManage.Single(spec, include).MapTo<AnswerDTO>();
+            return mapper.Map<AnswerDTO>(answerManage.Single(spec, include));
         }
 
         public List<AnswerDTO> Lists(Expression<Func<AnswerInfo, bool>> express = null,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null)
         {
             var spec = Specification<AnswerInfo>.Eval(express);
-            return answerManage.Lists(spec, include).MapToList<AnswerDTO>();
+            return mapper.Map<List<AnswerDTO>>(answerManage.Lists(spec, include));
         }
     }
 }
