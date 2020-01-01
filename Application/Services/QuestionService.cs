@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Application.DTO;
 using Application.IServices;
-using AutoMapper;
+using AtuoMapper;
 using Domain.Entities.QuestionAgg;
 using Domain.IComm;
 using Domain.IManages;
@@ -17,20 +17,18 @@ namespace Application.Services
     {
         private readonly IQuestionManage questionManage;
         private readonly IExamDbContext context;
-        private readonly IMapper mapper;
 
-        public QuestionService(IQuestionManage manage, IExamDbContext cxt, IMapper map)
+        public QuestionService(IQuestionManage manage, IExamDbContext cxt)
         {
             this.questionManage = manage;
             this.context = cxt;
-            this.mapper = map;
         }
 
         public bool AddOrEdit(QuestionDTO model)
         {
             if (model == null)
                 return false;
-            var entity = mapper.Map<QuestionInfo>(model);
+            var entity = model.MapTo<QuestionInfo>();
             return questionManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
         }
 
@@ -45,14 +43,15 @@ namespace Application.Services
         {
             var spec = Specification<QuestionInfo>.Eval(express);
             var entity = questionManage.Single(spec, include);
-            return mapper.Map<QuestionDTO>(entity);
+            return entity.MapTo<QuestionDTO>();
         }
 
         public List<QuestionDTO> Lists(Expression<Func<QuestionInfo, bool>> express = null,
             Func<IQueryable<QuestionInfo>, IIncludableQueryable<QuestionInfo, object>> include = null)
         {
             var spec = Specification<QuestionInfo>.Eval(express);
-            return mapper.Map<List<QuestionDTO>>(questionManage.Lists(spec, include));
+            var lst = questionManage.Lists(spec, include);
+            return lst.MapToList<QuestionDTO>();
         }
     }
 }

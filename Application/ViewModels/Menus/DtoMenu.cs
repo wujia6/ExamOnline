@@ -1,10 +1,10 @@
-﻿namespace Application.DTO
+﻿namespace Application.ViewModels
 {
-    public class MenuDTO
+    public class DtoMenu
     {
         public int MenuID { get; set; }
 
-        public int ParentId { get; set; }
+        public int ParentID { get; set; }
 
         public string MenuType { get; set; }
 

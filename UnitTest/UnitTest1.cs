@@ -10,7 +10,6 @@ using Domain.Entities.QuestionAgg;
 using Domain.Entities.ExamAgg;
 using Domain.Entities.ClassAgg;
 using Domain.Entities.AnwserAgg;
-using Application.DTO.Mappings;
 using Application.DTO;
 using Domain.Entities.RoleAgg;
 using Infrastructure.EfCore;
@@ -26,30 +25,30 @@ namespace UnitTest
         public void UserAggTest()
         {
             //AutoMapperHelper.SetMappings();
-            var userInfo = EntityFactory.Create<AdminInfo>(usr =>
-            {
-                usr.ID = 1;
-                usr.Remarks = "暂无";
-                usr.Account = "sysadmin";
-                usr.Pwd = "a1234567";
-                usr.Name = "wujia";
-                usr.Gender = 0;
-                usr.Age = 38;
-                usr.Tel = "18673968186";
-                usr.CreateDate = DateTime.Now;
-                usr.UserRoles = new List<UserRole>
-                {
-                    new UserRole{ ID=1, Remarks="暂无", RoleInfomation=EntityFactory.Create<RoleInfo>(r=>
-                    {
-                        r.ID=1;
-                        r.Name="管理员";
-                        r.Code="admin";
-                        r.Remarks="暂无";
-                        return r;
-                    }), UserInfomation = null }
-                };
-                return usr;
-            });
+            //var userInfo = EntityFactory.Create<AdminInfo>(usr =>
+            //{
+            //    usr.ID = 1;
+            //    usr.Remarks = "暂无";
+            //    usr.Account = "sysadmin";
+            //    usr.Pwd = "a1234567";
+            //    usr.Name = "wujia";
+            //    usr.Gender = 0;
+            //    usr.Age = 38;
+            //    usr.Tel = "18673968186";
+            //    usr.CreateDate = DateTime.Now;
+            //    usr.UserRoles = new List<UserRole>
+            //    {
+            //        new UserRole{ ID=1, Remarks="暂无", RoleInfomation=EntityFactory.Create<RoleInfo>(r=>
+            //        {
+            //            r.ID=1;
+            //            r.Name="管理员";
+            //            r.Code="admin";
+            //            r.Remarks="暂无";
+            //            return r;
+            //        }), UserInfomation = null }
+            //    };
+            //    return usr;
+            //});
             //var userDto = userInfo.MapTo<UserDTO>();
             //var classInfo = EntityFactory.Create<ClassInfo>(new object[]{
             //    "1701",

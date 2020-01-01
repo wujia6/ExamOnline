@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
-using Application.DTO;
 using Domain.Entities.UserAgg;
+using Application.ViewModels;
 
 namespace Application.IServices
 {
@@ -13,12 +13,12 @@ namespace Application.IServices
     /// </summary>
     public interface IUserService
     {
-        bool AddOrEdit(UserDTO model);
+        bool AddOrEdit(DtoUser model);
 
         bool Remove(Expression<Func<UserInfo, bool>> express);
 
-        UserDTO Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        DtoUser Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
-        List<UserDTO> Lists(Expression<Func<UserInfo, bool>> express = null,Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        List<DtoUser> Lists(Expression<Func<UserInfo, bool>> express = null,Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }
 }

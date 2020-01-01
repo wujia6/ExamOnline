@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Domain.IComm;
 
 namespace Domain.Entities.UserAgg
@@ -25,5 +26,21 @@ namespace Domain.Entities.UserAgg
         public DateTime CreateDate { get; set; }
         //导航属性
         public virtual IEnumerable<UserRole> UserRoles { get; set; }
+
+        /// <summary>
+        /// 获取用户角色
+        /// </summary>
+        /// <returns></returns>
+        public string GetRoles()
+        {
+            string roles = string.Empty;
+            if (UserRoles == null || UserRoles.ToList().Count == 0)
+                return roles;
+            foreach (var role in UserRoles)
+            {
+                roles += role.RoleInfomation.Code + ",";
+            }
+            return roles;
+        }
     }
 }

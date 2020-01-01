@@ -8,8 +8,8 @@ namespace Application.DTO
 
         public string Code { get; set; }
 
-        public List<RoleMenuDTO> RoleMenuDtos { get; set; }
+        public List<MenuDTO> MenuDtos { get; set; }
 
-        public List<UserRoleDTO> UserRoleDtos { get; set; }
+        public List<UserDTO> UserDtos { get; set; }
     }
 }

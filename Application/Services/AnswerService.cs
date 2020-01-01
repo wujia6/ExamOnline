@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using AtuoMapper;
 using Application.DTO;
 using Application.IServices;
 using Domain.Entities.AnwserAgg;
 using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Repository;
-using Application.DTO.Mappings;
 using Microsoft.EntityFrameworkCore.Query;
-using AutoMapper;
 
 namespace Application.Services
 {
@@ -18,20 +17,18 @@ namespace Application.Services
     {
         private readonly IAnswerManage answerManage;
         private readonly IExamDbContext context;
-        private readonly IMapper mapper;
 
-        public AnswerService(IAnswerManage manage, IExamDbContext cxt, IMapper map)
+        public AnswerService(IAnswerManage manage, IExamDbContext cxt)
         {
             this.answerManage = manage;
             this.context = cxt;
-            this.mapper = map;
         }
 
         public bool AddOrEdit(AnswerDTO model)
         {
             if (model == null)
                 return false;
-            var entity = mapper.Map<AnswerInfo>(model);
+            var entity = model.MapTo<AnswerInfo>();
             return answerManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
         }
 
@@ -45,14 +42,16 @@ namespace Application.Services
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null)
         {
             var spec = Specification<AnswerInfo>.Eval(express);
-            return mapper.Map<AnswerDTO>(answerManage.Single(spec, include));
+            var entity = answerManage.Single(spec, include);
+            return entity.MapTo<AnswerDTO>();
         }
 
         public List<AnswerDTO> Lists(Expression<Func<AnswerInfo, bool>> express = null,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null)
         {
             var spec = Specification<AnswerInfo>.Eval(express);
-            return mapper.Map<List<AnswerDTO>>(answerManage.Lists(spec, include));
+            var lst = answerManage.Lists(spec, include);
+            return lst.MapToList<AnswerInfo, AnswerDTO>();
         }
     }
 }

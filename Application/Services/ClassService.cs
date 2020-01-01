@@ -8,7 +8,7 @@ using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore.Query;
-using AutoMapper;
+using AtuoMapper;
 
 namespace Application.Services
 {
@@ -18,20 +18,18 @@ namespace Application.Services
     {
         private readonly IClassManage<TSource> classManage;
         private readonly IExamDbContext context;
-        private readonly IMapper mapper;
 
-        public ClassService(IClassManage<TSource> manage, IExamDbContext cxt, IMapper map)
+        public ClassService(IClassManage<TSource> manage, IExamDbContext cxt)
         {
             this.classManage = manage;
             this.context = cxt;
-            this.mapper = map;
         }
 
         public bool AddOrEdit(TDestination model)
         {
             if (model == null)
                 return false;
-            var entity = mapper.Map<TSource>(model);
+            var entity = model.MapTo<TSource>();
             return classManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
         }
 
@@ -41,18 +39,18 @@ namespace Application.Services
             return classManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 
-        public TDestination Single(Expression<Func<TSource, bool>> express = null,
-            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
+        public TDestination Single(Expression<Func<TSource, bool>> express = null, Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
         {
             var spec = Specification<TSource>.Eval(express);
-            return mapper.Map<TDestination>(classManage.Single(spec, include));
+            var entity = classManage.Single(spec, include);
+            return entity.MapTo<TDestination>();
         }
 
-        public List<TDestination> Lists(Expression<Func<TSource, bool>> express = null,
-            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
+        public List<TDestination> Lists(Expression<Func<TSource, bool>> express = null, Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
         {
             var spec = Specification<TSource>.Eval(express);
-            return mapper.Map<List<TDestination>>(classManage.Single(spec, include));
+            var lst = classManage.Lists(spec, include);
+            return lst.MapToList<TDestination>();
         }
     }
 }

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +11,8 @@ using AutoMapper;
 using ExamUI.Filters;
 using Infrastructure.Utils;
 using Infrastructure.EfCore;
-using Application.DTO.Mappings;
 using Newtonsoft.Json;
+using Application.ViewModels.Profiles;
 
 namespace ExamUI
 {
@@ -23,7 +22,8 @@ namespace ExamUI
         {
             //设置配置工具类系统路径
             ConfigurationUtils.HostEnv = env;
-            ProfileBase.Initialize();   //初始化加载映射配置
+            //初始化模型映射
+            MappingConfig.Initialze();
         }
 
         public IContainer ApplicationContainer { get; private set; }
@@ -49,7 +49,7 @@ namespace ExamUI
                 .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore) //延迟加载避免循环引用
                 .AddControllersAsServices();
             //添加automapper服务
-            services.AddAutoMapper();
+            //services.AddAutoMapper();
             //创建autofac服务容器
             var builder = new ContainerBuilder();
             builder.RegisterModule(new AutofacModuel());
@@ -58,7 +58,7 @@ namespace ExamUI
             return new AutofacServiceProvider(ApplicationContainer);
         }
 
-        //请求管道配置
+        //请求中间件管道配置
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

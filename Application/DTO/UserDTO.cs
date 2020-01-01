@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace Application.DTO
+﻿namespace Application.DTO
 {
-    public class UserDTO : BaseModel
+    public class UserDTO
     {
-        public string Account { get; set; }
+        public int UserID { get; set; }
+
+        public string UserAccount { get; set; }
+
+        public string UserPassword { get; set; }
 
         public string Name { get; set; }
 
@@ -16,8 +18,8 @@ namespace Application.DTO
 
         public string CreateDate { get; set; }
 
-        //public string TobeRoles { get; set; }
+        public string InRoles { get; set; }
 
-        public List<UserRoleDTO> UserRoleDtos { get; set; }
+        //public List<UserRoleDTO> UserRoleDtos { get; set; }
     }
 }

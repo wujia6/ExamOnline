@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Application.IServices;
 using Infrastructure.Utils;
+using Application.DTO;
+using Application.ViewModels;
 
 namespace ExamUI.Controllers
 {
@@ -48,7 +50,7 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(Models.ApplicationUser model)
+        public async Task<IActionResult> Login(DtoUser model)
         {
             try
             {
@@ -57,26 +59,22 @@ namespace ExamUI.Controllers
                     return Json(new { result = false, message = "验证码错误" });
 
                 var loginer = userService.Single(
-                    express: usr => usr.Account == model.Account && usr.Pwd == model.Password,
+                    express: usr => usr.Account == model.UserAccount && usr.Pwd == model.UserPassword,
                     include: src => src.Include(u => u.UserRoles).ThenInclude(r => r.RoleInfomation));
 
                 if (loginer == null)
                     return Json(new { result = false, message = "错误的用户名或密码" });
-
-                //获取用户角色
-                string roleCodes = string.Empty;
-                loginer.UserRoleDtos.ForEach(x => roleCodes += x.RoleDto.Code + ",");
-                roleCodes.Remove(roleCodes.LastIndexOf(','), 1);
+                
                 //创建身份证件单元：一张身份证由多个证件单元组成
                 //创建身份证件，添加证件单元
                 //创建身份证件使用者，添加身份证
                 var identitys = new ClaimsIdentity(new List<Claim>
                 {
-                    new Claim(ClaimTypes.Sid,loginer.ID.ToString()),
-                    new Claim(ClaimTypes.Name,model.Account),
+                    new Claim(ClaimTypes.Sid,loginer.UserID.ToString()),
+                    new Claim(ClaimTypes.Name,loginer.UserAccount),
                     //new Claim("Password",model.Password),
-                    new Claim(ClaimTypes.Role,roleCodes),
-                    new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(loginer.UserRoleDtos))
+                    new Claim(ClaimTypes.Role,loginer.InRoles),
+                    //new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(loginer.UserRoleDtos))
                 });
                 //写入客户端cookie
                 await HttpContext.SignInAsync(identitys.AuthenticationType, new ClaimsPrincipal(identitys), new AuthenticationProperties
