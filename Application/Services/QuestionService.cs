@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Application.DTO;
 using Application.IServices;
-using AtuoMapper;
+using AutoMapper.Execution;
 using Domain.Entities.QuestionAgg;
 using Domain.IComm;
 using Domain.IManages;

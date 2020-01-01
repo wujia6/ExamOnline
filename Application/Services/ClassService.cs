@@ -8,7 +8,7 @@ using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore.Query;
-using AtuoMapper;
+using AutoMapper.Execution;
 
 namespace Application.Services
 {

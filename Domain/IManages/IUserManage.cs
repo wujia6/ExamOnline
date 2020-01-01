@@ -17,7 +17,7 @@ namespace Domain.IManages
         /// </summary>
         /// <param name="entity">实体对象</param>
         /// <returns></returns>
-        bool AddOrEdit(UserInfo entity);
+        bool AddOrEdit(dynamic entity);
 
         /// <summary>
         /// 删除
@@ -40,6 +40,6 @@ namespace Domain.IManages
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        IEnumerable<UserInfo> Lists(ISpecification<UserInfo> spec = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        IEnumerable<dynamic> Lists(ISpecification<UserInfo> spec = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }
 }

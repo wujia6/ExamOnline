@@ -22,8 +22,6 @@ namespace ExamUI
         {
             //设置配置工具类系统路径
             ConfigurationUtils.HostEnv = env;
-            //初始化模型映射
-            MappingConfig.Initialze();
         }
 
         public IContainer ApplicationContainer { get; private set; }
@@ -48,8 +46,10 @@ namespace ExamUI
             services.AddMvc(options => options.Filters.Add<ModelVerifyActionFilter>())
                 .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore) //延迟加载避免循环引用
                 .AddControllersAsServices();
-            //添加automapper服务
-            //services.AddAutoMapper();
+            //初始化映射配置(注入automapper服务之前)
+            Mapper.Initialize(cfg => cfg.AddProfile<MappingConfig>());
+            //注入automapper服务(mvc之后)
+            services.AddAutoMapper();
             //创建autofac服务容器
             var builder = new ContainerBuilder();
             builder.RegisterModule(new AutofacModuel());

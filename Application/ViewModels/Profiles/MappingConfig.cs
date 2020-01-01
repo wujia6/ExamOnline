@@ -21,24 +21,18 @@ namespace Application.ViewModels.Profiles
                 .ReverseMap();
 
             CreateMap<UserInfo, DtoUser>()
-                .IncludeBase<AdminInfo, DtoAdmin>()
+                .Include<AdminInfo, DtoUser>()
                 .ForMember(dst => dst.UserID, opt => opt.MapFrom(src => src.ID))
                 .ForMember(dst => dst.UserAccount, opt => opt.MapFrom(src => src.Account))
                 .ForMember(dst => dst.UserPassword, opt => opt.MapFrom(src => src.Pwd))
-                //.ForMember(dst => dst.VerificyCode, opt => opt.Ignore())
-                //.ForMember(dst => dst.RememberMe, opt => opt.Ignore())
-                //.ForMember(dst => dst.ReturnUrl, opt => opt.Ignore())
                 .ForMember(dst => dst.CreateDate, opt => opt.MapFrom(src => src.CreateDate.ToString("yyyy-MM-dd")))
-                .ForMember(dst => dst.InRoles, opt => opt.MapFrom(src => src.GetRoles()))
-                .ReverseMap();
-        }
+                .ForMember(dst => dst.InRoles, opt => opt.MapFrom(src => src.GetRoles()));
 
-        /// <summary>
-        /// 初始化映射
-        /// </summary>
-        public static void Initialze()
-        {
-            Mapper.Initialize(cfg => cfg.AddProfile(new MappingConfig()));
+            CreateMap<AdminInfo, DtoUser>()
+                .ForMember(dst => dst.VerificyCode, opt => opt.Ignore())
+                .ForMember(dst => dst.RememberMe, opt => opt.Ignore())
+                .ForMember(dst => dst.ReturnUrl, opt => opt.Ignore())
+                .ReverseMap();
         }
     }
 }

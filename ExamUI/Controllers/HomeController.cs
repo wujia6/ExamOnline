@@ -17,7 +17,6 @@ namespace ExamUI.Controllers
             int userId = int.Parse(User.FindFirstValue(ClaimTypes.Sid));
             string userName = User.FindFirstValue(ClaimTypes.Name);
             string roles = User.FindFirstValue(ClaimTypes.UserData);
-            var lstRoles = JsonConvert.DeserializeObject<List<UserRoleDTO>>(roles);
             return View();
         }
 

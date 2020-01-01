@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using AutoMapper;
 
-namespace AtuoMapper
+namespace AutoMapper.Execution
 {
     /// <summary>
     /// AutoMapper映射扩展类

@@ -13,7 +13,7 @@ namespace Application.IServices
     /// </summary>
     public interface IUserService
     {
-        bool AddOrEdit(DtoUser model);
+        bool AddOrEdit(dynamic model);
 
         bool Remove(Expression<Func<UserInfo, bool>> express);
 

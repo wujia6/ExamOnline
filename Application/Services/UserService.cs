@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Query;
-using AtuoMapper;
+using AutoMapper.Execution;
 using Application.IServices;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
@@ -27,7 +27,7 @@ namespace Application.Services
             this.context = cxt;
         }
 
-        public bool AddOrEdit(DtoUser model)
+        public bool AddOrEdit(dynamic model)
         {
             if (model == null)
                 return false;
