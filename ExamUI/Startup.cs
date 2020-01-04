@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
+using Newtonsoft.Json;
 using ExamUI.Filters;
 using Infrastructure.Utils;
 using Infrastructure.EfCore;
-using Newtonsoft.Json;
-using Application.ViewModels.Profiles;
+using Application.DTO.Profiles;
 
 namespace ExamUI
 {
@@ -20,8 +20,7 @@ namespace ExamUI
     {
         public Startup(IHostingEnvironment env)
         {
-            //设置配置工具类系统路径
-            ConfigurationUtils.HostEnv = env;
+            ConfigurationUtils.HostEnv = env;   //设置配置工具类系统路径
         }
 
         public IContainer ApplicationContainer { get; private set; }
@@ -58,7 +57,7 @@ namespace ExamUI
             return new AutofacServiceProvider(ApplicationContainer);
         }
 
-        //请求中间件管道配置
+        //管道请求中间件配置
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

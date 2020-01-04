@@ -9,7 +9,7 @@ using Domain.IComm;
 namespace Domain.Entities.ExamAgg
 {
     /// <summary>
-    /// 考试实体类（聚合根）
+    /// 考试信息实体类（聚合根）
     /// </summary>
     public class ExaminationInfo : BaseEntity, IAggregateRoot
     {

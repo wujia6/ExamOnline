@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper.Execution;
-using Application.DTO;
 using Application.IServices;
 using Domain.Entities.AnwserAgg;
 using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore.Query;
+using Application.DTO.Models;
 
 namespace Application.Services
 {
@@ -24,7 +24,7 @@ namespace Application.Services
             this.context = cxt;
         }
 
-        public bool AddOrEdit(AnswerDTO model)
+        public bool AddOrEdit(AnswerDto model)
         {
             if (model == null)
                 return false;
@@ -38,20 +38,20 @@ namespace Application.Services
             return answerManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 
-        public AnswerDTO Single(Expression<Func<AnswerInfo, bool>> express = null,
+        public AnswerDto Single(Expression<Func<AnswerInfo, bool>> express = null,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null)
         {
             var spec = Specification<AnswerInfo>.Eval(express);
             var entity = answerManage.Single(spec, include);
-            return entity.MapTo<AnswerDTO>();
+            return entity.MapTo<AnswerDto>();
         }
 
-        public List<AnswerDTO> Lists(Expression<Func<AnswerInfo, bool>> express = null,
+        public List<AnswerDto> Lists(Expression<Func<AnswerInfo, bool>> express = null,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null)
         {
             var spec = Specification<AnswerInfo>.Eval(express);
             var lst = answerManage.Lists(spec, include);
-            return lst.MapToList<AnswerInfo, AnswerDTO>();
+            return lst.MapToList<AnswerInfo, AnswerDto>();
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Application.ViewModels
+namespace Application.DTO.Models
 {
-    public class DtoRole
+    public class RoleDto
     {
         public int ID { get; set; }
 
@@ -12,8 +12,8 @@ namespace Application.ViewModels
 
         public string Remarks { get; set; }
 
-        public List<DtoMenu> DtoMenus { get; set; }
+        public List<MenuDto> MenuDtos { get; set; }
 
-        public List<DtoUser> DtoUsers { get; set; }
+        public List<UserDto> UserDtos { get; set; }
     }
 }

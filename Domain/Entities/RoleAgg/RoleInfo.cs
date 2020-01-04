@@ -33,11 +33,11 @@ namespace Domain.Entities.RoleAgg
         /// 获取该角色所有用户
         /// </summary>
         /// <returns></returns>
-        public List<UserInfo> GetUsers()
+        public IEnumerable<UserInfo> GetUsers()
         {
             if (UserRoles == null || UserRoles.ToList().Count == 0)
                 return null;
-            return UserRoles.Where(e => e.RoleInfomation.ID == ID).Select(x => x.UserInfomation).ToList();
+            return UserRoles.Select(x => x.UserInfomation);
         }
     }
 }

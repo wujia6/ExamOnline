@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
 using Domain.Entities.UserAgg;
-using Application.ViewModels;
+using Application.DTO.Models;
 
 namespace Application.IServices
 {
@@ -17,8 +17,8 @@ namespace Application.IServices
 
         bool Remove(Expression<Func<UserInfo, bool>> express);
 
-        DtoUser Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        UserDto Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
-        List<DtoUser> Lists(Expression<Func<UserInfo, bool>> express = null,Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        List<UserDto> Lists(Expression<Func<UserInfo, bool>> express = null,Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }
 }

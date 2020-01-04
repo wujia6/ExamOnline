@@ -1,8 +1,8 @@
-﻿namespace Application.ViewModels
+﻿namespace Application.DTO.Models
 {
-    public class DtoMenu
+    public class MenuDto
     {
-        public int MenuID { get; set; }
+        public int ID { get; set; }
 
         public int ParentID { get; set; }
 

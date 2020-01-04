@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Application.DTO;
+using Application.DTO.Models;
 using Application.IServices;
 using AutoMapper.Execution;
 using Domain.Entities.QuestionAgg;
@@ -24,7 +24,7 @@ namespace Application.Services
             this.context = cxt;
         }
 
-        public bool AddOrEdit(QuestionDTO model)
+        public bool AddOrEdit(QuestionDto model)
         {
             if (model == null)
                 return false;
@@ -38,20 +38,20 @@ namespace Application.Services
             return questionManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 
-        public QuestionDTO Single(Expression<Func<QuestionInfo, bool>> express = null,
+        public QuestionDto Single(Expression<Func<QuestionInfo, bool>> express = null,
             Func<IQueryable<QuestionInfo>, IIncludableQueryable<QuestionInfo, object>> include = null)
         {
             var spec = Specification<QuestionInfo>.Eval(express);
             var entity = questionManage.Single(spec, include);
-            return entity.MapTo<QuestionDTO>();
+            return entity.MapTo<QuestionDto>();
         }
 
-        public List<QuestionDTO> Lists(Expression<Func<QuestionInfo, bool>> express = null,
+        public List<QuestionDto> Lists(Expression<Func<QuestionInfo, bool>> express = null,
             Func<IQueryable<QuestionInfo>, IIncludableQueryable<QuestionInfo, object>> include = null)
         {
             var spec = Specification<QuestionInfo>.Eval(express);
             var lst = questionManage.Lists(spec, include);
-            return lst.MapToList<QuestionDTO>();
+            return lst.MapToList<QuestionDto>();
         }
     }
 }

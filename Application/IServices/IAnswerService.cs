@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Application.DTO;
+using Application.DTO.Models;
 using Domain.Entities.AnwserAgg;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -18,7 +18,7 @@ namespace Application.IServices
         /// </summary>
         /// <param name="model">实体对象</param>
         /// <returns></returns>
-        bool AddOrEdit(AnswerDTO model);
+        bool AddOrEdit(AnswerDto model);
 
         /// <summary>
         /// 删除
@@ -33,7 +33,7 @@ namespace Application.IServices
         /// <param name="express">表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        AnswerDTO Single(Expression<Func<AnswerInfo, bool>> express = null,
+        AnswerDto Single(Expression<Func<AnswerInfo, bool>> express = null,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null);
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Application.IServices
         /// <param name="express">表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        List<AnswerDTO> Lists(Expression<Func<AnswerInfo, bool>> express = null,
+        List<AnswerDto> Lists(Expression<Func<AnswerInfo, bool>> express = null,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null);
     }
 }

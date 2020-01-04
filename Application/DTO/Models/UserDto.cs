@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Application.ViewModels
+namespace Application.DTO.Models
 {
-    public class DtoUser
+    public class UserDto
     {
         public int UserID { get; set; }
 

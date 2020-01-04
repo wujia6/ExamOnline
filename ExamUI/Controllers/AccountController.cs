@@ -7,11 +7,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Application.IServices;
 using Infrastructure.Utils;
-using Application.DTO;
-using Application.ViewModels;
+using Application.DTO.Models;
 
 namespace ExamUI.Controllers
 {
@@ -50,7 +48,7 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(DtoUser model)
+        public async Task<IActionResult> Login(UserDto model)
         {
             try
             {

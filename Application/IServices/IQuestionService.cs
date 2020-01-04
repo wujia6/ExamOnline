@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Application.DTO;
+using Application.DTO.Models;
 using Domain.Entities.QuestionAgg;
-using Domain.IComm;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.IServices
@@ -19,7 +18,7 @@ namespace Application.IServices
         /// </summary>
         /// <param name="model">实体对象</param>
         /// <returns></returns>
-        bool AddOrEdit(QuestionDTO model);
+        bool AddOrEdit(QuestionDto model);
 
         /// <summary>
         /// 删除
@@ -34,7 +33,7 @@ namespace Application.IServices
         /// <param name="express">表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        QuestionDTO Single(Expression<Func<QuestionInfo, bool>> express = null,
+        QuestionDto Single(Expression<Func<QuestionInfo, bool>> express = null,
             Func<IQueryable<QuestionInfo>, IIncludableQueryable<QuestionInfo, object>> include = null);
 
         /// <summary>
@@ -43,7 +42,7 @@ namespace Application.IServices
         /// <param name="express">表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        List<QuestionDTO> Lists(Expression<Func<QuestionInfo, bool>> express = null,
+        List<QuestionDto> Lists(Expression<Func<QuestionInfo, bool>> express = null,
             Func<IQueryable<QuestionInfo>, IIncludableQueryable<QuestionInfo, object>> include = null);
     }
 }

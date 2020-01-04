@@ -2,7 +2,7 @@
 
 namespace Domain.Entities.ClassAgg
 {
-    public class ClassExamination : ClassBase
+    public class ClassExamination : BaseEntity
     {
         public virtual ClassInfo ClassInfomation { get; set; }
 

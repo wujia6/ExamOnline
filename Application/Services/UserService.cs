@@ -9,7 +9,7 @@ using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Repository;
-using Application.ViewModels;
+using Application.DTO.Models;
 
 namespace Application.Services
 {
@@ -41,19 +41,19 @@ namespace Application.Services
             return userManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 
-        public DtoUser Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public UserDto Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
             UserInfo entity = userManage.Single(spec,include);
-            var model = entity.MapTo<DtoUser>();
+            var model = entity.MapTo<UserDto>();
             return model;
         }
 
-        public List<DtoUser> Lists(Expression<Func<UserInfo, bool>> express = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public List<UserDto> Lists(Expression<Func<UserInfo, bool>> express = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
             var lstUser = userManage.Lists(spec, include);
-            return lstUser.MapToList<DtoUser>();
+            return lstUser.MapToList<UserDto>();
         }
     }
 }
