@@ -47,12 +47,15 @@ namespace Application.DTO.Profiles
                 .ForMember(dst => dst.VerificyCode, opt => opt.Ignore())
                 .ForMember(dst => dst.RememberMe, opt => opt.Ignore())
                 .ForMember(dst => dst.ReturnUrl, opt => opt.Ignore())
+                .ForMember(dst => (dst as TeacherDto).FromClass, opt => opt.MapFrom(src => Mapper.Map<List<ClassDto>>(src.ClassTeachers.Select(x => x.ClassInfomation))))
                 .ReverseMap();
             //学生映射
-            CreateMap<StudentInfo,UserDto>()
+            CreateMap<StudentInfo, UserDto>()
                 .ForMember(dst => dst.VerificyCode, opt => opt.Ignore())
                 .ForMember(dst => dst.RememberMe, opt => opt.Ignore())
                 .ForMember(dst => dst.ReturnUrl, opt => opt.Ignore())
+                .ForMember(dst => (dst as StudentDto).FromClass, opt => opt.MapFrom(src => src.ClassInfomation))
+                .ForMember(dst => (dst as StudentDto).AnswerDtos, opt => opt.MapFrom(src => Mapper.Map<List<AnswerDto>>(src.AnswerInfomations)))
                 .ReverseMap();
             //班级映射
             CreateMap<ClassInfo, ClassDto>()
