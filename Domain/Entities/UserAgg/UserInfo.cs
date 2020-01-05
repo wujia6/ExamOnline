@@ -36,11 +36,26 @@ namespace Domain.Entities.UserAgg
             string roles = string.Empty;
             if (UserRoles == null || UserRoles.ToList().Count == 0)
                 return roles;
-            foreach (var role in UserRoles)
-            {
-                roles += role.RoleInfomation.Code + ",";
-            }
-            return roles;
+            UserRoles.ToList().ForEach(x => roles += x.RoleInfomation.Code + ",");
+            return roles.Remove(roles.LastIndexOf(','), 1);
         }
+
+        /// <summary>
+        /// 添加用户角色
+        /// </summary>
+        /// <returns></returns>
+        //public bool AddUserRole(int roleId)
+        //{
+        //    if (this.UserRoles == null)
+        //        this.UserRoles = new List<UserRole>();
+
+        //    UserRoles.ToList().Add(EntityFactory.Create<UserRole>(x =>
+        //    {
+        //        x.UserInfomation.ID = ID;
+        //        x.RoleInfomation.ID = roleId;
+        //        return x;
+        //    }));
+        //    return true;
+        //}
     }
 }

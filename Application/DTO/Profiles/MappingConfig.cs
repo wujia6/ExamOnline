@@ -24,33 +24,33 @@ namespace Application.DTO.Profiles
             //角色映射
             CreateMap<RoleInfo, RoleDto>()
                 .ForMember(dst => dst.MenuDtos, opt => opt.MapFrom(src => Mapper.Map<List<MenuDto>>(src.RoleMenus.Select(x => x.MenuInfomation))))
-                .ForMember(dst => dst.UserDtos, opt => opt.MapFrom(src => Mapper.Map<List<UserDto>>(src.UserRoles.Select(s => s.UserInfomation))))
+                .ForMember(dst => dst.UserDtos, opt => opt.MapFrom(src => Mapper.Map<List<ApplicationUser>>(src.UserRoles.Select(s => s.UserInfomation))))
                 .ReverseMap();
             //用户映射
-            CreateMap<UserInfo, UserDto>()
-                .Include<AdminInfo, UserDto>()
-                .Include<TeacherInfo, UserDto>()
-                .Include<StudentInfo, StudentDto>()
+            CreateMap<UserInfo, ApplicationUser>()
+                .Include<AdminInfo, ApplicationUser>()
+                .Include<TeacherInfo, ApplicationUser>()
+                .Include<StudentInfo, ApplicationUser>()
                 .ForMember(dst => dst.UserID, opt => opt.MapFrom(src => src.ID))
                 .ForMember(dst => dst.UserAccount, opt => opt.MapFrom(src => src.Account))
                 .ForMember(dst => dst.UserPassword, opt => opt.MapFrom(src => src.Pwd))
                 .ForMember(dst => dst.CreateDate, opt => opt.MapFrom(src => src.CreateDate.ToString("yyyy-MM-dd")))
                 .ForMember(dst => dst.InRoles, opt => opt.MapFrom(src => src.GetRoles()));
             //管理员映射
-            CreateMap<AdminInfo, UserDto>()
+            CreateMap<AdminInfo, ApplicationUser>()
                 .ForMember(dst => dst.VerificyCode, opt => opt.Ignore())
                 .ForMember(dst => dst.RememberMe, opt => opt.Ignore())
                 .ForMember(dst => dst.ReturnUrl, opt => opt.Ignore())
                 .ReverseMap();
             //教师映射
-            CreateMap<TeacherInfo, UserDto>()
+            CreateMap<TeacherInfo, ApplicationUser>()
                 .ForMember(dst => dst.VerificyCode, opt => opt.Ignore())
                 .ForMember(dst => dst.RememberMe, opt => opt.Ignore())
                 .ForMember(dst => dst.ReturnUrl, opt => opt.Ignore())
                 .ForMember(dst => (dst as TeacherDto).FromClass, opt => opt.MapFrom(src => Mapper.Map<List<ClassDto>>(src.ClassTeachers.Select(x => x.ClassInfomation))))
                 .ReverseMap();
             //学生映射
-            CreateMap<StudentInfo, UserDto>()
+            CreateMap<StudentInfo, ApplicationUser>()
                 .ForMember(dst => dst.VerificyCode, opt => opt.Ignore())
                 .ForMember(dst => dst.RememberMe, opt => opt.Ignore())
                 .ForMember(dst => dst.ReturnUrl, opt => opt.Ignore())

@@ -1,6 +1,6 @@
 ﻿namespace Application.DTO.Models
 {
-    public class AdminDto : UserDto
+    public class AdminDto : ApplicationUser
     {
 
     }

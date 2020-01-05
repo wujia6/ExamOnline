@@ -39,17 +39,59 @@ namespace Application.Services
             return classManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 
-        public TDestination Single(Expression<Func<TSource, bool>> express = null, Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
+        public TDestination Single(Expression<Func<TSource, bool>> express = null, 
+            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
         {
             var spec = Specification<TSource>.Eval(express);
             var entity = classManage.Single(spec, include);
             return entity.MapTo<TDestination>();
         }
 
-        public List<TDestination> Lists(Expression<Func<TSource, bool>> express = null, Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
+        public List<TDestination> Lists(Expression<Func<TSource, bool>> express = null, 
+            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
         {
             var spec = Specification<TSource>.Eval(express);
             var lst = classManage.Lists(spec, include);
+            return lst.MapToList<TDestination>();
+        }
+    }
+
+    public class ClassService : IClassService
+    {
+        private readonly IClassManage classManage;
+        private readonly IExamDbContext context;
+
+        public ClassService(IClassManage manage, IExamDbContext cxt)
+        {
+            this.classManage = manage;
+            this.context = cxt;
+        }
+
+        public bool AddOrEdit<T>(T entity) where T : BaseEntity
+        {
+            if (entity==null)
+                return false;
+            return classManage.AddOrEdit<T>(entity) ? context.SaveChanges() > 0 : false;
+        }
+
+        public bool Remove<T>(Expression<Func<T, bool>> express) where T : BaseEntity
+        {
+            var spec = Specification<T>.Eval(express);
+            return classManage.Remove(spec) ? context.SaveChanges() > 0 : false;
+        }
+
+        public TDestination Single<TSource, TDestination>(Expression<Func<TSource, bool>> express,
+            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null) where TSource : BaseEntity
+        {
+            var spec = Specification<TSource>.Eval(express);
+            return classManage.Single(spec, include).MapTo<TDestination>();
+        }
+
+        public List<TDestination> Lists<TSource, TDestination>(Expression<Func<TSource, bool>> express = null, 
+            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null) where TSource : BaseEntity
+        {
+            var spec = Specification<TSource>.Eval(express);
+            var lst = classManage.Lists<TSource>(spec, include);
             return lst.MapToList<TDestination>();
         }
     }

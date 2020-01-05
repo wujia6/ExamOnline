@@ -14,6 +14,6 @@ namespace Application.DTO.Models
 
         public List<MenuDto> MenuDtos { get; set; }
 
-        public List<UserDto> UserDtos { get; set; }
+        public List<ApplicationUser> UserDtos { get; set; }
     }
 }

@@ -13,12 +13,12 @@ using Application.DTO.Models;
 
 namespace Application.Services
 {
-    public class ExamService : IExamService
+    public class ExaminationService : IExaminationService
     {
-        private readonly IExamManage examManage;
+        private readonly IExaminationManage examManage;
         private readonly IExamDbContext context;
 
-        public ExamService(IExamManage manage, IExamDbContext cxt)
+        public ExaminationService(IExaminationManage manage, IExamDbContext cxt)
         {
             this.examManage = manage;
             this.context = cxt;

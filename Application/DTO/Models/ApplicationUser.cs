@@ -2,7 +2,7 @@
 
 namespace Application.DTO.Models
 {
-    public class UserDto
+    public class ApplicationUser
     {
         public int UserID { get; set; }
 
@@ -20,9 +20,9 @@ namespace Application.DTO.Models
         public string VerificyCode { get; set; }
 
         public string RememberMe { get; set; }
-        
+
         public int ExpireMin { get; set; } = 15;    //cookie过期时间
-        
+
         public string ReturnUrl { get; set; }   //返回rul
 
         public string Name { get; set; }
@@ -36,5 +36,7 @@ namespace Application.DTO.Models
         public string CreateDate { get; set; }
 
         public string InRoles { get; set; }
+
+        
     }
 }

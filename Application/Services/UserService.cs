@@ -41,19 +41,19 @@ namespace Application.Services
             return userManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 
-        public UserDto Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public ApplicationUser Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
             UserInfo entity = userManage.Single(spec,include);
-            var model = entity.MapTo<UserDto>();
+            var model = entity.MapTo<ApplicationUser>();
             return model;
         }
 
-        public List<UserDto> Lists(Expression<Func<UserInfo, bool>> express = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public List<ApplicationUser> Lists(Expression<Func<UserInfo, bool>> express = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
             var lstUser = userManage.Lists(spec, include);
-            return lstUser.MapToList<UserDto>();
+            return lstUser.MapToList<ApplicationUser>();
         }
     }
 }

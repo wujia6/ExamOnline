@@ -15,8 +15,18 @@ namespace Application.IServices
         where TSource : BaseEntity, IAggregateRoot 
         where TDest : class
     {
+        /// <summary>
+        /// 添加编辑
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         bool AddOrEdit(TDest model);
 
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="express"></param>
+        /// <returns></returns>
         bool Remove(Expression<Func<TSource, bool>> express);
 
         /// <summary>
@@ -25,7 +35,7 @@ namespace Application.IServices
         /// <param name="express">表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        TDest Single(Expression<Func<TSource, bool>> express = null,
+        TDest Single(Expression<Func<TSource, bool>> express = null, 
             Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null);
 
         /// <summary>
@@ -34,7 +44,20 @@ namespace Application.IServices
         /// <param name="express">表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        List<TDest> Lists(Expression<Func<TSource, bool>> express = null,
+        List<TDest> Lists(Expression<Func<TSource, bool>> express = null, 
             Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null);
+    }
+
+    public interface IClassService
+    {
+        bool AddOrEdit<TSource>(TSource entity) where TSource : BaseEntity;
+
+        bool Remove<TSource>(Expression<Func<TSource, bool>> express) where TSource : BaseEntity;
+
+        TDestination Single<TSource, TDestination>(Expression<Func<TSource, bool>> express,
+            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null) where TSource : BaseEntity;
+
+        List<TDestination> Lists<TSource, TDestination>(Expression<Func<TSource, bool>> express = null,
+            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null) where TSource : BaseEntity;
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Domain.Entities.ExamAgg;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 
@@ -51,27 +49,5 @@ namespace Domain.Entities.ClassAgg
         /// 导航属性
         /// </summary>
         public virtual IEnumerable<ClassTeacher> ClassTeachers { get; set; }
-
-        /// <summary>
-        /// 获取班级老师集合
-        /// </summary>
-        /// <returns></returns>
-        //public IEnumerable<TeacherInfo> GetTeachers()
-        //{
-        //    if (ClassTeachers == null || ClassTeachers.ToList().Count == 0)
-        //        return null;
-        //    return ClassTeachers.Select(t => t.TeacherInfomation);
-        //}
-
-        /// <summary>
-        /// 获取班级参考信息集合
-        /// </summary>
-        /// <returns></returns>
-        //public IEnumerable<ExaminationInfo> GetExaminations()
-        //{
-        //    if (ClassExams == null || ClassExams.ToList().Count == 0)
-        //        return null;
-        //    return ClassExams.Select(x => x.ExamInfomation);
-        //}
     }
 }

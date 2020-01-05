@@ -77,7 +77,8 @@ namespace Infrastructure.Repository
         public IEnumerable<T> Lists(ISpecification<T> spec = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            include?.Invoke(query);
+            if (include != null)
+                query = include(query);
             return query.Where(spec?.Expression);
         }
     }

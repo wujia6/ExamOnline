@@ -48,7 +48,7 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(UserDto model)
+        public async Task<IActionResult> Login(ApplicationUser model)
         {
             try
             {
@@ -56,11 +56,11 @@ namespace ExamUI.Controllers
                 if (string.Compare(scode, model.VerificyCode) != 0)
                     return Json(new { result = false, message = "验证码错误" });
 
-                var loginer = userService.Single(
+                var applicationUser = userService.Single(
                     express: usr => usr.Account == model.UserAccount && usr.Pwd == model.UserPassword,
                     include: src => src.Include(u => u.UserRoles).ThenInclude(r => r.RoleInfomation));
 
-                if (loginer == null)
+                if (applicationUser == null)
                     return Json(new { result = false, message = "错误的用户名或密码" });
                 
                 //创建身份证件单元：一张身份证由多个证件单元组成
@@ -68,11 +68,10 @@ namespace ExamUI.Controllers
                 //创建身份证件使用者，添加身份证
                 var identitys = new ClaimsIdentity(new List<Claim>
                 {
-                    new Claim(ClaimTypes.Sid,loginer.UserID.ToString()),
-                    new Claim(ClaimTypes.Name,loginer.UserAccount),
+                    new Claim(ClaimTypes.Sid,applicationUser.UserID.ToString()),
+                    new Claim(ClaimTypes.Name,applicationUser.UserAccount),
                     //new Claim("Password",model.Password),
-                    new Claim(ClaimTypes.Role,loginer.InRoles),
-                    //new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(loginer.UserRoleDtos))
+                    new Claim(ClaimTypes.Role,applicationUser.InRoles),
                 });
                 //写入客户端cookie
                 await HttpContext.SignInAsync(identitys.AuthenticationType, new ClaimsPrincipal(identitys), new AuthenticationProperties

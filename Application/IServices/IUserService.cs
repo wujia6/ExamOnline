@@ -17,8 +17,8 @@ namespace Application.IServices
 
         bool Remove(Expression<Func<UserInfo, bool>> express);
 
-        UserDto Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        ApplicationUser Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
-        List<UserDto> Lists(Expression<Func<UserInfo, bool>> express = null,Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        List<ApplicationUser> Lists(Expression<Func<UserInfo, bool>> express = null,Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }
 }

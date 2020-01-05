@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.IComm

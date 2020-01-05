@@ -3,20 +3,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ExamUI.Models;
 using System.Security.Claims;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using Application.DTO;
+using Application.IServices;
 
 namespace ExamUI.Controllers
 {
     [Authorize(Roles ="admin,teacher,student")]
     public class HomeController : Controller
     {
+        private readonly IMenuService menuService;
+
+        public HomeController(IMenuService service)
+        {
+            this.menuService = service;
+        }
+
         public IActionResult Index()
         {
             int userId = int.Parse(User.FindFirstValue(ClaimTypes.Sid));
             string userName = User.FindFirstValue(ClaimTypes.Name);
-            string roles = User.FindFirstValue(ClaimTypes.UserData);
+            string roles = User.FindFirstValue(ClaimTypes.Role);
             return View();
         }
 

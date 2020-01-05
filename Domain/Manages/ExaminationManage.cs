@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.Manages
 {
-    public class ExamManage : IExamManage
+    public class ExaminationManage : IExaminationManage
     {
         private readonly IEfCoreRepository<ExaminationInfo> efCore;
 
-        public ExamManage(IEfCoreRepository<ExaminationInfo> ef)
+        public ExaminationManage(IEfCoreRepository<ExaminationInfo> ef)
         {
             this.efCore = ef;
         }
