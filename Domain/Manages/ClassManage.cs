@@ -9,6 +9,10 @@ using Domain.Entities.ClassAgg;
 
 namespace Domain.Manages
 {
+    /// <summary>
+    /// 班级领域服务实现类
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class ClassManage<T> : IClassManage<T> where T : BaseEntity, IAggregateRoot
     {
         private readonly IEfCoreRepository<T> efCore;
@@ -61,7 +65,8 @@ namespace Domain.Manages
             return (entity.ID > 0 ? entitySet.Update(entity) : entitySet.Add(entity)) != null;
         }
 
-        public IEnumerable<T> Lists<T>(ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null) where T : BaseEntity
+        public IEnumerable<T> Lists<T>(ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null) where T : BaseEntity
         {
             IQueryable<T> query = efCore.DBContext.Set<T>();
             if (include!=null)
@@ -75,7 +80,8 @@ namespace Domain.Manages
             return entity == null ? false : efCore.DBContext.Set<T>().Remove(entity) != null;
         }
 
-        public T Single<T>(ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null) where T : BaseEntity
+        public T Single<T>(ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null) where T : BaseEntity
         {
             return include?.Invoke(efCore.DBContext.Set<T>()).FirstOrDefault(spec.Expression);
         }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using AutoMapper.Execution;
 using Domain.Entities.MenuAgg;
 using Domain.Entities.RoleAgg;
 using Domain.Entities.UserAgg;
@@ -29,8 +30,8 @@ namespace Application.DTO.Profiles
             //用户映射
             CreateMap<UserInfo, ApplicationUser>()
                 .Include<AdminInfo, ApplicationUser>()
-                .Include<TeacherInfo, ApplicationUser>()
-                .Include<StudentInfo, ApplicationUser>()
+                .Include<TeacherInfo, TeacherDto>()
+                .Include<StudentInfo, StudentDto>()
                 .ForMember(dst => dst.UserID, opt => opt.MapFrom(src => src.ID))
                 .ForMember(dst => dst.UserAccount, opt => opt.MapFrom(src => src.Account))
                 .ForMember(dst => dst.UserPassword, opt => opt.MapFrom(src => src.Pwd))
@@ -43,19 +44,19 @@ namespace Application.DTO.Profiles
                 .ForMember(dst => dst.ReturnUrl, opt => opt.Ignore())
                 .ReverseMap();
             //教师映射
-            CreateMap<TeacherInfo, ApplicationUser>()
+            CreateMap<TeacherInfo, TeacherDto>()
                 .ForMember(dst => dst.VerificyCode, opt => opt.Ignore())
                 .ForMember(dst => dst.RememberMe, opt => opt.Ignore())
                 .ForMember(dst => dst.ReturnUrl, opt => opt.Ignore())
-                .ForMember(dst => (dst as TeacherDto).FromClass, opt => opt.MapFrom(src => Mapper.Map<List<ClassDto>>(src.ClassTeachers.Select(x => x.ClassInfomation))))
+                .ForMember(dst => dst.FromClass, opt => opt.MapFrom(src => Mapper.Map<List<ClassDto>>(src.ClassTeachers.Select(x => x.ClassInfomation))))
                 .ReverseMap();
             //学生映射
-            CreateMap<StudentInfo, ApplicationUser>()
+            CreateMap<StudentInfo, StudentDto>()
                 .ForMember(dst => dst.VerificyCode, opt => opt.Ignore())
                 .ForMember(dst => dst.RememberMe, opt => opt.Ignore())
                 .ForMember(dst => dst.ReturnUrl, opt => opt.Ignore())
-                .ForMember(dst => (dst as StudentDto).FromClass, opt => opt.MapFrom(src => src.ClassInfomation))
-                .ForMember(dst => (dst as StudentDto).AnswerDtos, opt => opt.MapFrom(src => Mapper.Map<List<AnswerDto>>(src.AnswerInfomations)))
+                .ForMember(dst => dst.FromClass, opt => opt.MapFrom(src => src.ClassInfomation))
+                .ForMember(dst => dst.AnswerDtos, opt => opt.MapFrom(src => Mapper.Map<List<AnswerDto>>(src.AnswerInfomations)))
                 .ReverseMap();
             //班级映射
             CreateMap<ClassInfo, ClassDto>()

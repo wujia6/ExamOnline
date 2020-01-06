@@ -67,16 +67,16 @@ namespace Application.Services
             this.context = cxt;
         }
 
-        public bool AddOrEdit<T>(T entity) where T : BaseEntity
+        public bool AddOrEdit<TSource>(TSource entity) where TSource : BaseEntity
         {
             if (entity==null)
                 return false;
-            return classManage.AddOrEdit<T>(entity) ? context.SaveChanges() > 0 : false;
+            return classManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
         }
 
-        public bool Remove<T>(Expression<Func<T, bool>> express) where T : BaseEntity
+        public bool Remove<TSource>(Expression<Func<TSource, bool>> express) where TSource : BaseEntity
         {
-            var spec = Specification<T>.Eval(express);
+            var spec = Specification<TSource>.Eval(express);
             return classManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 

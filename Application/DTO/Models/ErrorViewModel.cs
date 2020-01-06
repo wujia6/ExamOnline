@@ -1,6 +1,4 @@
-using System;
-
-namespace ExamUI.Models
+namespace Application.DTO.Models
 {
     public class ErrorViewModel
     {

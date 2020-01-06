@@ -60,7 +60,7 @@ namespace Infrastructure.Repository
         /// <param name="spec">规约表达式</param>
         /// <param name="include">要包含的导航属性</param>
         /// <returns></returns>
-        public T Single(ISpecification<T> spec = null, 
+        public T Single(ISpecification<T> spec, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             if (include != null)
@@ -79,7 +79,7 @@ namespace Infrastructure.Repository
         {
             if (include != null)
                 query = include(query);
-            return query.Where(spec?.Expression);
+            return spec == null ? query : query.Where(spec?.Expression);
         }
     }
 }

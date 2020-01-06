@@ -41,7 +41,7 @@ namespace Domain.IComm
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        T Single(ISpecification<T> spec = null, 
+        T Single(ISpecification<T> spec,
             Func<IQueryable<T>, IIncludableQueryable<T,object>> include = null);
 
         /// <summary>
