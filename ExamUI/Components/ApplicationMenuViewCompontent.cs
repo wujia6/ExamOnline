@@ -1,52 +1,34 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
-using Application.IServices;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using Application.DTO.Models;
+using Application.IServices;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-namespace ExamUI.Controllers
+namespace ExamUI.Components
 {
-    [Authorize(Roles ="admin,teacher,student")]
-    public class HomeController : Controller
+    /// <summary>
+    /// 系统菜单视图组件类
+    /// </summary>
+    [ViewComponent(Name = "ApplicationMenu")]
+    public class ApplicationMenuViewCompontent : ViewComponent
     {
         private readonly IRoleService roleService;
 
-        public HomeController(IRoleService service)
+        public ApplicationMenuViewCompontent(IRoleService service)
         {
             this.roleService = service;
         }
 
-        public IActionResult Index()
+        public IViewComponentResult Invoke()
         {
-            try
-            {
-                int userId = int.Parse(User.FindFirstValue(ClaimTypes.Sid));
-                string userName = User.FindFirstValue(ClaimTypes.Name);
-                string roles = User.FindFirstValue(ClaimTypes.Role);
-                
-                if (string.IsNullOrEmpty(roles))
-                    return LocalRedirect("~/Views/Shared/Error.cshtml");
-                var appMenus = ApplicationMenus(roles);
-                return View();
-            }
-            catch (System.Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            int userId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.Sid));
+            string userName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            string roles = HttpContext.User.FindFirstValue(ClaimTypes.Role);
+            if (string.IsNullOrEmpty(roles))
+                return View("~/Views/Shared/Error.cshtml");
+            var appMenus = ApplicationMenus(roles);
+            return View(appMenus);
         }
 
         /// <summary>
