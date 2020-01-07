@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Security.Claims;
+using System.Threading.Tasks;
 using Application.DTO.Models;
 using Application.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -20,29 +20,15 @@ namespace ExamUI.Components
             this.roleService = service;
         }
 
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(string roles)
         {
-            int userId = int.Parse(HttpContext.User.FindFirstValue(ClaimTypes.Sid));
-            string userName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
-            string roles = HttpContext.User.FindFirstValue(ClaimTypes.Role);
             if (string.IsNullOrEmpty(roles))
                 return View("~/Views/Shared/Error.cshtml");
-            var appMenus = ApplicationMenus(roles);
-            return View(appMenus);
-        }
-
-        /// <summary>
-        /// 获取角色菜单
-        /// </summary>
-        /// <param name="roleCodes">角色字符串</param>
-        /// <returns></returns>
-        private List<MenuDto> ApplicationMenus(string roleCodes)
-        {
             List<MenuDto> menus = null;
-            if (roleCodes.IndexOf(',') > 0)
+            if (roles.IndexOf(',') > 0)
             {
                 menus = new List<MenuDto>();
-                foreach (var code in roleCodes.Split(','))
+                foreach (var code in roles.Split(','))
                 {
                     var role = roleService.Single(express: src => src.Code == code,
                         include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
@@ -55,11 +41,11 @@ namespace ExamUI.Components
             }
             else
             {
-                var role = roleService.Single(express: src => src.Code == roleCodes,
-                        include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
+                var role = roleService.Single(express: src => src.Code == roles,
+                    include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
                 menus = role.MenuDtos;
             }
-            return menus;
+            return View(menus);
         }
     }
 }

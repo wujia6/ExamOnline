@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Domain.Entities.RoleAgg;
 using Domain.IComm;
 using Domain.IManages;
@@ -22,22 +23,45 @@ namespace Domain.Manages
             return entity.ID > 0 ? efCore.ModifyAt(entity) : efCore.AddAt(entity);
         }
 
-        public IEnumerable<RoleInfo> Lists(ISpecification<RoleInfo> spec = null, 
-            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
-        {
-            return efCore.Lists(spec, include);
-        }
-
         public bool Remove(ISpecification<RoleInfo> spec)
         {
             var entity = Single(spec);
             return efCore.RemoveAt(entity);
         }
 
+        public IEnumerable<RoleInfo> Lists(ISpecification<RoleInfo> spec = null, 
+            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
+        {
+            return efCore.Lists(spec, include);
+        }
+
         public RoleInfo Single(ISpecification<RoleInfo> spec, 
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
         {
             return efCore.Single(spec, include);
+        }
+
+        public async Task<bool> AddOrEditAsync(RoleInfo entity)
+        {
+            return entity.ID > 0 ? await efCore.ModifyAsync(entity) : await efCore.AddAsync(entity);
+        }
+
+        public async Task<bool> RemoveAsync(ISpecification<RoleInfo> spec)
+        {
+            var entity = await SingleAsync(spec);
+            return entity == null ? false : await efCore.RemoveAsync(entity);
+        }
+
+        public async Task<RoleInfo> SingleAsync(ISpecification<RoleInfo> spec, 
+            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
+        {
+            return await efCore.SingleAsync(spec, include);
+        }
+
+        public async Task<IEnumerable<RoleInfo>> ListsAsync(ISpecification<RoleInfo> spec = null, 
+            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
+        {
+            return await efCore.ListsAsync(spec, include);
         }
     }
 }

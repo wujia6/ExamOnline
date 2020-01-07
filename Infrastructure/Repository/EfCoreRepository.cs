@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.IComm;
 using Microsoft.EntityFrameworkCore;
@@ -21,45 +22,25 @@ namespace Infrastructure.Repository
 
         public IExamDbContext DBContext { get; private set; }
 
-        /// <summary>
-        /// 插入
-        /// </summary>
-        /// <param name="entity">实体类</param>
-        /// <returns></returns>
+        #region Sync
         public bool AddAt(T entity)
         {
             DBContext.Entry(entity).State = EntityState.Added;
             return true;
         }
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="entity">实体类</param>
-        /// <returns></returns>
+        
         public bool RemoveAt(T entity)
         {
             DBContext.Entry(entity).State = EntityState.Deleted;
             return true;
         }
-
-        /// <summary>
-        /// 更新
-        /// </summary>
-        /// <param name="entity">实体类</param>
-        /// <returns></returns>
+        
         public bool ModifyAt(T entity)
         {
             DBContext.Entry(entity).State = EntityState.Modified;
             return true;
         }
-
-        /// <summary>
-        /// 查找单个
-        /// </summary>
-        /// <param name="spec">规约表达式</param>
-        /// <param name="include">要包含的导航属性</param>
-        /// <returns></returns>
+        
         public T Single(ISpecification<T> spec, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
@@ -67,13 +48,7 @@ namespace Infrastructure.Repository
                 query = include(query);
             return query.FirstOrDefault(spec.Expression);
         }
-
-        /// <summary>
-        /// 查找集合
-        /// </summary>
-        /// <param name="spec">规约表达式</param>
-        /// <param name="include">要包含的导航属性</param>
-        /// <returns></returns>
+        
         public IEnumerable<T> Lists(ISpecification<T> spec = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
@@ -81,5 +56,35 @@ namespace Infrastructure.Repository
                 query = include(query);
             return spec == null ? query : query.Where(spec?.Expression);
         }
+        #endregion
+
+        #region Async
+        public async Task<bool> AddAsync(T entity)
+        {
+            return await Task.Run(() => this.AddAt(entity));
+        }
+
+        public async Task<bool> RemoveAsync(T entity)
+        {
+            return await Task.Run(() => this.RemoveAt(entity));
+        }
+
+        public async Task<bool> ModifyAsync(T entity)
+        {
+            return await Task.Run(() => this.ModifyAt(entity));
+        }
+
+        public async Task<T> SingleAsync(ISpecification<T> spec, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            return await Task.Run(() => this.Single(spec, include));
+        }
+
+        public async Task<IEnumerable<T>> ListsAsync(ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            return await Task.Run(() => this.Lists(spec, include));
+        }
+        #endregion
     }
 }
