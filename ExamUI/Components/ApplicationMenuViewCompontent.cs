@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Application.DTO.Models;
 using Application.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -33,19 +32,14 @@ namespace ExamUI.Components
                 {
                     var role = roleService.Single(express: src => src.Code == code,
                         include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
-                    menus = BuilderTree(role.MenuDtos.AsQueryable(), null, 0);
-                    //role.MenuDtos.ForEach(itm =>
-                    //{
-                    //    if (!menus.Contains(itm))
-                    //        menus.Add(itm);
-                    //});
+                    menus = BuilderTree(role.MenuDtos, null, 0);
                 }
             }
             else
             {
                 var role = roleService.Single(express: src => src.Code == roles,
                     include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
-                menus = BuilderTree(role.MenuDtos.AsQueryable(), null, 0);
+                menus = BuilderTree(role.MenuDtos, null, 0);
             }
             return View(menus);
         }
@@ -54,30 +48,20 @@ namespace ExamUI.Components
         /// 递归生成菜单
         /// </summary>
         /// <param name="dtos">数据源</param>
-        /// <param name="node">节点对象</param>
+        /// <param name="treeNode">节点对象</param>
         /// <param name="id">层级ID</param>
         /// <returns></returns>
-        private List<MenuDto> BuilderTree(IQueryable<MenuDto> dtos, MenuDto node, int id)
+        private List<MenuDto> BuilderTree(List<MenuDto> dtos, MenuDto treeNode, int id)
         {
-            var lst = dtos.Where(x => x.ParentID == id).Select(src => new MenuDto
+            var menuList = dtos.Where(x => x.ParentID == id).Distinct().ToList();
+            if (menuList != null && menuList.Count >0)
             {
-                ID = src.ID,
-                ParentID = src.ParentID,
-                MenuType = src.MenuType,
-                Title = src.Title,
-                Controller = src.Controller,
-                Action = src.Action,
-                Remarks = src.Remarks
-            }).Distinct().ToList();
-
-            if (lst != null)
-            {
-                foreach (var item in lst)
+                foreach (var node in menuList)
                 {
-                    item.ChildNodes = BuilderTree(dtos, item, item.ID);
+                    node.ChildNodes = BuilderTree(dtos, node, node.ID);
                 }
             }
-            return lst;
+            return menuList;
         }
     }
 }
