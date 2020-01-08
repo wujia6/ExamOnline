@@ -1,4 +1,6 @@
-﻿namespace Application.DTO.Models
+﻿using System.Collections.Generic;
+
+namespace Application.DTO.Models
 {
     public class MenuDto
     {
@@ -15,5 +17,7 @@
         public string Action { get; set; }
 
         public string Remarks { get; set; }
+
+        public List<MenuDto> ChildNodes { get; set; }
     }
 }
