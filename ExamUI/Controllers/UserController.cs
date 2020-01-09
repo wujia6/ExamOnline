@@ -1,15 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ExamUI.Controllers
 {
     public class UserController : Controller
     {
-        //private readonly IUserService userService;
+        public IActionResult Index()
+        {
+            return View();
+        }
 
-        ////依赖注入
-        //public UserController(IUserService service)
-        //{
-        //    this.userService = service;
-        //}
+        [HttpGet]
+        [Authorize(Roles ="admin,teacher")]
+        public IActionResult TeacherManage()
+        {
+
+            return View();
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "admin,teacher,student")]
+        public IActionResult StudentManage()
+        {
+            return View();
+        }
     }
 }

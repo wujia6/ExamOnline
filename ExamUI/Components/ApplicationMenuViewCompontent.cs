@@ -20,6 +20,11 @@ namespace ExamUI.Components
             this.roleService = service;
         }
 
+        /// <summary>
+        /// 回调方法
+        /// </summary>
+        /// <param name="roles">角色字符串</param>
+        /// <returns></returns>
         public IViewComponentResult Invoke(string roles)
         {
             if (string.IsNullOrEmpty(roles))
