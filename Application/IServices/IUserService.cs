@@ -17,8 +17,14 @@ namespace Application.IServices
 
         bool Remove(Expression<Func<UserInfo, bool>> express);
 
-        ApplicationUser Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        ApplicationUser Single(Expression<Func<UserInfo, bool>> express, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
-        List<ApplicationUser> Lists(Expression<Func<UserInfo, bool>> express = null,Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        List<ApplicationUser> Lists(Expression<Func<UserInfo, bool>> express = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+
+        List<ApplicationUser> Lists(out int total, int? pageIndex = 0, int? pageSize = 10, 
+            Expression<Func<UserInfo, bool>> express = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }
 }

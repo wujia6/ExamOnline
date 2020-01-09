@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.IComm
@@ -52,6 +51,19 @@ namespace Domain.IComm
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
         IEnumerable<T> Lists(ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
+
+        /// <summary>
+        /// 获取实体集合
+        /// </summary>
+        /// <param name="total">分页记录总数</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页记录显示条数</param>
+        /// <param name="spec">规约表达式</param>
+        /// <param name="include">包含导航属性</param>
+        /// <returns></returns>
+        IEnumerable<T> Lists(out int total, int? pageIndex = 0, int? pageSize = 10, 
+            ISpecification<T> spec = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
 
         /// <summary>

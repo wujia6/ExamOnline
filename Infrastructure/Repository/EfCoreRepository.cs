@@ -56,6 +56,26 @@ namespace Infrastructure.Repository
                 query = include(query);
             return spec == null ? query : query.Where(spec?.Expression);
         }
+
+        public IEnumerable<T> Lists(out int total, int? pageIndex = 0, int? pageSize = 10, 
+            ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            if (include != null)
+                query = include(query);
+            if (spec != null)
+            {
+                var result = query.Where(spec.Expression).Skip((pageIndex.Value - 1) * pageSize.Value).Take(pageSize.Value);
+                total = result.Count();
+                return result;
+            }
+            else
+            {
+                var result = query.Skip((pageIndex.Value - 1) * pageSize.Value).Take(pageSize.Value);
+                total = result.Count();
+                return result;
+            }
+        }
         #endregion
 
         #region Async
@@ -85,6 +105,7 @@ namespace Infrastructure.Repository
         {
             return await Task.Run(() => this.Lists(spec, include));
         }
+        
         #endregion
     }
 }

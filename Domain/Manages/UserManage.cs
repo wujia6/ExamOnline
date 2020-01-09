@@ -33,14 +33,23 @@ namespace Domain.Manages
             return entity == null ? false : efCore.RemoveAt(entity);
         }
 
-        public dynamic Single(ISpecification<UserInfo> spec, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public dynamic Single(ISpecification<UserInfo> spec, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             return efCore.Single(spec, include);
         }
 
-        public IEnumerable<dynamic> Lists(ISpecification<UserInfo> spec = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public IEnumerable<dynamic> Lists(ISpecification<UserInfo> spec = null, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             return efCore.Lists(spec, include);
+        }
+
+        public IEnumerable<UserInfo> Lists(out int total, int? pageIndex = 0, int? pageSize = 10, 
+            ISpecification<UserInfo> spec = null, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        {
+            return efCore.Lists(out total, pageIndex, pageSize, spec, include);
         }
     }
 }

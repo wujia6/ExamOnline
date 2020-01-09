@@ -18,9 +18,10 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Management()
+        public IActionResult Management(int? pageIndex = 0,int? pageSize = 10)
         {
-            return View();
+            var result = userService.Lists(out int total, pageIndex, pageSize);
+            return View(result);
         }
 
         [HttpPost]
@@ -30,8 +31,10 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Remove(int? id)
+        public IActionResult Remove(int id)
         {
+            if (id == 0)
+                return View("false");
             return View();
         }
 

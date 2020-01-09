@@ -56,9 +56,15 @@
                                 <td>teacher.Age</td>
                                 <td>teacher.Course</td>
                                 <td class="project-actions text-right">
-                                    <a class="btn btn-primary btn-sm" href="#"><i class="fas fa-folder" />详细</a>
-                                    <a class="btn btn-info btn-sm" href="#"><i class="fas fa-pencil-alt" />编辑</a>
-                                    <a class="btn btn-danger btn-sm" href="#"><i class="fas fa-trash" />删除</a>
+                                    <a id="teacher_details" class="btn btn-primary btn-sm" href="/Teacher/Details/@teacher.UserID">
+                                        <i class="fas fa-folder" />详细
+                                    </a>
+                                    <a id="teacher_dit" class="btn btn-info btn-sm" href="/Teacher/Edit/@teacher.UserID">
+                                        <i class="fas fa-pencil-alt" />编辑
+                                    </a>
+                                    <a id="teacher_remove" class="btn btn-danger btn-sm" href="#">
+                                        <i class="fas fa-trash" />删除
+                                    </a>
                                 </td>
                             </tr>
                         }
@@ -68,4 +74,13 @@
         </div>
     </section>
 </div>
+
+<script>
+    $(function () {
+        //编辑
+        $("#edit").click(function (dto) {
+
+        })
+    })
+</script>
 

@@ -32,7 +32,8 @@ namespace Domain.IManages
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        dynamic Single(ISpecification<UserInfo> spec, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        dynamic Single(ISpecification<UserInfo> spec, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
         /// <summary>
         /// 查询
@@ -40,6 +41,20 @@ namespace Domain.IManages
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        IEnumerable<dynamic> Lists(ISpecification<UserInfo> spec = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+        IEnumerable<dynamic> Lists(ISpecification<UserInfo> spec = null, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <param name="total">总记录</param>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">显示记录数</param>
+        /// <param name="spec">规约表达式</param>
+        /// <param name="include">包含导航属性</param>
+        /// <returns></returns>
+        IEnumerable<UserInfo> Lists(out int total, int? pageIndex = 0, int? pageSize = 10,
+            ISpecification<UserInfo> spec = null,
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }
 }

@@ -41,7 +41,8 @@ namespace Application.Services
             return userManage.Remove(spec) ? context.SaveChanges() > 0 : false;
         }
 
-        public ApplicationUser Single(Expression<Func<UserInfo, bool>> express, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public ApplicationUser Single(Expression<Func<UserInfo, bool>> express, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
             UserInfo entity = userManage.Single(spec,include);
@@ -49,11 +50,20 @@ namespace Application.Services
             return model;
         }
 
-        public List<ApplicationUser> Lists(Expression<Func<UserInfo, bool>> express = null, Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        public List<ApplicationUser> Lists(Expression<Func<UserInfo, bool>> express = null, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
             var spec = Specification<UserInfo>.Eval(express);
             var lstUser = userManage.Lists(spec, include);
             return lstUser.MapToList<ApplicationUser>();
+        }
+
+        public List<ApplicationUser> Lists(out int total, int? pageIndex = 0, int? pageSize = 10, 
+            Expression<Func<UserInfo, bool>> express = null, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        {
+            var spec = Specification<UserInfo>.Eval(express);
+            return userManage.Lists(out total, pageIndex, pageSize, spec, include).MapToList<ApplicationUser>();
         }
     }
 }
