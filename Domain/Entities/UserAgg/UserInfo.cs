@@ -26,7 +26,6 @@ namespace Domain.Entities.UserAgg
         public DateTime CreateDate { get; set; }
         //导航属性
         public virtual IEnumerable<UserRole> UserRoles { get; set; }
-
         /// <summary>
         /// 获取用户角色
         /// </summary>
@@ -39,23 +38,5 @@ namespace Domain.Entities.UserAgg
             UserRoles.ToList().ForEach(x => roles += x.RoleInfomation.Code + ",");
             return roles.Remove(roles.LastIndexOf(','), 1);
         }
-
-        /// <summary>
-        /// 添加用户角色
-        /// </summary>
-        /// <returns></returns>
-        //public bool AddUserRole(int roleId)
-        //{
-        //    if (this.UserRoles == null)
-        //        this.UserRoles = new List<UserRole>();
-
-        //    UserRoles.ToList().Add(EntityFactory.Create<UserRole>(x =>
-        //    {
-        //        x.UserInfomation.ID = ID;
-        //        x.RoleInfomation.ID = roleId;
-        //        return x;
-        //    }));
-        //    return true;
-        //}
     }
 }

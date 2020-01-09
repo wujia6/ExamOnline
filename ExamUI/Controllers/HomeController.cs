@@ -21,7 +21,6 @@ namespace ExamUI.Controllers
         {
             try
             {
-                //int userId = int.Parse(User.FindFirstValue(ClaimTypes.Sid));
                 ViewBag.UserName = User.FindFirstValue(ClaimTypes.Name);
                 ViewBag.InRoles = User.FindFirstValue(ClaimTypes.Role);
                 return View();
