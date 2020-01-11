@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace AutoMapper.Execution
 {
     #region AutoMapper 对象映射扩展 1.0
-    public static class MapToExtension
+    public static class MapToExtensions
     {
         /// <summary>
         /// 映射源类型到目标类型

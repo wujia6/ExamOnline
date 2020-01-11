@@ -39,7 +39,9 @@ namespace ExamUI
                     opts.AccessDeniedPath = new PathString("/Shared/Error");    //未授权访问重定向路径
                     opts.SlidingExpiration = true;
                 });
-            //添加session服务
+            //注入缓存服务
+            services.AddMemoryCache();
+            //注入session服务
             services.AddSession();
             //添加mvc服务与模型验证过滤器
             services.AddMvc(options => options.Filters.Add<ModelVerifyActionFilter>())

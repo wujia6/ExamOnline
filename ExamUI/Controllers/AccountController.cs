@@ -54,14 +54,14 @@ namespace ExamUI.Controllers
             {
                 var scode = HttpContext.Session.GetString("VCode").ToLower();
                 if (string.Compare(scode, model.VerificyCode) != 0)
-                    return Json(new { result = false, message = "验证码错误" });
+                    return Json(new { success = false, message = "验证码错误" });
 
                 var applicationUser = userService.Single(
                     express: usr => usr.Account == model.UserAccount && usr.Pwd == model.UserPassword,
                     include: src => src.Include(u => u.UserRoles).ThenInclude(r => r.RoleInfomation));
 
                 if (applicationUser == null)
-                    return Json(new { result = false, message = "错误的用户名或密码" });
+                    return Json(new { success = false, message = "错误的用户名或密码" });
                 
                 //创建身份证件单元：一张身份证由多个证件单元组成
                 //创建身份证件，添加证件单元
@@ -80,7 +80,7 @@ namespace ExamUI.Controllers
                     IsPersistent = true,
                     AllowRefresh = true
                 });
-                return Json(new { result = true, message = "登录成功", path = "/Home/Index" });
+                return Json(new { success = true, message = "登录成功", path = "/Home/Index" });
             }
             catch (Exception ex)
             {

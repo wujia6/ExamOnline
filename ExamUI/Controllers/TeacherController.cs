@@ -1,7 +1,9 @@
 ﻿using Application.DTO.Models;
 using Application.IServices;
+using Domain.Entities.UserAgg;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExamUI.Controllers
 {
@@ -17,37 +19,38 @@ namespace ExamUI.Controllers
             this.classService = cls;
         }
 
-        [HttpGet]
-        public IActionResult Management(int? pageIndex = 0,int? pageSize = 10)
-        {
-            var result = userService.Lists(out int total, pageIndex, pageSize);
-            return View(result);
-        }
-
         [HttpPost]
         public IActionResult AddOrEdit(TeacherDto model)
         {
-            return View();
+            if (model == null)
+                return Json(new { success = false, message = "目标不能为空" });
+
+            return userService.AddOrEdit(model) ? 
+                Json(new { success = true, message = "操作成功！" }) : Json(new { success = false, message = "操作失败！" });
         }
 
         [HttpPost]
         public IActionResult Remove(int id)
         {
             if (id == 0)
-                return View("false");
-            return View();
+                return Json(new { success = false, message = "请选择删除记录" });
+            return userService.Remove(express:t=>t.ID==id)?
+                Json(new { success = true, message = "删除成功！" }) : Json(new { success = false, message = "删除失败！" });
         }
 
         [HttpGet]
-        public IActionResult Single(int? teacherId)
+        public IActionResult Details(int? id)
         {
-            return View();
+            var model = userService.Single(express: t => t.ID == id,
+                include: src => src.Include(x => (x as TeacherInfo).ClassTeachers).ThenInclude(ct => ct.ClassInfomation));
+            return View(model);
         }
 
         [HttpGet]
         public IActionResult Lists(int? pageIndex = 0, int? pageSize = 10)
         {
-            return View();
+            var lsts = userService.Lists(out int total, pageIndex, pageSize);
+            return Json(new { total, result = lsts });
         }
     }
 }

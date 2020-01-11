@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "教师管理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.CurrentMenu = "Teacher";
+}
+@model List<TeacherDto>
+
+<link href="~/lib/layer/skin/layer.css" rel="stylesheet" />
+<script src="~/lib/layer/layer.js"></script>
+
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6"><h1>教师管理</h1></div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/Home/Index">首页</a></li>
+                        <li class="breadcrumb-item active">教师管理</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">教师管理</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="收起">
+                        <i class="fas fa-minus" />
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="关闭">
+                        <i class="fas fa-times" />
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-striped projects">
+                    <thead>
+                        <tr>
+                            <th style="width: 5%"></th>
+                            <th style="width: 5%">姓名</th>
+                            <th style="width: 5%">性别</th>
+                            <th style="width: 5%">年龄</th>
+                            <th style="width: 5%">科目</th>
+                            <th style="width: 5%">专业</th>
+                            <th style="width: 30%">授课班级</th>
+                            <th style="width: 20%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var teacher in Model)
+                        {
+                            <tr>
+                                <td class="list-inline">
+                                    @teacher.Gender == "男" ?
+                                    <img class="table-avatar" src="~/images/avatar5.png"> :
+                                    <img class="table-avatar" src="~/images/avatar3.png">;
+                                </td>
+                                <td><a>@teacher.Name</a></td>
+                                <td>@teacher.Gender</td>
+                                <td>@teacher.Age</td>
+                                <td>@teacher.Course</td>
+                                <td>
+                                    @{ 
+                                        var fromClass = string.Empty;
+                                        foreach (var item in teacher.FromClass)
+                                        {
+                                            fromClass += item.Name + ",";
+                                        }
+                                        fromClass.Remove(fromClass.LastIndexOf(','), 1);
+                                    }
+                                    @fromClass;
+                                </td>
+                                <td class="project-actions text-right">
+                                    @*<a id="teacher_details" class="btn btn-primary btn-sm" href="/Teacher/Details/id=@teacher.UserID">
+                                        <i class="fas fa-folder" />详细
+                                    </a>*@
+                                    <a id="teacher_edit" class="btn btn-info btn-sm" href="/Teacher/Edit/id=@teacher.UserID">
+                                        <i class="fas fa-pencil-alt" />编辑
+                                    </a>
+                                    <a id="teacher_remove" class="btn btn-danger btn-sm" href="javascript:teacher_remove(@teacher.UserID)">
+                                        <i class="fas fa-trash" />删除
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+<div id="sysdialog" class="mode fade" role="dialog" aria-labelledbyl="dialoglabel">
+    
+</div>
+
+<script>
+    function teacher_remove(id) {
+        if (id == 0) {
+            layer.msg('请选择有效的删除项');
+            return;
+        }
+        //异步提交
+        $.ajax({
+            url: "/Teacher/Remove",
+            type: "post",
+            data: id,
+            success: function (data) {
+                layer.open({ title: '提示信息', content: data.message, icon: 6 });  
+            }
+        })
+    }
+</script>
+

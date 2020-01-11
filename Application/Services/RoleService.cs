@@ -68,7 +68,7 @@ namespace Application.Services
         {
             var spec = Specification<RoleInfo>.Eval(express);
             var entity = await roleManage.SingleAsync(spec);
-            return MapToExtension.MapTo<RoleDto>(entity);
+            return MapToExtensions.MapTo<RoleDto>(entity);
         }
 
         public async Task<List<RoleDto>> ListsAsync(Expression<Func<RoleInfo, bool>> express = null,
@@ -76,7 +76,7 @@ namespace Application.Services
         {
             var spec = Specification<RoleInfo>.Eval(express);
             var lst = await roleManage.ListsAsync(spec, include);
-            return MapToExtension.MapToList<RoleDto>(lst);
+            return MapToExtensions.MapToList<RoleDto>(lst);
         }
     }
 }
