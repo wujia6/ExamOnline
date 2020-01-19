@@ -28,7 +28,7 @@ namespace ExamUI
         //DI注册容器组件服务
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ExamDbContext>(options => 
+            services.AddDbContext<ExamDbContext>(options =>
                 options.UseSqlServer(ConfigurationUtils.Settings.GetConfig("ConnectionStrings:ExamDbConnection")));
             //添加Cookie验证授权支持
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -59,7 +59,7 @@ namespace ExamUI
             return new AutofacServiceProvider(ApplicationContainer);
         }
 
-        //管道请求中间件配置
+        //请求管道中间件配置
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

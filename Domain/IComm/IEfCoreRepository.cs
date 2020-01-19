@@ -67,6 +67,22 @@ namespace Domain.IComm
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
 
         /// <summary>
+        /// 获取分页集合
+        /// </summary>
+        /// <param name="draw">当前绘制页码</param>
+        /// <param name="start">记录开始位置</param>
+        /// <param name="length">每页记录显示条数</param>
+        /// <param name="spec">规约表达式</param>
+        /// <param name="include">包含导航属性</param>
+        /// <returns></returns>
+        IEnumerable<T> Paginator(
+            int? draw = 1,
+            int? start = 0,
+            int? length = 10,
+            ISpecification<T> spec = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
+
+        /// <summary>
         /// 添加（异步方法）
         /// </summary>
         /// <param name="entity">实体类</param>

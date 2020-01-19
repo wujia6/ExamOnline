@@ -57,9 +57,8 @@ namespace Infrastructure.Repository
             return spec == null ? query : query.Where(spec?.Expression);
         }
 
-        public IEnumerable<T> Lists(out int total, int? pageIndex = 0, int? pageSize = 10, 
-            ISpecification<T> spec = null, 
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public IEnumerable<T> Lists(out int total, int? pageIndex = 1, int? pageSize = 10, 
+            ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             if (include != null)
                 query = include(query);
@@ -75,6 +74,16 @@ namespace Infrastructure.Repository
                 total = result.Count();
                 return result;
             }
+        }
+
+        public IEnumerable<T> Paginator(
+            int? draw = 1, 
+            int? start = 0, 
+            int? length = 10, 
+            ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
@@ -105,7 +114,7 @@ namespace Infrastructure.Repository
         {
             return await Task.Run(() => this.Lists(spec, include));
         }
-        
+
         #endregion
     }
 }

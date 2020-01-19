@@ -9,7 +9,7 @@ using Application.DTO.Models;
 namespace Application.IServices
 {
     /// <summary>
-    /// 用户应用服务接口
+    /// 应用用户服务接口
     /// </summary>
     public interface IUserService
     {
@@ -23,7 +23,7 @@ namespace Application.IServices
         List<ApplicationUser> Lists(Expression<Func<UserInfo, bool>> express = null,
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
-        List<ApplicationUser> Lists(out int total, int? pageIndex = 0, int? pageSize = 10, 
+        List<ApplicationUser> Lists(out int total, int? pageIndex = 1, int? pageSize = 10, 
             Expression<Func<UserInfo, bool>> express = null,
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }

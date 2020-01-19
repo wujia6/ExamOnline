@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Application.DTO.Models;
 using Application.IServices;
@@ -8,6 +9,7 @@ using Domain.Entities.MenuAgg;
 using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Repository;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.Services
 {
@@ -22,11 +24,17 @@ namespace Application.Services
             this.context = cxt;
         }
 
-        public bool AddOrEdit(MenuInfo entity)
+        public bool AddOrEdit(MenuDto model)
         {
-            if (entity == null)
+            if (model == null)
                 return false;
-            return menuManage.AddOrEdit(entity);
+            return menuManage.AddOrEdit(model.MapTo<MenuInfo>());
+        }
+
+        public bool Remove(Expression<Func<MenuInfo, bool>> express)
+        {
+            var spec = Specification<MenuInfo>.Eval(express);
+            return menuManage.Remove(spec);
         }
 
         public MenuDto FindBy(Expression<Func<MenuInfo, bool>> express)
@@ -35,16 +43,20 @@ namespace Application.Services
             return menuManage.FindBy(spec).MapTo<MenuDto>();
         }
 
-        public IEnumerable<MenuDto> Lists(Expression<Func<MenuInfo, bool>> express = null)
+        public List<MenuDto> Lists(
+            out int total, 
+            int? pageIndex = 1, 
+            int? pageSize = 10, 
+            Expression<Func<MenuInfo, bool>> express = null, 
+            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
             var spec = Specification<MenuInfo>.Eval(express);
-            return menuManage.Lists(spec).MapToList<MenuDto>();
+            return menuManage.Lists(out total, pageIndex, pageSize, spec, include).MapToList<MenuDto>();
         }
 
-        public bool Remove(Expression<Func<MenuInfo, bool>> express)
+        public List<MenuDto> Paginator(int? draw = 1, int? start = 0, int? length = 10)
         {
-            var spec = Specification<MenuInfo>.Eval(express);
-            return menuManage.Remove(spec);
+            
         }
     }
 }

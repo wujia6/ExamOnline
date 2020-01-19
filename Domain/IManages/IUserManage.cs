@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Domain.Entities;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Microsoft.EntityFrameworkCore.Query;
@@ -8,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Query;
 namespace Domain.IManages
 {
     /// <summary>
-    /// 领域服务用户接口
+    /// 领域用户服务接口
     /// </summary>
     public interface IUserManage
     {
@@ -56,5 +57,21 @@ namespace Domain.IManages
         IEnumerable<UserInfo> Lists(out int total, int? pageIndex = 0, int? pageSize = 10,
             ISpecification<UserInfo> spec = null,
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
+    }
+
+    /// <summary>
+    /// 领域用户泛型服务接口
+    /// </summary>
+    public interface IUserManage<T> where T : BaseEntity, IAggregateRoot
+    {
+        bool AddorEdit(T entity);
+
+        bool Remove(ISpecification<T> spec);
+
+        T Single(ISpecification<T> spec,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
+
+        IEnumerable<T> Lists(out int total, int? pageIndex = 1, int? pageSize = 10,
+            ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
     }
 }

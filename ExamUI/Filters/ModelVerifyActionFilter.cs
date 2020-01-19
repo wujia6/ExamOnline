@@ -12,10 +12,10 @@ namespace ExamUI.Filters
         //action调用后触发事件
         public void OnActionExecuted(ActionExecutedContext context)
         {
-            
+            //do some things...
         }
 
-        //action调用前触发事件
+        //action调用前触发事件,模型同一验证
         public void OnActionExecuting(ActionExecutingContext context)
         {
             if (!context.ModelState.IsValid)

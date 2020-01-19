@@ -36,7 +36,7 @@ namespace ExamUI.Components
             //缓存角色菜单
             if (!appCache.TryGetValue("ApplicationMenus",out object cacheValue))
             {
-                var lst= GetDbMenus(roles);
+                var lst= FindMenuBy(roles);
                 appCache.Set("ApplicationMenus", lst, new MemoryCacheEntryOptions
                 {
                     AbsoluteExpiration = DateTime.Now.AddMinutes(2),  //设置缓存绝对过期时间
@@ -52,12 +52,11 @@ namespace ExamUI.Components
         /// </summary>
         /// <param name="roles">角色字符串</param>
         /// <returns></returns>
-        private List<MenuDto> GetDbMenus(string roles)
+        private List<MenuDto> FindMenuBy(string roles)
         {
             List<MenuDto> menus = null;
             if (roles.IndexOf(',') > 0)
             {
-                menus = new List<MenuDto>();
                 foreach (var code in roles.Split(','))
                 {
                     var role = roleService.Single(express: src => src.Code == code,
@@ -83,15 +82,15 @@ namespace ExamUI.Components
         /// <returns></returns>
         private List<MenuDto> BuilderTree(List<MenuDto> dtos, MenuDto treeNode, int id)
         {
-            var menuList = dtos.Where(x => x.ParentID == id).Distinct().ToList();
-            if (menuList != null && menuList.Count >0)
+            var menus = dtos.Where(x => x.ParentID == id).Distinct().ToList();
+            if (menus != null && menus.Count > 0)
             {
-                foreach (var node in menuList)
+                foreach (var node in menus)
                 {
                     node.ChildNodes = BuilderTree(dtos, node, node.ID);
                 }
             }
-            return menuList;
+            return menus;
         }
     }
 }

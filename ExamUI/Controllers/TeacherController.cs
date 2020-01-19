@@ -22,9 +22,6 @@ namespace ExamUI.Controllers
         [HttpPost]
         public IActionResult AddOrEdit(TeacherDto model)
         {
-            if (model == null)
-                return Json(new { success = false, message = "目标不能为空" });
-
             return userService.AddOrEdit(model) ? 
                 Json(new { success = true, message = "操作成功！" }) : Json(new { success = false, message = "操作失败！" });
         }
@@ -47,10 +44,11 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Lists(int? pageIndex = 0, int? pageSize = 10)
+        public IActionResult Lists(int? pageIndex = 1, int? pageSize = 10)
         {
             var lsts = userService.Lists(out int total, pageIndex, pageSize);
-            return Json(new { total, result = lsts });
+            ViewBag.AllRecords = total;
+            return View(lsts);
         }
     }
 }

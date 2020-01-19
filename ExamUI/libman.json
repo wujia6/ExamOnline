@@ -62,6 +62,36 @@
         "skin/default/loading-1.gif",
         "skin/default/loading-2.gif"
       ]
+    },
+    {
+      "library": "datatables@1.10.19",
+      "destination": "wwwroot/lib/datatables/",
+      "files": [
+        "js/jquery.dataTables.min.js",
+        "js/dataTables.bootstrap4.min.js",
+        "css/dataTables.bootstrap4.min.css"
+      ]
+    },
+    {
+      "library": "bootstrap-table@1.15.5",
+      "destination": "wwwroot/lib/bootstrap-table/",
+      "files": [
+        "bootstrap-table.min.js",
+        "extensions/toolbar/bootstrap-table-toolbar.min.js",
+        "locale/bootstrap-table-zh-CN.min.js",
+        "bootstrap-table.min.css"
+      ]
+    },
+    {
+      "library": "bootstrap-modal@2.2.6",
+      "destination": "wwwroot/lib/bootstrap-modal/",
+      "files": [
+        "js/bootstrap-modal.min.js",
+        "img/ajax-loader.gif",
+        "css/bootstrap-modal.min.css",
+        "css/bootstrap-modal-bs3patch.min.css",
+        "js/bootstrap-modalmanager.min.js"
+      ]
     }
   ]
 }
