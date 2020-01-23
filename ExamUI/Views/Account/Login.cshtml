@@ -14,9 +14,9 @@
     <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link href="~/lib/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap3-dialog/css/bootstrap-dialog.min.css" rel="stylesheet" />
     <link href="~/css/adminlte.min.css" rel="stylesheet" />
     @*<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">*@
-    <link href="~/lib/layer/skin/layer.css" rel="stylesheet" />
 </head>
 <body class="hold-transition login-page">
     <div class="login-box">
@@ -68,8 +68,8 @@
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
     <script src="~/js/adminlte.min.js"></script>
-    <script src="~/lib/layer/layer.js"></script>
     <script>
         $(function () {
             $.fn.serializeObject = function () {
@@ -95,7 +95,7 @@
                     data: $("#frmlogin").serializeObject(),
                     success: function (data) {
                         if (!data.success) {
-                            layer.open({ title: '提示信息',content: '操作失败',icon: 5 });  
+                            BootstrapDialog.show({ title: "系统提示", message: "登录失败，请重试" });
                             return;
                         }
                         window.location.href = encodeURI(data.path);

@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using System.Collections.Generic;
+
+namespace Domain.Entities
 {
     /// <summary>
     /// 性别
@@ -66,5 +68,16 @@
         admin=23,
         teacher=24,
         student=25
+    }
+
+    /// <summary>
+    /// 分页查询返回类
+    /// </summary>
+    public struct PageResult
+    {
+        //总记录数
+        public int Total { get; set; }
+        //分页数据
+        public IEnumerable<dynamic> Rows { get; set; }
     }
 }

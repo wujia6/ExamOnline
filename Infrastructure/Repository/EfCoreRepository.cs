@@ -23,98 +23,100 @@ namespace Infrastructure.Repository
         public IExamDbContext DBContext { get; private set; }
 
         #region Sync
-        public bool AddAt(T entity)
+        public bool SaveAs(T entity)
         {
             DBContext.Entry(entity).State = EntityState.Added;
             return true;
         }
         
-        public bool RemoveAt(T entity)
+        public bool RemoveAs(T entity)
         {
             DBContext.Entry(entity).State = EntityState.Deleted;
             return true;
         }
         
-        public bool ModifyAt(T entity)
+        public bool EditAs(T entity)
         {
             DBContext.Entry(entity).State = EntityState.Modified;
             return true;
         }
         
-        public T Single(ISpecification<T> spec, 
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public T Single(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             if (include != null)
                 query = include(query);
             return query.FirstOrDefault(spec.Expression);
         }
         
-        public IEnumerable<T> Lists(ISpecification<T> spec = null, 
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public IEnumerable<T> QuerySet(ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             if (include != null)
                 query = include(query);
             return spec == null ? query : query.Where(spec?.Expression);
         }
 
-        public IEnumerable<T> Lists(out int total, int? pageIndex = 1, int? pageSize = 10, 
-            ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public IEnumerable<T> Lists(
+            out int total, 
+            int? index, 
+            int? size, 
+            ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             if (include != null)
                 query = include(query);
             if (spec != null)
             {
-                var result = query.Where(spec.Expression).Skip((pageIndex.Value - 1) * pageSize.Value).Take(pageSize.Value);
+                var result = query.Where(spec.Expression).Skip((index.Value - 1) * size.Value).Take(size.Value);
                 total = result.Count();
                 return result;
             }
             else
             {
-                var result = query.Skip((pageIndex.Value - 1) * pageSize.Value).Take(pageSize.Value);
+                var result = query.Skip((index.Value - 1) * size.Value).Take(size.Value);
                 total = result.Count();
                 return result;
             }
         }
-
-        public IEnumerable<T> Paginator(
-            int? draw = 1, 
-            int? start = 0, 
-            int? length = 10, 
-            ISpecification<T> spec = null, 
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
 
         #region Async
-        public async Task<bool> AddAsync(T entity)
+        public async Task<bool> SaveAsync(T entity)
         {
-            return await Task.Run(() => this.AddAt(entity));
+            return await Task.Run(() => this.SaveAs(entity));
         }
 
         public async Task<bool> RemoveAsync(T entity)
         {
-            return await Task.Run(() => this.RemoveAt(entity));
+            return await Task.Run(() => this.RemoveAs(entity));
         }
 
-        public async Task<bool> ModifyAsync(T entity)
+        public async Task<bool> EditAsync(T entity)
         {
-            return await Task.Run(() => this.ModifyAt(entity));
+            return await Task.Run(() => this.EditAs(entity));
         }
 
-        public async Task<T> SingleAsync(ISpecification<T> spec, 
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<T> SingleAsync(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             return await Task.Run(() => this.Single(spec, include));
         }
 
-        public async Task<IEnumerable<T>> ListsAsync(ISpecification<T> spec = null, 
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<IEnumerable<T>> QuerySetAsync(ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return await Task.Run(() => this.Lists(spec, include));
+            return await Task.Run(() => this.QuerySet(spec, include));
         }
 
+        public async Task<PageResult> ListsAsync(
+            int? index,
+            int? size,
+            ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        {
+            return await Task.Run(() => new PageResult
+            {
+                Rows = this.Lists(out int total, index, size, spec, include),
+                Total = total
+            });
+        }
         #endregion
     }
 }

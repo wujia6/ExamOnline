@@ -24,13 +24,13 @@ namespace Domain.Manages
         {
             if (entity == null)
                 return false;
-            return entity.ID > 0 ? efCore.ModifyAt(entity) : efCore.AddAt(entity);
+            return entity.ID > 0 ? efCore.EditAs(entity) : efCore.SaveAs(entity);
         }
 
         public bool Remove(ISpecification<UserInfo> spec)
         {
             var entity = Single(spec);
-            return entity == null ? false : efCore.RemoveAt(entity);
+            return entity == null ? false : efCore.RemoveAs(entity);
         }
 
         public dynamic Single(ISpecification<UserInfo> spec, 
@@ -42,7 +42,7 @@ namespace Domain.Manages
         public IEnumerable<dynamic> Lists(ISpecification<UserInfo> spec = null, 
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
-            return efCore.Lists(spec, include);
+            return efCore.QuerySet(spec, include);
         }
 
         public IEnumerable<UserInfo> Lists(out int total, int? pageIndex = 0, int? pageSize = 10, 
@@ -69,13 +69,13 @@ namespace Domain.Manages
         {
             if (entity == null)
                 return false;
-            return entity.ID > 0 ? efCore.ModifyAt(entity) : efCore.AddAt(entity);
+            return entity.ID > 0 ? efCore.EditAs(entity) : efCore.SaveAs(entity);
         }
 
         public bool Remove(ISpecification<T> spec)
         {
             var entity = Single(spec);
-            return entity == null ? false : efCore.RemoveAt(entity);
+            return entity == null ? false : efCore.RemoveAs(entity);
         }
 
         public T Single(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)

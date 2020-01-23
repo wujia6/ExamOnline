@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Application.DTO.Models;
+using Domain.Entities;
 using Domain.Entities.RoleAgg;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -28,7 +29,10 @@ namespace Application.IServices
         Task<RoleDto> SingleAsync(Expression<Func<RoleInfo, bool>> express,
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null);
 
-        Task<List<RoleDto>> ListsAsync(Expression<Func<RoleInfo, bool>> express = null,
+        Task<PageResult> ListsAsync(
+            int? index = 1,
+            int? size = 10,
+            Expression<Func<RoleInfo, bool>> express = null,
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null);
     }
 }

@@ -3,13 +3,13 @@ namespace ExamUI.Filters
     /// <summary>
     /// 自定义Action返回类
     /// </summary>
-    public class XcHttpResult
+    public class ProcessResult
     {
         //结果
-        public bool result { get; set; }
+        public bool Success { get; set; }
         //信息
-        public string message { get; set; }
+        public string Message { get; set; }
         //跳转路径
-        public string path { get; set; }
+        public string Path { get; set; }
     }
 }

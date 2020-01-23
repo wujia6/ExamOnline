@@ -26,13 +26,13 @@ namespace Domain.Manages
         {
             if (entity == null)
                 return false;
-            return entity.ID > 0 ? efCore.AddAt(entity) : efCore.ModifyAt(entity);
+            return entity.ID > 0 ? efCore.SaveAs(entity) : efCore.EditAs(entity);
         }
 
         public bool Remove(ISpecification<T> spec)
         {
             var entity = Single(spec);
-            return entity == null ? false : efCore.RemoveAt(entity);
+            return entity == null ? false : efCore.RemoveAs(entity);
         }
 
         public T Single(ISpecification<T> spec = null, 
@@ -44,7 +44,7 @@ namespace Domain.Manages
         public IEnumerable<T> Lists(ISpecification<T> spec = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return efCore.Lists(spec, include);
+            return efCore.QuerySet(spec, include);
         }
     }
 

@@ -11,6 +11,7 @@ using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore.Query;
+using Domain.Entities;
 
 namespace Application.Services
 {
@@ -71,12 +72,16 @@ namespace Application.Services
             return MapToExtensions.MapTo<RoleDto>(entity);
         }
 
-        public async Task<List<RoleDto>> ListsAsync(Expression<Func<RoleInfo, bool>> express = null,
+        public async Task<PageResult> ListsAsync(
+            int? index,
+            int? size,
+            Expression<Func<RoleInfo, bool>> express = null,
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
         {
             var spec = Specification<RoleInfo>.Eval(express);
-            var lst = await roleManage.ListsAsync(spec, include);
-            return MapToExtensions.MapToList<RoleDto>(lst);
+            var result = await roleManage.ListsAsync(index,size,spec, include);
+            result.Rows = MapToExtensions.MapToList<RoleDto>(result.Rows);
+            return result;
         }
     }
 }

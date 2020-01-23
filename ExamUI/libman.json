@@ -51,28 +51,6 @@
       ]
     },
     {
-      "library": "layer@2.3",
-      "destination": "wwwroot/lib/layer/",
-      "files": [
-        "layer.js",
-        "skin/layer.css",
-        "skin/default/icon-ext.png",
-        "skin/default/icon.png",
-        "skin/default/loading-0.gif",
-        "skin/default/loading-1.gif",
-        "skin/default/loading-2.gif"
-      ]
-    },
-    {
-      "library": "datatables@1.10.19",
-      "destination": "wwwroot/lib/datatables/",
-      "files": [
-        "js/jquery.dataTables.min.js",
-        "js/dataTables.bootstrap4.min.js",
-        "css/dataTables.bootstrap4.min.css"
-      ]
-    },
-    {
       "library": "bootstrap-table@1.15.5",
       "destination": "wwwroot/lib/bootstrap-table/",
       "files": [
@@ -91,6 +69,14 @@
         "css/bootstrap-modal.min.css",
         "css/bootstrap-modal-bs3patch.min.css",
         "js/bootstrap-modalmanager.min.js"
+      ]
+    },
+    {
+      "library": "bootstrap3-dialog@1.35.4",
+      "destination": "wwwroot/lib/bootstrap3-dialog/",
+      "files": [
+        "js/bootstrap-dialog.min.js",
+        "css/bootstrap-dialog.min.css"
       ]
     }
   ]

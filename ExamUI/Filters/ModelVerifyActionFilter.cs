@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ExamUI.Filters
 {
@@ -20,15 +19,15 @@ namespace ExamUI.Filters
         {
             if (!context.ModelState.IsValid)
             {
-                var httpResult=new XcHttpResult{ result=false, path=string.Empty };
+                var httpResult = new ProcessResult{ Success=false, Path=string.Empty };
                 foreach (var item in context.ModelState.Values)
                 {
                     foreach (var error in item.Errors)
                     {
-                        httpResult.message+=error.ErrorMessage;
+                        httpResult.Message += error.ErrorMessage;
                     }
                 }
-                context.Result=new JsonResult(httpResult);
+                context.Result = new JsonResult(httpResult);
             }
         }
     }

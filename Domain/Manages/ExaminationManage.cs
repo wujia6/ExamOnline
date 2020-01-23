@@ -21,13 +21,13 @@ namespace Domain.Manages
         {
             if (entity == null)
                 return false;
-            return entity.ID > 0 ? efCore.ModifyAt(entity) : efCore.AddAt(entity);
+            return entity.ID > 0 ? efCore.EditAs(entity) : efCore.SaveAs(entity);
         }
 
         public bool Remove(ISpecification<ExaminationInfo> spec)
         {
             var entity = Single(spec);
-            return entity == null ? false : efCore.RemoveAt(entity);
+            return entity == null ? false : efCore.RemoveAs(entity);
         }
 
         public ExaminationInfo Single(ISpecification<ExaminationInfo> spec = null,
@@ -39,7 +39,7 @@ namespace Domain.Manages
         public IEnumerable<ExaminationInfo> Lists(ISpecification<ExaminationInfo> spec = null,
             Func<IQueryable<ExaminationInfo>, IIncludableQueryable<ExaminationInfo, object>> include = null)
         {
-            return efCore.Lists(spec, include);
+            return efCore.QuerySet(spec, include);
         }
     }
 }

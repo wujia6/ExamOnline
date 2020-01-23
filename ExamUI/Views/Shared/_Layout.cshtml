@@ -6,7 +6,9 @@
     <title>在线考试系统</title>
     @*import css*@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link href="~/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-modal/css/bootstrap-modal.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap3-dialog/css/bootstrap-dialog.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.css" />
     <link rel="stylesheet" href="~/css/adminlte.min.css" />
@@ -15,10 +17,13 @@
     @*import js*@
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="~/lib/bootstrap-modal/js/bootstrap-modal.min.js"></script>
+    <script src="~/lib/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
     <script src="~/js/adminlte.js"></script>
     <script src="~/lib/iCheck/icheck.js"></script>
     <script src="~/lib/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/js/comm.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -161,26 +166,7 @@
         <!-- 左侧菜单结束 -->
         <!-- 右侧内容开始 -->
         <div class="content-wrapper">
-            <!-- 网页头开始 -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0 text-dark">网页标题</h1>
-                        </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">主页</a></li>
-                                <li class="breadcrumb-item active">网页标题</li>
-                            </ol>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </div>
-            <!-- 网页头结束 -->
-            <section class="content">
-                @RenderBody()
-            </section>
+            @RenderBody()
         </div>
         <!-- 右侧内容结束 -->
         <!-- 下部开始 -->

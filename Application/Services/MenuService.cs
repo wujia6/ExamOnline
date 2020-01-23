@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Application.DTO.Models;
 using Application.IServices;
 using AutoMapper.Execution;
+using Domain.Entities;
 using Domain.Entities.MenuAgg;
 using Domain.IComm;
 using Domain.IManages;
@@ -24,11 +26,19 @@ namespace Application.Services
             this.context = cxt;
         }
 
-        public bool AddOrEdit(MenuDto model)
+        public bool Save(MenuDto model)
         {
             if (model == null)
                 return false;
-            return menuManage.AddOrEdit(model.MapTo<MenuInfo>());
+            var entity = model.MapTo<MenuInfo>();
+            return menuManage.Save(entity);
+        }
+
+        public bool Edit(MenuDto model)
+        {
+            if (model == null)
+                return false;
+            return menuManage.Edit(model.MapTo<MenuInfo>());
         }
 
         public bool Remove(Expression<Func<MenuInfo, bool>> express)
@@ -37,26 +47,40 @@ namespace Application.Services
             return menuManage.Remove(spec);
         }
 
-        public MenuDto FindBy(Expression<Func<MenuInfo, bool>> express)
+        public MenuDto Single(Expression<Func<MenuInfo, bool>> express)
         {
             var spec = Specification<MenuInfo>.Eval(express);
-            return menuManage.FindBy(spec).MapTo<MenuDto>();
+            return menuManage.Single(spec).MapTo<MenuDto>();
         }
 
         public List<MenuDto> Lists(
             out int total, 
-            int? pageIndex = 1, 
-            int? pageSize = 10, 
+            int? index = 1, 
+            int? size = 10, 
             Expression<Func<MenuInfo, bool>> express = null, 
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
             var spec = Specification<MenuInfo>.Eval(express);
-            return menuManage.Lists(out total, pageIndex, pageSize, spec, include).MapToList<MenuDto>();
+            return menuManage.Lists(out total, index, size, spec, include).MapToList<MenuDto>();
         }
 
-        public List<MenuDto> Paginator(int? draw = 1, int? start = 0, int? length = 10)
+        public async Task<List<MenuDto>> QueryByAsync(Expression<Func<MenuInfo, bool>> express)
         {
-            
+            var spec = Specification<MenuInfo>.Eval(express);
+            var menus = await menuManage.QueryByAsync(spec);
+            return menus.MapToList<MenuDto>();
+        }
+
+        public async Task<PageResult> ListsAsync(
+            int? index = 1, 
+            int? size = 10, 
+            Expression<Func<MenuInfo, bool>> express = null, 
+            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
+        {
+            var spec = Specification<MenuInfo>.Eval(express);
+            var result = await menuManage.ListsAsync(index, size, spec, include);
+            result.Rows = result.Rows.MapToList<MenuDto>();
+            return result;
         }
     }
 }
