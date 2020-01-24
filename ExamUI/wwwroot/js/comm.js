@@ -1,15 +1,6 @@
-﻿/* 对象 component
- * 初始化BootstrapTable组件
- * 
- * 属性
- * tableTarget：初始化表格对象
- * postUrl：请求地址
- * dataColumns：需要显示的数据列
- * 
- * 函数
- * queryParams：请求数据参数
- * initTable：初始化表格组件
- * */
+﻿//JS公用组件
+
+//table组件
 var dataTable = {
     //请求地址
     postUrl: '',
@@ -143,17 +134,44 @@ var bt_dialog = {
     }
 }
 
-/**
- * formClear 重置表单
- * @param {any} frm：表单对象
- */
-function formClear(frm) {
-    frm.find("input,select").each(function (index, element) {
-        if (element.type == "text")
-            element.val('');
-        else if (element.type == "hidden")
-            element.val('0');
-        else
-            element.selectedIndex = 0;
-    });
+//表单操作
+var form = {
+    /**
+     * clear 清空表单
+     * @param {any} frm
+     */
+    clear: function (frm) {
+        $(":input", frm).not(":button,:submit,:reset").val('')
+            .removeAttr("checked").removeAttr("selected");
+    },
+
+    /**
+     * load 加载表单数据
+     * @param {any} frm：表单对象
+     * @param {any} data：数据源
+     */
+    load: function (frm, json) {
+        if (frm == null || frm == 'undefined' || data == null || data == 'undefined') {
+            bt_dialog.show("错误提示", "表单或数据不能为空");
+            return;
+        }
+
+        $(":input", frm).not(":button,:submit,:reset").each(function () {
+            var v = Object.keys(json).find(this.getAttribute("name")).val();
+            if (v != null && v != 'undefined') 
+                this.val(v);
+        });
+    },
+
+    /**
+     * getJson 获取表单JSON对象
+     * @param {any} frm 表单对象
+     */
+    getJson: function (frm) {
+        if (frm == null || frm == 'undefined') {
+            bt_dialog.show("错误", "表单对象不能为空");
+            return;
+        }
+        return frm.serializeArray();
+    }
 }

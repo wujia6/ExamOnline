@@ -70,8 +70,17 @@
         //添加
         $("#btn_add").click(function () {
             bt_dialog.remoteLoad("添加菜单项", "~/Views/Menu/EditForm.cshtml", function (dialog) {
+                var frmData = dialog.getData("#frm_menu_edit").serializeArray();
                 $.ajax({
-
+                    url: "/Menu/EditForm",
+                    method: "post",
+                    data: frmData,
+                    success: function (result) {
+                        bt_dialog.show("提示", result.message);
+                    },
+                    error: function () {
+                        bt_dialog.show("提示", "请求服务器失败");
+                    }
                 })
             });
         });
@@ -118,7 +127,7 @@
                         bt_dialog.show("提示", "请求服务器失败");
                     }
                 });
-                dialog.close();
+                //dialog.close();
             });
         });
 

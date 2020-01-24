@@ -77,21 +77,21 @@
 
             //表单加载事件
             $("#frm_menu_edit").load(function () {
-                var obj = $.parseJSON(localStorage.getItem("RowData")); //获取localStorage中保存的行对象
-                if (obj != null) {
-                    $("#hd_key").val(obj.ID);
-                    $("#slt_menu_parent").val(obj.ParentID);
-                    $("#slt_menu_type").val(obj.MenuType);
-                    $("#txt_menu_title").val(obj.Title);
-                    $("#txt_menu_controller").val(obj.Controller);
-                    $("#txt_menu_action").val(obj.Action);
-                    $("#txt_menu_remarks").val(obj.Remarks);
+                var data = $.parseJSON(localStorage.getItem("RowData")); //获取localStorage中保存的行对象
+                if (data != null) {
+                    //$("#hd_key").val(obj.ID);
+                    //$("#slt_menu_parent").val(obj.ParentID);
+                    //$("#slt_menu_type").val(obj.MenuType);
+                    //$("#txt_menu_title").val(obj.Title);
+                    //$("#txt_menu_controller").val(obj.Controller);
+                    //$("#txt_menu_action").val(obj.Action);
+                    //$("#txt_menu_remarks").val(obj.Remarks);
+                    form.load(this, data);
                 }
                 localStorage.removeItem("RowData"); //本地存取方法使用之后，清除缓存避免不必要的错误
             })
         })
     </script>
 </body>
-
 </html>
 

@@ -43,8 +43,7 @@ namespace ExamUI.Controllers
         public IActionResult Remove(int id)
         {
             return menuService.Remove(express:m=>m.ID == id) ?
-                Json(new { success = true, message = "操作成功！" }) : 
-                Json(new { success = false, message = "操作失败！" });
+                Json(new { success = true, message = "操作成功！" }) : Json(new { success = false, message = "操作失败！" });
         }
 
         [HttpGet]
