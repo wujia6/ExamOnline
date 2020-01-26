@@ -26,7 +26,7 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg">用户登录</p>
-                <form id="frmlogin">
+                <form id="frm_account_login" role="form">
                     <div class="input-group mb-3">
                         <input type="text" name="UserAccount" class="form-control" placeholder="用户名">
                         <div class="input-group-append">
@@ -70,18 +70,9 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
     <script src="~/js/adminlte.min.js"></script>
+    <script src="~/js/comm.js"></script>
     <script>
         $(function () {
-            $.fn.serializeObject = function () {
-                var hasOwnProperty = Object.prototype.hasOwnProperty;
-                return this.serializeArray().reduce(function (data, pair) {
-                    if (!hasOwnProperty.call(data, pair.name)) {
-                        data[pair.name] = pair.value;
-                    }
-                    return data;
-                }, {});
-            };
-
             //刷新验证码
             $("#img_vcode").click(function () {
                 this.src = "/Account/VerifyCodeBuilder?t=" + new Date();
@@ -92,7 +83,7 @@
                 $.ajax({
                     type: 'post',
                     url: '/Account/Login',
-                    data: $("#frmlogin").serializeObject(),
+                    data: $("#frm_account_login").serializeObject(),
                     success: function (data) {
                         if (!data.success) {
                             BootstrapDialog.show({ title: "系统提示", message: "登录失败，请重试" });

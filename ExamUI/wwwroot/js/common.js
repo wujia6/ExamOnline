@@ -1,10 +1,20 @@
-﻿//JS公用组件
+﻿//JQuery序列化扩展方法
+$.fn.serializeObject = function () {
+    var hasOwnProperty = Object.prototype.hasOwnProperty;
+    return this.serializeArray().reduce(function (data, pair) {
+        if (!hasOwnProperty.call(data, pair.name)) {
+            data[pair.name] = pair.value;
+        }
+        return data;
+    }, {});
+};
+
+//JS公用组件
 
 //table组件
 var dataTable = {
     //请求地址
     postUrl: '',
-
     /**
      * 请求数据参数
      * @param {any} params：参数对象
@@ -14,13 +24,10 @@ var dataTable = {
         params.size = this.pageSize;
         return params;
     },
-
     //表格对象
     tableTarget: null,
-
     //数据列
     dataColumns: [],
-
     /**初始化 */
     initTable: function () {
         if (this.tableTarget == null) {
@@ -66,6 +73,18 @@ var dataTable = {
 var bt_dialog = {
     /**
      * 信息弹框
+     * @param {any} msg 弹框消息
+     */
+    alert: function (msg) {
+        BootstrapDialog.alert({
+            type: "BootStrapDialog.TYPE_WARNING",
+            title: "错误提示",
+            message: msg,
+            btnOKLabel:"确定"
+        });
+    },
+    /**
+     * 信息弹框
      * @param {any} title：窗口标题
      * @param {any} msg：提示消息
      */
@@ -82,7 +101,6 @@ var bt_dialog = {
             }],
         })
     },
-
     /**
      * 确认弹框
      * @param {any} msg：提示消息
@@ -91,7 +109,7 @@ var bt_dialog = {
     confirm: function (msg, funcBack) {
         BootstrapDialog.confirm({
             type: BootstrapDialog.TYPE_WARNING,
-            title: '警告提示',
+            title: '警告',
             message: msg,
             closable: true,
             draggable: true,
@@ -101,14 +119,14 @@ var bt_dialog = {
             callback: funcBack.call()
         })
     },
-
     /**
      * 加载url弹框
      * @param {any} title：窗口标题
      * @param {any} url: 远程路径
+     * @param {any} parms：绑定到dialog数据对象（JSON）
      * @param {any} success：提交事件（回调方法）
      */
-    remoteLoad: function (title, url, success) {
+    remoteLoad: function (title, url, databind, success) {
         BootstrapDialog.show({
             type: BootstrapDialog.TYPE_DEFAULT,
             size: BootstrapDialog.SIZE_WIDE,
@@ -129,7 +147,42 @@ var bt_dialog = {
                 label: '<i class="fa fa-check"></i> 提交',
                 cssClass: 'btn btn-primary',
                 action: function (dialog) { success(dialog); }
-            }]
+            }],
+            onshown: function (dialog) {
+                if (databind != null && databind != "undefined") {
+                    var frmTarget = dialog.getModalBody().find("form");
+                    form.load(frmTarget, databind);
+                }
+            }
+        });
+    },
+    /**
+     * 加载url弹框
+     * @param {any} parms 绑定到dialog参数对象
+     */
+    loadUrl: function (parms) {
+        BootstrapDialog.show({
+            type: BootstrapDialog.TYPE_DEFAULT,
+            size: BootstrapDialog.SIZE_WIDE,
+            title: parms.title,
+            cssClass: "fade",
+            closeable: false,
+            data: { 'pageToLoad': parms.url },
+            message: function (dialog) {
+                var $message = $('<div></div>');
+                var pageToLoad = dialog.getData('pageToLoad');
+                $message.load(pageToLoad);
+                return $message;
+            },
+            buttons: [{
+                label: '<i class="fa fa-close"></i> 取消',
+                action: function (dialog) { dialog.close(); }
+            }, {
+                label: '<i class="fa fa-check"></i> 提交',
+                cssClass: 'btn btn-primary',
+                action: function (dialog) { parms.event_submit(dialog); }
+            }],
+            onshown: function (dialog) { parms.event_showed(dialog); }
         });
     }
 }
@@ -141,10 +194,8 @@ var form = {
      * @param {any} frm
      */
     clear: function (frm) {
-        $(":input", frm).not(":button,:submit,:reset").val('')
-            .removeAttr("checked").removeAttr("selected");
+        $(":input", frm).not(":button,:submit,:reset").val('').removeAttr("checked").removeAttr("selected");
     },
-
     /**
      * load 加载表单数据
      * @param {any} frm：表单对象
@@ -155,19 +206,17 @@ var form = {
             bt_dialog.show("错误提示", "表单或数据不能为空");
             return;
         }
-
         $(":input", frm).not(":button,:submit,:reset").each(function () {
             var v = Object.keys(json).find(this.getAttribute("name")).val();
             if (v != null && v != 'undefined') 
                 this.val(v);
         });
     },
-
     /**
      * getJson 获取表单JSON对象
      * @param {any} frm 表单对象
      */
-    getJson: function (frm) {
+    getJsonObject: function (frm) {
         if (frm == null || frm == 'undefined') {
             bt_dialog.show("错误", "表单对象不能为空");
             return;

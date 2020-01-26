@@ -33,7 +33,7 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditForm(MenuDto model)
+        public IActionResult Edit(MenuDto model)
         {
             bool isOk = model.ID == 0 ? menuService.Save(model) : menuService.Edit(model);
             return isOk ? Json(new { success = true, message = "提交成功！" }) : Json(new { success = false, message = "提交失败！" });
