@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     /// <summary>
     /// 性别
@@ -78,6 +76,6 @@ namespace Domain.Entities
         //总记录数
         public int Total { get; set; }
         //分页数据
-        public IEnumerable<dynamic> Rows { get; set; }
+        public dynamic Rows { get; set; }
     }
 }

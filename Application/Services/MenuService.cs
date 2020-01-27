@@ -64,6 +64,31 @@ namespace Application.Services
             return menuManage.Lists(out total, index, size, spec, include).MapToList<MenuDto>();
         }
 
+        public async Task<bool> SaveAsync(MenuDto model)
+        {
+            var entity = model.MapTo<MenuInfo>();
+            return await menuManage.SaveAsync(entity);
+        }
+
+        public async Task<bool> EditAsync(MenuDto model)
+        {
+            var entity = model.MapTo<MenuInfo>();
+            return await menuManage.EditAsync(entity);
+        }
+
+        public async Task<bool> RemoveAsync(Expression<Func<MenuInfo, bool>> express)
+        {
+            var spec = Specification<MenuInfo>.Eval(express);
+            return await menuManage.RemoveAsync(spec);
+        }
+
+        public async Task<MenuDto> SingleAsync(Expression<Func<MenuInfo, bool>> express)
+        {
+            var spec = Specification<MenuInfo>.Eval(express);
+            var entity = await menuManage.SingleAsync(spec);
+            return entity.MapTo<MenuDto>();
+        }
+
         public async Task<List<MenuDto>> QueryByAsync(Expression<Func<MenuInfo, bool>> express)
         {
             var spec = Specification<MenuInfo>.Eval(express);

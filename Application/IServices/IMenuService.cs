@@ -50,11 +50,39 @@ namespace Application.IServices
         /// <param name="include">关联属性</param>
         /// <returns></returns>
         List<MenuDto> Lists(
-            out int total, 
-            int? index = 1, 
+            out int total,
+            int? index = 1,
             int? size = 10,
             Expression<Func<MenuInfo, bool>> express = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
+
+        /// <summary>
+        /// 保存
+        /// </summary>
+        /// <param name="model">实体对象</param>
+        /// <returns></returns>
+        Task<bool> SaveAsync(MenuDto model);
+
+        /// <summary>
+        /// 编辑
+        /// </summary>
+        /// <param name="model">实体对象</param>
+        /// <returns></returns>
+        Task<bool> EditAsync(MenuDto model);
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="spec">表达式对象</param>
+        /// <returns></returns>
+        Task<bool> RemoveAsync(Expression<Func<MenuInfo, bool>> express);
+
+        /// <summary>
+        /// 获取单个模型
+        /// </summary>
+        /// <param name="express">表达式对象</param>
+        /// <returns></returns>
+        Task<MenuDto> SingleAsync(Expression<Func<MenuInfo, bool>> express);
 
         /// <summary>
         /// 获取集合

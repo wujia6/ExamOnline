@@ -19,17 +19,26 @@ namespace ExamUI.Controllers
         }
         
         [HttpGet]
-        public IActionResult Lists(string type = "", string title = "", int? index = 1, int? size = 10)
+        public async Task<IActionResult> Lists(int? index = 1, int? size = 10, string type = "", string title = "")
         {
             Expression<Func<MenuInfo, bool>> express = null;
             if (!string.IsNullOrEmpty(title) && string.IsNullOrEmpty(type))
-                express = m => m.Title == title;
+                express = m => m.Title.Contains(title);
             else if (!string.IsNullOrEmpty(type) && string.IsNullOrEmpty(title))
-                express = m => m.MenuType.ToString() == type;
+                express = m => m.MenuType.ToString().Contains(title);
             else if (!string.IsNullOrEmpty(title) && !string.IsNullOrEmpty(type))
-                express = m => m.Title == title && m.MenuType.ToString() == type;
-            var result = menuService.Lists(out int total, index, size, express);
-            return Json(new { total, rows = result });
+                express = m => m.Title.Contains(title) && m.MenuType.ToString().Contains(type);
+            var result = await menuService.ListsAsync(index, size, express);
+            return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult Add(MenuDto model)
+        {
+            if (model == null)
+                return Json(new { success = false, message = "请添加有效数据" });
+            return menuService.Save(model) ? 
+                Json(new { success = true, message = "添加成功" }) : Json(new { success = false, message = "添加失败，请重试" });
         }
 
         [HttpPost]

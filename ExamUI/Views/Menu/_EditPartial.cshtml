@@ -1,72 +1,47 @@
-﻿
-<div class="modal-header">
-    <h4 id="modal_fance_title" class="modal-title"></h4>
-    <input type="button" class="close" data-dismiss="modal" aria-hidden="true" value="&times;" />
-</div>
-<div class="modal-body">
-    <!-- form start -->
-    @*<form id="frm_menu_edit" role="form">*@
-        <div class="card-body">
-            <div class="form-group">
-                <input type="hidden" id="hd_key" name="ID" value="0" />
-                <label for="lab_parent">父节点</label>
-                <select id="slt_menu_parent" name="ParentID" multiple class="custom-select"></select>
-            </div>
-            <div class="form-group">
-                <label for="lab_menutype">类型</label>
-                <select id="slt_menu_type" name="MenuType" multiple class="custom-select">
-                    <option value="20">menu</option>
-                    <option value="21">module</option>
-                    <option value="22">action</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="lab_title">标题</label>
-                <input id="txt_menu_title" name="Title" class="form-control" placeholder="菜单标题" />
-            </div>
-            <div class="form-group">
-                <label for="lab_controller">模块</label>
-                <input id="txt_menu_controller" name="Controller" class="form-control" placeholder="所属模块" />
-            </div>
-            <div class="form-group">
-                <label for="lab_action">功能</label>
-                <input id="txt_menu_action" name="Action" class="form-control" placeholder="功能名称" />
-            </div>
-            <div class="form-group">
-                <label for="lab_remarks">备注</label>
-                <input id="txt_menu_remarks" name="Remarks" class="form-control" placeholder="菜单备注" />
-            </div>
+﻿<!-- form start -->
+<form id="frm_menu_edit" role="form">
+    <div class="card-body">
+        <div class="form-group">
+            <input type="hidden" id="hd_key" name="ID" value="0" />
+            <label for="lab_parent">父节点</label>
+            <select id="slt_menu_parent" name="ParentID" multiple class="custom-select"></select>
         </div>
-    @*</form>*@
-    <!-- form end -->
-</div>
+        <div class="form-group">
+            <label for="lab_menutype">类型</label>
+            <select id="slt_menu_type" name="MenuType" multiple class="custom-select">
+                <option value="20">menu</option>
+                <option value="21">module</option>
+                <option value="22">action</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lab_title">标题</label>
+            <input id="txt_menu_title" name="Title" class="form-control" placeholder="菜单标题" />
+        </div>
+        <div class="form-group">
+            <label for="lab_controller">模块</label>
+            <input id="txt_menu_controller" name="Controller" class="form-control" placeholder="所属模块" />
+        </div>
+        <div class="form-group">
+            <label for="lab_action">功能</label>
+            <input id="txt_menu_action" name="Action" class="form-control" placeholder="功能名称" />
+        </div>
+        <div class="form-group">
+            <label for="lab_remarks">备注</label>
+            <input id="txt_menu_remarks" name="Remarks" class="form-control" placeholder="菜单备注" />
+        </div>
+    </div>
+</form>
+<!-- form end -->
 <script>
     $(function () {
-        //初始化下拉列表框
-        $("#slt_menu_parent").load(function () {
-            $.ajax({
-                url: "/Menu/ParentsAsync",
-                method: "get",
-                data: { "pid": 0 },
-                success: function (result) {
-                    var data = $.parseJSON(result);
-                    $("#slt_menu_parent").html("").each(data, function (index, dom) {
-                        $("#slt_menu_parent").append($("<option value=\"" + dom.ID + "\">" + data[index].Name + "</option>"));
-                    });
-                },
-                error: function () {
-                    bt_dialog.show("提示", "控件初始化失败");
-                }
-            })
-        });
-
         //表单加载事件
-        $("#frm_menu_edit").load(function () {
-            var data = $.parseJSON(localStorage.getItem("RowData")); //获取localStorage中保存的行对象
-            bt_dialog.getData("binding")
-            if (data != null)
-                form.load($(this), data);
-            localStorage.removeItem("RowData"); //本地存取方法使用之后，清除缓存避免不必要的错误
-        });
+        //$("#frm_menu_edit").load(function () {
+        //    var data = $.parseJSON(localStorage.getItem("RowData")); //获取localStorage中保存的行对象
+        //    bt_dialog.getData("binding")
+        //    if (data != null)
+        //        form.load($(this), data);
+        //    localStorage.removeItem("RowData"); //本地存取方法使用之后，清除缓存避免不必要的错误
+        //});
     })
 </script>

@@ -43,35 +43,34 @@
         </div>
     </div>
 </section>
-@*<div class="modal fade" role="dialog" aria-labelledby="modal_fence_title" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            @{ await Html.RenderPartialAsync("~/Views/Menu/_EditPartial.cshtml"); }
-        </div>
-    </div>
-</div>*@
 
 <script>
     $(function () {
         //查询
         $("#btn_query").click(function () {
-            dataTable.postUrl = "/Menu/Lists";
-            dataTable.queryParams({
-                "type": $("#txt_type").val(),
-                "title": $("#txt_title").val()
+            initalizeTable({
+                tableTarget: $("#tab_menus"),
+                postUrl: "/Menu/Lists",
+                queryParams: function (params) {
+                    var parms = {
+                        index: params.pageNumber,
+                        size: params.pageSize,
+                        type: $("#txt_type").val(),
+                        title: $("#txt_title").val()
+                    }
+                    return parms;
+                },
+                dataColumns: [
+                    { checkbox: true },
+                    { field: "ID", title: "编号" },
+                    { field: "ParentID", title: "父节点" },
+                    { field: "MenuType", title: "类型" },
+                    { field: "Title", title: "标题" },
+                    { field: "Controller", title: "模块" },
+                    { field: "Action", title: "功能" },
+                    { field: "Remarks", title: "备注" }
+                ]
             });
-            dataTable.tableTarget = $("#tab_menus");
-            dataTable.dataColumns = [
-                { checkbox: true },
-                { field: "ID", title: "编号" },
-                { field: "ParentID", title: "父节点" },
-                { field: "MenuType", title: "类型" },
-                { field: "Title", title: "标题" },
-                { field: "Controller", title: "模块" },
-                { field: "Action", title: "功能" },
-                { field: "Remarks", title: "备注" }
-            ];
-            dataTable.initTable();
         });
 
         //添加
@@ -79,7 +78,22 @@
             bt_dialog.loadUrl({
                 title: "添加菜单项",
                 url: "~/Views/Menu/_EditPartial.cshtml",
-                event_submit: saveAs
+                event_submit: function (dialog) {
+                    var frm = dialog.getModalBody().find("form");
+                    $.ajax({
+                        url: "/Menu/Add",
+                        method: "post",
+                        data: frm.serializeArray(),
+                        success: function (result) {
+                            bt_dialog.information(result.message);
+                            if (result.success) 
+                                form.clear(frm);
+                        },
+                        error: function () {
+                            bt_dialog.error("未知错误，请重试");
+                        }
+                    })
+                }
             });
         });
 
@@ -87,18 +101,48 @@
         $("#btn_edit").click(function () {
             var selectRows = $("#tab_menus").bootstrapTable("getSelections");   //获取选择项
             if (selectRows.length != 1) {
-                bt_dialog.alert("请选择有效数据,一次只能编辑一行");
+                bt_dialog.error("请选择有效数据,一次只能编辑一行");
                 return;
             }
             //localStorage.setItem("RowData", selectRows[0].serializeObject()); //行对象存入本地localStorage
             //打开url加载
-            bt_dialog.loadUrl({
+            bt_dialog.remoteUrl({
                 title: "编辑菜单项",
                 url: "~/Views/Menu/_EditPartial.cshtml",
-                event_submit: saveAs,
+                event_submit: function (dialog) {
+                    var frm = dialog.getModalBody().find("form");
+                    $.ajax({
+                        url: "/Menu/Edit",
+                        method: "post",
+                        data: frm.serializeArray(),
+                        success: function (result) {
+                            bt_dialog.information(result.message);
+                            if (result.success)
+                                form.clear(frm);
+                        },
+                        error: function () {
+                            bt_dialog.error("未知错误，请重试");
+                        }
+                    });
+                },
                 event_showed: function (dialog) {
+                    var slt = dialog.getModalBody().find("#slt_menu_parent");
+                    $.ajax({
+                        url: "/Menu/ParentsAsync",
+                        method: "get",
+                        data: { "pid": 0 },
+                        success: function (result) {
+                            var data = $.parseJSON(result);
+                            slt.html("").each(data, function (index, dom) {
+                                slt.append($("<option value=\"" + dom.ID + "\">" + data[index].Name + "</option>"));
+                            });
+                        },
+                        error: function () {
+                            bt_dialog.error("控件初始化失败");
+                        }
+                    });
                     if (selectRows[0] != null && selectRows[0] != "undefined") {
-                        var frm = dialog.getModalBody().find("#frm_menu_edit");
+                        var frm = dialog.getModalBody().find("form");
                         form.load(frm, selectRows[0]);
                     }
                 }
@@ -107,26 +151,34 @@
 
         //删除
         $("#btn_remove").click(function () {
-
-        });
-
-        //保存
-        function saveAs(dialog) {
-            var frm = dialog.getModalBody().find("#frm_menu_edit");
-            $.ajax({
-                url: "/Menu/Edit",
-                method: "post",
-                data: frm.serializeArray(),
-                success: function (result) {
-                    bt_dialog.show("提示", result.message);
-                    if (result.success)
-                        form.clear(frm);
-                },
-                error: function () {
-                    bt_dialog.alert("未知错误，请重试");
+            var selectRows = $("#tab_menus").bootstrapTable("getSelections");
+            if (selectRows.length == 0 || selectRows == "undefined") {
+                bt_dialog.error("请选择有效数据");
+                return;
+            }
+            bt_dialog.confirm("确认删除选中数据？", function (res) {
+                if (res) {
+                    var ids = [];
+                    for (var key in selectRows)
+                        ids.push(selectRows[key].uniqueId);
+                    $.ajax({
+                        url: "/Menu/Remove",
+                        method: "post",
+                        traditional: true,
+                        data: { "keys": ids },
+                        success: function (result) {
+                            bt_dialog.information(result.message);
+                            if (result.success) {
+                                $("#tab_menus").bootstrapTable("refresh");
+                            }
+                        },
+                        error: function () {
+                            bt_dialog.error("未知错误，请重试");
+                        }
+                    });
                 }
             });
-        }
+        });
     })
 </script>
 

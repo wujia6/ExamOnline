@@ -56,6 +56,34 @@ namespace Domain.IManages
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
 
         /// <summary>
+        /// 保存
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+        /// <returns></returns>
+        Task<bool> SaveAsync(MenuInfo entity);
+
+        /// <summary>
+        /// 编辑
+        /// </summary>
+        /// <param name="entity">实体对象</param>
+        /// <returns></returns>
+        Task<bool> EditAsync(MenuInfo entity);
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="spec">规约对象</param>
+        /// <returns></returns>
+        Task<bool> RemoveAsync(ISpecification<MenuInfo> spec);
+
+        /// <summary>
+        /// 获取单个模型
+        /// </summary>
+        /// <param name="spec">规约对象</param>
+        /// <returns></returns>
+        Task<MenuInfo> SingleAsync(ISpecification<MenuInfo> spec);
+
+        /// <summary>
         /// 获取集合（异步）
         /// </summary>
         /// <param name="spec">规约对象</param>

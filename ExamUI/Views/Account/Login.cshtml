@@ -70,7 +70,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
     <script src="~/js/adminlte.min.js"></script>
-    <script src="~/js/comm.js"></script>
+    <script src="~/js/common.js"></script>
     <script>
         $(function () {
             //刷新验证码
@@ -83,10 +83,10 @@
                 $.ajax({
                     type: 'post',
                     url: '/Account/Login',
-                    data: $("#frm_account_login").serializeObject(),
+                    data: $("#frm_account_login").serializeArray(),
                     success: function (data) {
                         if (!data.success) {
-                            BootstrapDialog.show({ title: "系统提示", message: "登录失败，请重试" });
+                            bt_dialog.error("登录失败，请重试");
                             return;
                         }
                         window.location.href = encodeURI(data.path);

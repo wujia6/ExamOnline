@@ -50,6 +50,27 @@ namespace Domain.Manages
             return efCore.Lists(out total, index, size, spec, include);
         }
 
+        public async Task<bool> SaveAsync(MenuInfo entity)
+        {
+            return await efCore.SaveAsync(entity);
+        }
+
+        public async Task<bool> EditAsync(MenuInfo entity)
+        {
+            return await efCore.EditAsync(entity);
+        }
+
+        public async Task<bool> RemoveAsync(ISpecification<MenuInfo> spec)
+        {
+            var entity = await SingleAsync(spec);
+            return await efCore.RemoveAsync(entity);
+        }
+
+        public async Task<MenuInfo> SingleAsync(ISpecification<MenuInfo> spec)
+        {
+            return await efCore.SingleAsync(spec);
+        }
+
         public async Task<IEnumerable<MenuInfo>> QueryByAsync(ISpecification<MenuInfo> spec)
         {
             return await efCore.QuerySetAsync(spec);
