@@ -40,6 +40,13 @@ namespace Domain.IManages
         MenuInfo Single(ISpecification<MenuInfo> spec);
 
         /// <summary>
+        /// 获取集合
+        /// </summary>
+        /// <param name="spec">规约对象</param>
+        /// <returns></returns>
+        IEnumerable<MenuInfo> QuerySet(ISpecification<MenuInfo> spec);
+
+        /// <summary>
         /// 获取分页集合
         /// </summary>
         /// <param name="total">分页总记录</param>
@@ -50,31 +57,10 @@ namespace Domain.IManages
         /// <returns></returns>
         IEnumerable<MenuInfo> Lists(
             out int total, 
-            int? index = 1, 
-            int? size = 10,
+            int? index, 
+            int? size,
             ISpecification<MenuInfo> spec = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
-
-        /// <summary>
-        /// 保存
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-        /// <returns></returns>
-        Task<bool> SaveAsync(MenuInfo entity);
-
-        /// <summary>
-        /// 编辑
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-        /// <returns></returns>
-        Task<bool> EditAsync(MenuInfo entity);
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="spec">规约对象</param>
-        /// <returns></returns>
-        Task<bool> RemoveAsync(ISpecification<MenuInfo> spec);
 
         /// <summary>
         /// 获取单个模型
@@ -88,7 +74,7 @@ namespace Domain.IManages
         /// </summary>
         /// <param name="spec">规约对象</param>
         /// <returns></returns>
-        Task<IEnumerable<MenuInfo>> QueryByAsync(ISpecification<MenuInfo> spec);
+        Task<IEnumerable<MenuInfo>> QuerySetAsync(ISpecification<MenuInfo> spec);
 
         /// <summary>
         /// 获取分页集合（异步）
@@ -98,10 +84,10 @@ namespace Domain.IManages
         /// <param name="spec">规约对象</param>
         /// <param name="include">关联属性</param>
         /// <returns></returns>
-        Task<PageResult> ListsAsync(
-            int? index, 
-            int? size, 
-            ISpecification<MenuInfo> spec = null, 
+        Task<PageResult<MenuInfo>> ListsAsync(
+            int? index,
+            int? size,
+            ISpecification<MenuInfo> spec = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
     }
 }

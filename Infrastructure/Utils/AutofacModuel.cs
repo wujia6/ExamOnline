@@ -26,12 +26,12 @@ namespace Infrastructure.Utils
                 builder.RegisterGeneric(typeof(EfCoreRepository<>))
                     .As(typeof(IEfCoreRepository<>)).InstancePerLifetimeScope();
                 //注册领域层服务
-                builder.RegisterAssemblyTypes(Common.Instance.GetAssembly("Domain"))
+                builder.RegisterAssemblyTypes(ApplicationFactory.GetAssembly("Domain"))
                     .Where(tp => tp.Name.EndsWith("Manage") && !tp.IsInterface && !tp.IsAbstract)
                     .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();
                 //注册应用层服务
-                builder.RegisterAssemblyTypes(Common.Instance.GetAssembly("Application"))
+                builder.RegisterAssemblyTypes(ApplicationFactory.GetAssembly("Application"))
                     .Where(tp => tp.Name.EndsWith("Service") && !tp.IsInterface && !tp.IsAbstract)
                     .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();

@@ -61,14 +61,14 @@ namespace Domain.Manages
         {
             if (entity == null)
                 return false;
-            var entitySet = efCore.DBContext.Set<T>();
+            var entitySet = efCore.ApplicationContext.Set<T>();
             return (entity.ID > 0 ? entitySet.Update(entity) : entitySet.Add(entity)) != null;
         }
 
         public IEnumerable<T> Lists<T>(ISpecification<T> spec = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null) where T : BaseEntity
         {
-            IQueryable<T> query = efCore.DBContext.Set<T>();
+            IQueryable<T> query = efCore.ApplicationContext.Set<T>();
             if (include!=null)
                 query = include(query);
             return query.Where(spec.Expression);
@@ -77,13 +77,13 @@ namespace Domain.Manages
         public bool Remove<T>(ISpecification<T> spec) where T : BaseEntity
         {
             var entity = Single(spec);
-            return entity == null ? false : efCore.DBContext.Set<T>().Remove(entity) != null;
+            return entity == null ? false : efCore.ApplicationContext.Set<T>().Remove(entity) != null;
         }
 
         public T Single<T>(ISpecification<T> spec = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null) where T : BaseEntity
         {
-            return include?.Invoke(efCore.DBContext.Set<T>()).FirstOrDefault(spec.Expression);
+            return include?.Invoke(efCore.ApplicationContext.Set<T>()).FirstOrDefault(spec.Expression);
         }
     }
 }

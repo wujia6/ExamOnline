@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace Domain.Entities
+namespace Infrastructure.EfCore
 {
     /// <summary>
     /// 延时加载扩展类

@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Reflection;
+using System.Runtime.Loader;
 
-namespace Domain.Entities
+namespace Infrastructure.Utils
 {
-    /// <summary>
-    /// 实体创建工厂类
-    /// </summary>
-    public static class EntityFactory
+    public class ApplicationFactory
     {
         /// <summary>
         /// 创建对象
@@ -13,7 +12,7 @@ namespace Domain.Entities
         /// <typeparam name="T">类型</typeparam>
         /// <param name="parms">可变参数</param>
         /// <returns></returns>
-        public static T Create<T>(params object[] parms)
+        public static T Create<T>(params object[] parms) where T : class
         {
             Type tp = typeof(T);
             var obj = Activator.CreateInstance(typeof(T));
@@ -38,10 +37,21 @@ namespace Domain.Entities
         /// <typeparam name="T">对象类型</typeparam>
         /// <param name="func">委托(回调方法)</param>
         /// <returns></returns>
-        public static T Create<T>(Func<T,T> func)
+        public static T Create<T>(Func<T, T> func) where T : class
         {
             T TClass = (T)Activator.CreateInstance(typeof(T));
             return func(TClass);
+        }
+
+        /// <summary>
+        /// 获取指定程序集对象
+        /// </summary>
+        /// <param name="assemblyName">程序集名称</param>
+        /// <returns></returns>
+        public static Assembly GetAssembly(string assemblyName)
+        {
+            var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(AppContext.BaseDirectory + $"{assemblyName}.dll");
+            return assembly;
         }
     }
 }

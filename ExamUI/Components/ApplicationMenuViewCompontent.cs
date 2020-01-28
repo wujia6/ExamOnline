@@ -36,7 +36,7 @@ namespace ExamUI.Components
             //缓存角色菜单
             if (!appCache.TryGetValue("ApplicationMenus",out object cacheValue))
             {
-                var lst= FindMenuBy(roles);
+                var lst= ReadMenusBy(roles);
                 appCache.Set("ApplicationMenus", lst, new MemoryCacheEntryOptions
                 {
                     AbsoluteExpiration = DateTime.Now.AddMinutes(2),  //设置缓存绝对过期时间
@@ -52,7 +52,7 @@ namespace ExamUI.Components
         /// </summary>
         /// <param name="roles">角色字符串</param>
         /// <returns></returns>
-        private List<MenuDto> FindMenuBy(string roles)
+        private List<MenuDto> ReadMenusBy(string roles)
         {
             List<MenuDto> menus = null;
             if (roles.IndexOf(',') > 0)

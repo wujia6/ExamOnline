@@ -7,6 +7,7 @@ using Domain.Entities.MenuAgg;
 using Domain.Entities.RoleAgg;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
+using Infrastructure.Utils;
 
 namespace Infrastructure.EfCore
 {
@@ -53,21 +54,21 @@ namespace Infrastructure.EfCore
         {
             if (context.Roles.Any())
                 return;
-            context.Roles.Add(EntityFactory.Create<RoleInfo>(func: r =>
+            context.Roles.Add(ApplicationFactory.Create<RoleInfo>(func: r =>
             {
                 r.Name = "管理员";
                 r.Code = "admin";
                 r.Remarks = "暂无";
                 return r;
             }));
-            context.Roles.Add(EntityFactory.Create<RoleInfo>(func: r =>
+            context.Roles.Add(ApplicationFactory.Create<RoleInfo>(func: r =>
             {
                 r.Name = "教师";
                 r.Code = "teacher";
                 r.Remarks = "暂无";
                 return r;
             }));
-            context.Roles.Add(EntityFactory.Create<RoleInfo>(func: r =>
+            context.Roles.Add(ApplicationFactory.Create<RoleInfo>(func: r =>
             {
                 r.Name = "学生";
                 r.Code = "student";
@@ -88,86 +89,86 @@ namespace Infrastructure.EfCore
             var roleMenus = new List<RoleMenu>
             {
                 #region admin
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=1;
                     e.MenuInfomation.ID=1;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=1;
                     e.MenuInfomation.ID=2;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=1;
                     e.MenuInfomation.ID=3;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=1;
                     e.MenuInfomation.ID=4;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=1;
                     e.MenuInfomation.ID=5;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=1;
                     e.MenuInfomation.ID=6;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=1;
                     e.MenuInfomation.ID=7;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=1;
                     e.MenuInfomation.ID=8;
                     return e;
                 }),
                 #endregion
                 #region teacher
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=2;
                     e.MenuInfomation.ID=1;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=2;
                     e.MenuInfomation.ID=3;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=2;
                     e.MenuInfomation.ID=5;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=2;
                     e.MenuInfomation.ID=6;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=2;
                     e.MenuInfomation.ID=7;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=2;
                     e.MenuInfomation.ID=8;
                     return e;
                 }),
                 #endregion
                 #region student
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=3;
                     e.MenuInfomation.ID=1;
                     return e;
                 }),
-                EntityFactory.Create<RoleMenu>(func:e=>{
+                ApplicationFactory.Create<RoleMenu>(func:e=>{
                     e.RoleInfomation.ID=3;
                     e.MenuInfomation.ID=6;
                     return e;
@@ -189,7 +190,7 @@ namespace Infrastructure.EfCore
         {
             if (context.Classes.Any())
                 return;
-            context.Classes.Add(EntityFactory.Create<ClassInfo>(func: cls =>
+            context.Classes.Add(ApplicationFactory.Create<ClassInfo>(func: cls =>
             {
                 cls.Remarks = "暂无";
                 cls.Name = "1701";
@@ -211,7 +212,7 @@ namespace Infrastructure.EfCore
             if (context.Admins.Any())
                 return;
             //初始化管理员数据
-            context.Admins.Add(EntityFactory.Create<AdminInfo>(func: adm =>
+            context.Admins.Add(ApplicationFactory.Create<AdminInfo>(func: adm =>
             {
                 adm.Remarks = "系统管理员";
                 adm.Account = "sysadmin";
@@ -223,7 +224,7 @@ namespace Infrastructure.EfCore
                 return adm;
             }));
             //初始化教师数据
-            context.Teachers.Add(EntityFactory.Create<TeacherInfo>(func: thr =>
+            context.Teachers.Add(ApplicationFactory.Create<TeacherInfo>(func: thr =>
             {
                 thr.Remarks = "C语言教师";
                 thr.Account = "teacher1";
@@ -237,7 +238,7 @@ namespace Infrastructure.EfCore
                 return thr;
             }));
             //初始化学生数据
-            context.Students.Add(EntityFactory.Create<StudentInfo>(func: stu =>
+            context.Students.Add(ApplicationFactory.Create<StudentInfo>(func: stu =>
             {
                 stu.Remarks = "学生";
                 stu.Account = "student1";
@@ -252,7 +253,7 @@ namespace Infrastructure.EfCore
                 stu.District = "大祥区";
                 stu.Address = "电大路2号医药局2栋3单元502";
                 stu.Dormitory = "02001";
-                stu.ClassInfomation = EntityFactory.Create<ClassInfo>(func: cls => { cls.ID = 1; return cls; });
+                stu.ClassInfomation = ApplicationFactory.Create<ClassInfo>(func: cls => { cls.ID = 1; return cls; });
                 return stu;
             }));
             context.SaveChanges();

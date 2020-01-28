@@ -44,7 +44,7 @@
                             <input type="text" name="VerificyCode" class="form-control" placeholder="验证码" />
                         </div>
                         <div class="col-4">
-                            <img id="img_vcode" style="cursor: pointer; height:30px;" src="/Account/VerifyCodeBuilder" alt="单击更换验证码" />
+                            <img id="img_vcode" style="cursor: pointer; height:30px;" src="/Account/CodeBuilder" alt="单击更换验证码" />
                         </div>
                     </div>
                     <div class="row">
@@ -75,7 +75,7 @@
         $(function () {
             //刷新验证码
             $("#img_vcode").click(function () {
-                this.src = "/Account/VerifyCodeBuilder?t=" + new Date();
+                this.src = "/Account/CodeBuilder?t=" + new Date();
             });
 
             //表单提交

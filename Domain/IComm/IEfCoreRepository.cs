@@ -16,7 +16,7 @@ namespace Domain.IComm
         /// <summary>
         /// 数据上下文
         /// </summary>
-        IExamDbContext DBContext { get; }
+        IExamDbContext ApplicationContext { get; }
 
         #region 同步
         /// <summary>
@@ -79,21 +79,21 @@ namespace Domain.IComm
         /// </summary>
         /// <param name="entity">实体类</param>
         /// <returns></returns>
-        Task<bool> SaveAsync(T entity);
+        //Task<bool> SaveAsync(T entity);
 
         /// <summary>
         /// 删除（异步）
         /// </summary>
         /// <param name="entity">实体类</param>
         /// <returns></returns>
-        Task<bool> RemoveAsync(T entity);
+        //Task<bool> RemoveAsync(T entity);
 
         /// <summary>
         /// 修改（异步）
         /// </summary>
         /// <param name="entity">实体类</param>
         /// <returns></returns>
-        Task<bool> EditAsync(T entity);
+        //Task<bool> EditAsync(T entity);
 
         /// <summary>
         /// 单个实体（异步）
@@ -119,7 +119,7 @@ namespace Domain.IComm
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        Task<PageResult> ListsAsync(
+        Task<PageResult<T>> ListsAsync(
             int? index,
             int? size,
             ISpecification<T> spec = null,

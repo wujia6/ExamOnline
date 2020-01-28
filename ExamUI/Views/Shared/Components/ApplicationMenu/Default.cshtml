@@ -4,6 +4,10 @@
 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
     @foreach (var menu in Model)
     {
+        if (menu.MenuType == "action")
+        {
+            continue;
+        }
         var isActive = ViewBag.CurrentMenu == menu.Controller;
         <li class="nav-item has-treeview">
             <a href="/@menu.Controller/@menu.Action" class="nav-link @(isActive ? "active" : "")">

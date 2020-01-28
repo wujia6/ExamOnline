@@ -13,7 +13,7 @@ namespace Domain.IComm
     public interface IExamDbContext: IUnitOfWork
     {
         DbSet<T> Set<T>() where T : class;
-        EntityEntry Entry(object entry);
+        EntityEntry<T> Entry<T>(T entry) where T : class;
 
         DbSet<MenuInfo> Menus { get; set; }
         DbSet<RoleInfo> Roles { get; set; }

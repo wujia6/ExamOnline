@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using System.Collections.Generic;
+
+namespace Domain.Entities
 {
     /// <summary>
     /// 性别
@@ -61,21 +63,22 @@
         //菜单类型
         menu=20,
         module=21,
-        action=22,
+        function=22,
+        action=23,
         //用户角色
-        admin=23,
-        teacher=24,
-        student=25
+        admin=24,
+        teacher=25,
+        student=26
     }
 
     /// <summary>
     /// 分页查询返回类
     /// </summary>
-    public struct PageResult
+    public struct PageResult<T>
     {
         //总记录数
         public int Total { get; set; }
         //分页数据
-        public dynamic Rows { get; set; }
+        public IEnumerable<T> Rows { get; set; }
     }
 }

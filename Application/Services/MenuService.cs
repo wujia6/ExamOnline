@@ -26,60 +26,27 @@ namespace Application.Services
             this.context = cxt;
         }
 
-        public bool Save(MenuDto model)
-        {
-            if (model == null)
-                return false;
-            var entity = model.MapTo<MenuInfo>();
-            return menuManage.Save(entity);
-        }
-
-        public bool Edit(MenuDto model)
-        {
-            if (model == null)
-                return false;
-            return menuManage.Edit(model.MapTo<MenuInfo>());
-        }
-
-        public bool Remove(Expression<Func<MenuInfo, bool>> express)
-        {
-            var spec = Specification<MenuInfo>.Eval(express);
-            return menuManage.Remove(spec);
-        }
-
-        public MenuDto Single(Expression<Func<MenuInfo, bool>> express)
-        {
-            var spec = Specification<MenuInfo>.Eval(express);
-            return menuManage.Single(spec).MapTo<MenuDto>();
-        }
-
-        public List<MenuDto> Lists(
-            out int total, 
-            int? index = 1, 
-            int? size = 10, 
-            Expression<Func<MenuInfo, bool>> express = null, 
-            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
-        {
-            var spec = Specification<MenuInfo>.Eval(express);
-            return menuManage.Lists(out total, index, size, spec, include).MapToList<MenuDto>();
-        }
-
+        #region ### async
         public async Task<bool> SaveAsync(MenuDto model)
         {
+            if (model == null)
+                return false;
             var entity = model.MapTo<MenuInfo>();
-            return await menuManage.SaveAsync(entity);
+            return menuManage.Save(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
         public async Task<bool> EditAsync(MenuDto model)
         {
+            if (model==null)
+                return false;
             var entity = model.MapTo<MenuInfo>();
-            return await menuManage.EditAsync(entity);
+            return menuManage.Edit(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
         public async Task<bool> RemoveAsync(Expression<Func<MenuInfo, bool>> express)
         {
             var spec = Specification<MenuInfo>.Eval(express);
-            return await menuManage.RemoveAsync(spec);
+            return menuManage.Remove(spec) ? await context.SaveChangesAsync() > 0 : false;
         }
 
         public async Task<MenuDto> SingleAsync(Expression<Func<MenuInfo, bool>> express)
@@ -89,23 +56,22 @@ namespace Application.Services
             return entity.MapTo<MenuDto>();
         }
 
-        public async Task<List<MenuDto>> QueryByAsync(Expression<Func<MenuInfo, bool>> express)
+        public async Task<List<MenuDto>> QuerysAsync(Expression<Func<MenuInfo, bool>> express = null)
         {
-            var spec = Specification<MenuInfo>.Eval(express);
-            var menus = await menuManage.QueryByAsync(spec);
-            return menus.MapToList<MenuDto>();
+            var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
+            return await Task.Run(() => menuManage.QuerySet(spec).MapToList<MenuDto>());
         }
 
-        public async Task<PageResult> ListsAsync(
-            int? index = 1, 
-            int? size = 10, 
+        public async Task<PagingResult<MenuDto>> ListsAsync(
+            int? index, 
+            int? size, 
             Expression<Func<MenuInfo, bool>> express = null, 
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
-            var spec = Specification<MenuInfo>.Eval(express);
+            var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
             var result = await menuManage.ListsAsync(index, size, spec, include);
-            result.Rows = result.Rows.MapToList<MenuDto>();
-            return result;
+            return new PagingResult<MenuDto> { Total = result.Total, Rows = result.Rows.MapToList<MenuDto>() };
         }
+        #endregion
     }
 }

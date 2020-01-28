@@ -16,28 +16,31 @@ namespace Infrastructure.Repository
         //构造方法
         public EfCoreRepository(IExamDbContext context)
         {
-            this.DBContext = context;
-            this.query = DBContext.Set<T>();
+            this.ApplicationContext = context;
+            this.query = ApplicationContext.Set<T>();
         }
 
-        public IExamDbContext DBContext { get; private set; }
+        public IExamDbContext ApplicationContext { get; private set; }
 
         #region Sync
         public bool SaveAs(T entity)
         {
-            DBContext.Entry(entity).State = EntityState.Added;
+            ApplicationContext.Set<T>().Attach(entity);
+            ApplicationContext.Entry(entity).State = EntityState.Added;
             return true;
         }
         
         public bool RemoveAs(T entity)
         {
-            DBContext.Entry(entity).State = EntityState.Deleted;
+            ApplicationContext.Set<T>().Attach(entity);
+            ApplicationContext.Entry(entity).State = EntityState.Deleted;
             return true;
         }
         
         public bool EditAs(T entity)
         {
-            DBContext.Entry(entity).State = EntityState.Modified;
+            ApplicationContext.Set<T>().Attach(entity);
+            ApplicationContext.Entry(entity).State = EntityState.Modified;
             return true;
         }
         
@@ -45,10 +48,12 @@ namespace Infrastructure.Repository
         {
             if (include != null)
                 query = include(query);
-            return query.FirstOrDefault(spec.Expression);
+            return query.SingleOrDefault(spec.Expression);
         }
         
-        public IEnumerable<T> QuerySet(ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public IEnumerable<T> QuerySet(
+            ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             if (include != null)
                 query = include(query);
@@ -80,42 +85,38 @@ namespace Infrastructure.Repository
         #endregion
 
         #region Async
-        public async Task<bool> SaveAsync(T entity)
-        {
-            return await Task.Run(() => this.SaveAs(entity));
-        }
-
-        public async Task<bool> RemoveAsync(T entity)
-        {
-            return await Task.Run(() => this.RemoveAs(entity));
-        }
-
-        public async Task<bool> EditAsync(T entity)
-        {
-            return await Task.Run(() => this.EditAs(entity));
-        }
-
         public async Task<T> SingleAsync(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return await Task.Run(() => this.Single(spec, include));
+            if (include != null)
+                query = include(query);
+            return await query.SingleOrDefaultAsync(spec.Expression);
         }
 
         public async Task<IEnumerable<T>> QuerySetAsync(ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return await Task.Run(() => this.QuerySet(spec, include));
+            if (include != null)
+                query = include(query);
+            if (spec != null)
+                query = query.Where(spec.Expression);
+            return await query.ToListAsync();
         }
 
-        public async Task<PageResult> ListsAsync(
+        public async Task<PageResult<T>> ListsAsync(
             int? index,
             int? size,
-            ISpecification<T> spec = null, 
+            ISpecification<T> spec = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return await Task.Run(() => new PageResult
+            if (include != null)
+                query = include(query);
+            if (spec != null)
+                query = query.Where(spec.Expression);
+            var rows = await query.Skip((index.Value - 1) * size.Value).Take(size.Value).ToListAsync();
+            return new PageResult<T>
             {
-                Rows = this.Lists(out int total, index, size, spec, include),
-                Total = total
-            });
+                Total = query.Count(),
+                Rows = rows
+            };
         }
         #endregion
     }
