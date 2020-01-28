@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace AutoMapper.Execution
 {
@@ -46,9 +46,9 @@ namespace AutoMapper.Execution
         /// <typeparam name="TDestination">目标类型</typeparam>
         /// <param name="src">源对象</param>
         /// <returns></returns>
-        public static List<TDestination> MapToList<TDestination>(this IEnumerable src)
+        public static List<TDestination> MapToList<TDestination>(this IEnumerable<object> src)
         {
-            var sourceType = src.GetEnumerator().Current.GetType();
+            var sourceType = src.FirstOrDefault().GetType();
             var map = Mapper.Configuration.FindTypeMapFor(sourceType, typeof(TDestination));
             if (map == null)
                 Mapper.Initialize(cfg => cfg.CreateMap(src.GetType(), typeof(TDestination)));

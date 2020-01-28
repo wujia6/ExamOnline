@@ -19,21 +19,16 @@ namespace ExamUI.Controllers
         {
             this.menuService = service;
         }
-        
+
         [HttpGet]
-        public async Task<IActionResult> Lists(int? index = 1, int? size = 10, string type = "", string title = "")
+        public async Task<string> ParentsAsync(int? pid = 0)
         {
-            Expression<Func<MenuInfo, bool>> express = inf => true;
-            if (!string.IsNullOrEmpty(type))
-                express = inf => express.Compile()(inf) && inf.MenuType.ToString().Contains(type);
-            if (!string.IsNullOrEmpty(title))
-                express = inf => express.Compile()(inf) && inf.Title.Contains(title);
-            var result = await menuService.ListsAsync(index, size, express);
-            return Json(result);
+            var result = await menuService.QuerysAsync(express: m => m.ParentId == pid);
+            return JsonConvert.SerializeObject(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(MenuDto model)
+        public async Task<IActionResult> AddAsync(MenuDto model)
         {
             if (model == null)
                 return Json(new { success = false, message = "请添加有效数据" });
@@ -42,24 +37,29 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(MenuDto model)
+        public async Task<IActionResult> EditAsync(MenuDto model)
         {
             return await menuService.EditAsync(model) ? 
                 Json(new { success = true, message = "提交成功！" }) : Json(new { success = false, message = "提交失败！" });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Remove(int id)
+        public async Task<IActionResult> RemoveAsync(int id)
         {
-            return await menuService.RemoveAsync(express:m=>m.ID == id) ?
+            return await menuService.RemoveAsync(express:m => m.ID == id) ?
                 Json(new { success = true, message = "操作成功！" }) : Json(new { success = false, message = "操作失败！" });
         }
 
         [HttpGet]
-        public async Task<string> ParentsAsync(int? pid = 0)
+        public async Task<IActionResult> ListsAsync(int? index = 1, int? size = 10, string type = "", string title = "")
         {
-            var result = await menuService.QuerysAsync(express: m => m.ParentId == pid);
-            return JsonConvert.SerializeObject(result);
+            Expression<Func<MenuInfo, bool>> express = inf => true;
+            if (!string.IsNullOrEmpty(type))
+                express = inf => express.Compile()(inf) && inf.MenuType.ToString().Contains(type);
+            if (!string.IsNullOrEmpty(title))
+                express = inf => express.Compile()(inf) && inf.Title.Contains(title);
+            var result = await menuService.ListsAsync(index, size, express);
+            return Json(result);
         }
     }
 }

@@ -119,7 +119,7 @@ namespace Domain.IComm
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        Task<PageResult<T>> ListsAsync(
+        Task<object> ListsAsync(
             int? index,
             int? size,
             ISpecification<T> spec = null,

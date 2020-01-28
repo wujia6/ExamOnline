@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Application.DTO.Models;
 using Application.IServices;
 using AutoMapper.Execution;
-using Domain.Entities;
 using Domain.Entities.MenuAgg;
 using Domain.IComm;
 using Domain.IManages;
@@ -70,7 +69,12 @@ namespace Application.Services
         {
             var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
             var result = await menuManage.ListsAsync(index, size, spec, include);
-            return new PagingResult<MenuDto> { Total = result.Total, Rows = result.Rows.MapToList<MenuDto>() };
+            var paging = new PagingResult<MenuDto>
+            {
+                Total = Convert.ToInt32(result.GetType().GetProperty("Total").GetValue(result)),
+                Rows = (result.GetType().GetProperty("Rows").GetValue(result) as IEnumerable<MenuInfo>).MapToList<MenuDto>()
+            };
+            return paging;
         }
         #endregion
     }

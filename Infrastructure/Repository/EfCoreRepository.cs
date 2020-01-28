@@ -101,7 +101,7 @@ namespace Infrastructure.Repository
             return await query.ToListAsync();
         }
 
-        public async Task<PageResult<T>> ListsAsync(
+        public async Task<object> ListsAsync(
             int? index,
             int? size,
             ISpecification<T> spec = null,
@@ -112,11 +112,7 @@ namespace Infrastructure.Repository
             if (spec != null)
                 query = query.Where(spec.Expression);
             var rows = await query.Skip((index.Value - 1) * size.Value).Take(size.Value).ToListAsync();
-            return new PageResult<T>
-            {
-                Total = query.Count(),
-                Rows = rows
-            };
+            return new { Total = query.Count(), Rows = rows };
         }
         #endregion
     }

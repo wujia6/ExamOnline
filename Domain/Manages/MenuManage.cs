@@ -65,7 +65,7 @@ namespace Domain.Manages
             return await efCore.QuerySetAsync(spec);
         }
 
-        public async Task<PageResult<MenuInfo>> ListsAsync(
+        public async Task<object> ListsAsync(
             int? index,
             int? size,
             ISpecification<MenuInfo> spec = null,

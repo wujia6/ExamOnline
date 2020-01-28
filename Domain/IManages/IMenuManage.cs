@@ -84,7 +84,7 @@ namespace Domain.IManages
         /// <param name="spec">规约对象</param>
         /// <param name="include">关联属性</param>
         /// <returns></returns>
-        Task<PageResult<MenuInfo>> ListsAsync(
+        Task<object> ListsAsync(
             int? index,
             int? size,
             ISpecification<MenuInfo> spec = null,

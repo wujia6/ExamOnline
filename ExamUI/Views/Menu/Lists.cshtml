@@ -50,7 +50,7 @@
         $("#btn_query").click(function () {
             initalizeTable({
                 tableTarget: $("#tab_menus"),
-                postUrl: "/Menu/Lists",
+                postUrl: "/Menu/ListsAsync",
                 queryParams: function (params) {
                     var parms = {
                         index: params.pageNumber,
@@ -81,7 +81,7 @@
                 event_submit: function (dialog) {
                     var frm = dialog.getModalBody().find("form");
                     $.ajax({
-                        url: "/Menu/Add",
+                        url: "/Menu/AddAsync",
                         method: "post",
                         data: frm.serializeArray(),
                         success: function (result) {
@@ -112,7 +112,7 @@
                 event_submit: function (dialog) {
                     var frm = dialog.getModalBody().find("form");
                     $.ajax({
-                        url: "/Menu/Edit",
+                        url: "/Menu/EditAsync",
                         method: "post",
                         data: frm.serializeArray(),
                         success: function (result) {
@@ -162,7 +162,7 @@
                     for (var key in selectRows)
                         ids.push(selectRows[key].uniqueId);
                     $.ajax({
-                        url: "/Menu/Remove",
+                        url: "/Menu/RemoveAsync",
                         method: "post",
                         traditional: true,
                         data: { "keys": ids },
