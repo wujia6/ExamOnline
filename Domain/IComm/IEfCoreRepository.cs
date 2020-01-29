@@ -41,20 +41,20 @@ namespace Domain.IComm
         bool EditAs(T entity);
 
         /// <summary>
-        /// 单个实体
+        /// 获取单个实体
         /// </summary>
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        T Single(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T,object>> include = null);
+        T GetEntity(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T,object>> include = null);
 
         /// <summary>
-        /// 获取实体集合
+        /// 获取集合实体
         /// </summary>
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        IEnumerable<T> QuerySet(ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
+        IEnumerable<T> GetEntities(ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
 
         /// <summary>
         /// 获取实体集合
@@ -101,7 +101,7 @@ namespace Domain.IComm
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        Task<T> SingleAsync(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
+        Task<T> GetEntityAsync(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
 
         /// <summary>
         /// 获取实体集合（异步）
@@ -109,7 +109,7 @@ namespace Domain.IComm
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        Task<IEnumerable<T>> QuerySetAsync(ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
+        Task<IEnumerable<T>> GetEntitiesAsync(ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
 
         /// <summary>
         /// 获取实体集合（异步）
@@ -119,7 +119,7 @@ namespace Domain.IComm
         /// <param name="spec">规约表达式</param>
         /// <param name="include">包含导航属性</param>
         /// <returns></returns>
-        Task<object> ListsAsync(
+        Task<object> PageListAsync(
             int? index,
             int? size,
             ISpecification<T> spec = null,

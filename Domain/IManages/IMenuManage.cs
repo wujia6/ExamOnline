@@ -17,9 +17,11 @@ namespace Domain.IManages
 
         bool Remove(ISpecification<MenuInfo> spec);
 
-        //MenuInfo Single(ISpecification<MenuInfo> spec);
-        
-        //IEnumerable<MenuInfo> QuerySet(ISpecification<MenuInfo> spec);
+        //MenuInfo GetEntity(ISpecification<MenuInfo> spec);
+
+        //IEnumerable<MenuInfo> GetEntities(
+        //    ISpecification<MenuInfo> spec, 
+        //    Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
 
         //IEnumerable<MenuInfo> Lists(
         //    out int total, 
@@ -30,15 +32,15 @@ namespace Domain.IManages
         #endregion
 
         #region ### async
-        Task<MenuInfo> SingleAsync(
-            ISpecification<MenuInfo> spec, 
+        Task<MenuInfo> GetEntityAsync(
+            ISpecification<MenuInfo> spec,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
-        
-        Task<IEnumerable<MenuInfo>> QuerySetAsync(
-            ISpecification<MenuInfo> spec = null, 
+
+        Task<IEnumerable<MenuInfo>> GetEntitiesAsync(
+            ISpecification<MenuInfo> spec = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
-        
-        Task<object> ListsAsync(
+
+        Task<object> PageListAsync(
             int? index,
             int? size,
             ISpecification<MenuInfo> spec = null,

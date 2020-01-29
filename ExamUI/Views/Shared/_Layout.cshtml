@@ -7,7 +7,7 @@
     @*import css*@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link href="~/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap-modal/css/bootstrap-modal.min.css" rel="stylesheet" />
+    @*<link href="~/lib/bootstrap-modal/css/bootstrap-modal.min.css" rel="stylesheet" />*@
     <link href="~/lib/bootstrap3-dialog/css/bootstrap-dialog.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.css" />
@@ -18,11 +18,12 @@
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/lib/bootstrap-table/bootstrap-table.min.js"></script>
-    <script src="~/lib/bootstrap-modal/js/bootstrap-modal.min.js"></script>
+    <script src="~/lib/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    @*<script src="~/lib/bootstrap-modal/js/bootstrap-modal.min.js"></script>*@
     <script src="~/lib/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
-    <script src="~/js/adminlte.js"></script>
     <script src="~/lib/iCheck/icheck.js"></script>
     <script src="~/lib/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/js/adminlte.js"></script>
     <script src="~/js/common.js"></script>
 </head>
 
@@ -45,11 +46,9 @@
             <!-- 搜索栏 -->
             <form class="form-inline ml-3">
                 <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                    <input class="form-control form-control-navbar" type="search" placeholder="搜索" aria-label="Search">
                     <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
+                        <button class="btn btn-navbar" type="submit"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
             </form>
@@ -155,13 +154,11 @@
                 <!-- 用户面板 (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image"><img src="~/images/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"></div>
-                    <div class="info"><a href="#" class="d-block">@ViewBag.UserName</a></div>
+                    <div class="info"><a href="#" class="d-block">@ViewBag.CurrentUser</a></div>
                     <div class="info"><a href="/Account/Logout" class="d-block">退出登录</a></div>
                 </div>
-                <!-- 菜单-->
-                <nav class="mt-2">
-                    @await Component.InvokeAsync("ApplicationMenus");<!-- 加载视图组件 -->
-                </nav>
+                <!-- 加载菜单视图组件-->
+                <nav class="mt-2">@await Component.InvokeAsync("ApplicationMenus");</nav>
             </div>
         </aside>
         <!-- 左侧菜单结束 -->
@@ -172,11 +169,9 @@
         <!-- 右侧内容结束 -->
         <!-- 下部开始 -->
         <footer class="main-footer">
-            <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong>
+            <strong>Copyright &copy; 2020-2022 <a href="https://github.com/wujia6/ExamOnline">GitHub</a>.</strong>
             All rights reserved.
-            <div class="float-right d-none d-sm-inline-block">
-                <b>Version</b> 3.0.0-rc.5
-            </div>
+            <div class="float-right d-none d-sm-inline-block"><b>Version</b> 3.0.0-rc.5</div>
         </footer>
         <!-- 下部结束 -->
         <aside class="control-sidebar control-sidebar-dark">

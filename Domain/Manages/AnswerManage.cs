@@ -33,13 +33,13 @@ namespace Domain.Manages
         public AnswerInfo Single(ISpecification<AnswerInfo> spec = null,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null)
         {
-            return efCore.Single(spec, include);
+            return efCore.GetEntity(spec, include);
         }
 
         public IEnumerable<AnswerInfo> Lists(ISpecification<AnswerInfo> spec = null,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null)
         {
-            return efCore.QuerySet(spec, include);
+            return efCore.GetEntities(spec, include);
         }
     }
 }

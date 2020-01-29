@@ -49,7 +49,7 @@ namespace Domain.Manages
             ISpecification<RoleInfo> spec, 
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
         {
-            return efCore.Single(spec, include);
+            return efCore.GetEntity(spec, include);
         }
     }
 }

@@ -6,7 +6,7 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6"><h1>权限菜单管理</h1></div>
+            <div class="col-sm-6"><h1>菜单管理</h1></div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">权限菜单</a></li>
@@ -20,21 +20,39 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <div class="card-group">
-                        <div class="card-title">查询条件</div>
-                        <div class="card-group">
-                            类型：<input type="text" id="txt_type" class="form-control" placeholder="菜单类型" />
-                            标题：<input type="text" id="txt_title" class="form-control" placeholder="菜单标题" />
-                            <button type="button" id="btn_query" class="btn btn-success">查询</button>
+                <div class="card-header"><h3 class="card-title">查询条件</h3></div>
+                <div class="card-group">
+                    <div class="row form-group">
+                        <label class="col-sm-2 col-form-label">类型：</label>
+                        <div class="col-sm-10">
+                            <select id="slt_search_menutype" name="MenuType" class="custom-select form-control">
+                                <option value="-1">---请选择---</option>
+                                <option value="20">menu</option>
+                                <option value="21">module</option>
+                                <option value="22">funaction</option>
+                                <option value="23">action</option>
+                            </select>
                         </div>
                     </div>
+                    <div class="row col-md-5">
+                        <label class="col-sm-2 col-form-label">标题：</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="txt_title" class="form-control" placeholder="菜单标题" />
+                        </div>
+                    </div>
+                    <div class="row col-md-2"><button type="button" id="btn_query" class="btn btn-success" value="查询" /></div>
                 </div>
                 <div class="card-body">
                     <div id="toolbar" class="btn-group">
-                        <button type="button" id="btn_add" class="btn btn-info">添加</button>
-                        <button type="button" id="btn_edit" class="btn btn-warning">编辑</button>
-                        <button type="button" id="btn_remove" class="btn btn-danger">删除</button>
+                        <button type="button" id="btn_add" class="btn btn-default">
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true" />新增
+                        </button>
+                        <button type="button" id="btn_edit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true" />编辑
+                        </button>
+                        <button type="button" id="btn_remove" class="btn btn-default">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true" />删除
+                        </button>
                     </div>
                     <table id="tab_menus" class="table table-bordered table-hover"></table>
                 </div>
@@ -53,8 +71,8 @@
             striped: true,          //启用行交替颜色
             toolbar: "#toolbar",    //指定工具条容器
             clickToSelect: true,    //启用点击选中行
-            search: true,           //显示表格搜索
-            searchOnEnterKey: true,  //回车键执行搜索
+            //search: false,           //显示表格搜索
+            //searchOnEnterKey: true,  //回车键执行搜索
             showColumns: true,       //显示全部列
             showRefresh: true,      //启用刷新按钮
             showToggle: true,        //启用详细视图和列表视图
@@ -65,24 +83,25 @@
                 return {
                     index: params.pageNumber,
                     size: params.pageSize,
-                    type: $("#txt_type").val(),
+                    type: $("#slt_search_menutype").val(),
                     title: $("#txt_title").val()
                 }
             },      
+            paginationLoop: false,  //是否无限循环
             pagination: true,       //启用分页（*）
             sidePagination: "server",   //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,              //当前页码初始化加载第一页，默认第一页
             pageSize: 10,               //每页的记录行数（*）
             pageList: [10, 20, 50, 100],    //可供选择的每页的行数（*）
             columns: [
-                { checkbox: true },
-                { field: "ID", title: "编号" },
-                { field: "ParentID", title: "父节点" },
-                { field: "MenuType", title: "类型" },
-                { field: "Title", title: "标题" },
-                { field: "Controller", title: "模块" },
-                { field: "Action", title: "功能" },
-                { field: "Remarks", title: "备注" }
+                { checkbox: true, align: "center", valign:"middle" },
+                { field: "ID", title: "编号", align: "center", valign: "middle" },
+                { field: "ParentID", title: "父节点", align: "center", valign: "middle" },
+                { field: "MenuType", title: "类型", align: "center", valign: "middle" },
+                { field: "Title", title: "标题", align: "center", valign: "middle" },
+                { field: "Controller", title: "模块", align: "center", valign: "middle" },
+                { field: "Action", title: "动作", align: "center", valign: "middle" },
+                { field: "Remarks", title: "备注", align: "center", valign: "middle" }
             ]
         });
 

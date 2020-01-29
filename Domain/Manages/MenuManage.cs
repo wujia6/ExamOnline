@@ -31,18 +31,20 @@ namespace Domain.Manages
 
         public bool Remove(ISpecification<MenuInfo> spec)
         {
-            var entity = efCore.Single(spec);
+            var entity = efCore.GetEntity(spec);
             return entity == null ? false : efCore.RemoveAs(entity);
         }
 
-        //public MenuInfo Single(ISpecification<MenuInfo> spec)
+        //public MenuInfo GetEntity(ISpecification<MenuInfo> spec)
         //{
-        //    return efCore.Single(spec);
+        //    return efCore.GetEntity(spec);
         //}
 
-        //public IEnumerable<MenuInfo> QuerySet(ISpecification<MenuInfo> spec)
+        //public IEnumerable<MenuInfo> GetEntities(
+        //    ISpecification<MenuInfo> spec =null, 
+        //    Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         //{
-        //    return efCore.QuerySet(spec);
+        //    return efCore.GetEntities(spec, include);
         //}
 
         //public IEnumerable<MenuInfo> Lists(
@@ -57,27 +59,27 @@ namespace Domain.Manages
         #endregion
 
         #region ### async
-        public async Task<MenuInfo> SingleAsync(
-            ISpecification<MenuInfo> spec, 
+        public async Task<MenuInfo> GetEntityAsync(
+            ISpecification<MenuInfo> spec,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
-            return await efCore.SingleAsync(spec);
+            return await efCore.GetEntityAsync(spec);
         }
 
-        public async Task<IEnumerable<MenuInfo>> QuerySetAsync(
-            ISpecification<MenuInfo> spec, 
+        public async Task<IEnumerable<MenuInfo>> GetEntitiesAsync(
+            ISpecification<MenuInfo> spec,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
-            return await efCore.QuerySetAsync(spec);
+            return await efCore.GetEntitiesAsync(spec);
         }
 
-        public async Task<object> ListsAsync(
+        public async Task<object> PageListAsync(
             int? index,
             int? size,
             ISpecification<MenuInfo> spec = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
-            return await efCore.ListsAsync(index, size, spec, include);
+            return await efCore.PageListAsync(index, size, spec, include);
         }
         #endregion
     }

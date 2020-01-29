@@ -48,38 +48,37 @@ namespace Application.Services
             return menuManage.Remove(spec) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public async Task<MenuDto> SingleAsync(
+        public async Task<MenuDto> GetModelAsync(
             Expression<Func<MenuInfo, bool>> express, 
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
             var spec = Specification<MenuInfo>.Eval(express);
-            var entity = await menuManage.SingleAsync(spec);
+            var entity = await menuManage.GetEntityAsync(spec);
             return entity.MapTo<MenuDto>();
         }
 
-        public async Task<List<MenuDto>> QuerySetAsync(
+        public async Task<List<MenuDto>> GetModelsAsync(
             Expression<Func<MenuInfo, bool>> express = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
-            var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
-            var lsts = await menuManage.QuerySetAsync(spec);
+           var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
+            var lsts = await menuManage.GetEntitiesAsync(spec);
             return lsts.MapToList<MenuDto>();
         }
 
-        public async Task<PageResult<MenuDto>> ListsAsync(
+        public async Task<PageResult<MenuDto>> PageListAsync(
             int? index, 
             int? size, 
             Expression<Func<MenuInfo, bool>> express = null, 
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
             var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
-            var result = await menuManage.ListsAsync(index, size, spec, include);
-            var paging = new PageResult<MenuDto>
+            var result = await menuManage.PageListAsync(index, size, spec, include);
+            return new PageResult<MenuDto>
             {
                 Total = Convert.ToInt32(result.GetType().GetProperty("Total").GetValue(result)),
-                Rows = (result.GetType().GetProperty("Rows").GetValue(result) as IEnumerable<MenuInfo>).MapToList<MenuDto>()
+                Rows = (result.GetType().GetProperty("Rows").GetValue(result) as List<MenuInfo>).MapToList<MenuDto>()
             };
-            return paging;
         }
         #endregion
     }

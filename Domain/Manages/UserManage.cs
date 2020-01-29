@@ -36,13 +36,13 @@ namespace Domain.Manages
         public dynamic Single(ISpecification<UserInfo> spec, 
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
-            return efCore.Single(spec, include);
+            return efCore.GetEntity(spec, include);
         }
 
         public IEnumerable<dynamic> Lists(ISpecification<UserInfo> spec = null, 
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
-            return efCore.QuerySet(spec, include);
+            return efCore.GetEntities(spec, include);
         }
 
         public IEnumerable<UserInfo> Lists(out int total, int? pageIndex = 0, int? pageSize = 10, 
@@ -80,7 +80,7 @@ namespace Domain.Manages
 
         public T Single(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return efCore.Single(spec, include);
+            return efCore.GetEntity(spec, include);
         }
 
         public IEnumerable<T> Lists(out int total, int? pageIndex = 1, int? pageSize = 10,

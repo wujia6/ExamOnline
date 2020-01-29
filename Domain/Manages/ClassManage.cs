@@ -38,13 +38,13 @@ namespace Domain.Manages
         public T Single(ISpecification<T> spec = null, 
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return efCore.Single(spec);
+            return efCore.GetEntity(spec);
         }
 
         public IEnumerable<T> Lists(ISpecification<T> spec = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
-            return efCore.QuerySet(spec, include);
+            return efCore.GetEntities(spec, include);
         }
     }
 

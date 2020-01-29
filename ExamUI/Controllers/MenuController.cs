@@ -19,13 +19,6 @@ namespace ExamUI.Controllers
             this.menuService = service;
         }
 
-        [HttpGet]
-        public async Task<JsonResult> MenuParentsAsync(int? pid = 0)
-        {
-            var lstParents = await menuService.QuerySetAsync(express: m => m.ParentId == pid.Value);
-            return Json(lstParents);
-        }
-
         [HttpPost]
         public async Task<JsonResult> AddAsync(MenuDto model)
         {
@@ -43,22 +36,29 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> RemoveAsync(int id)
+        public async Task<JsonResult> RemoveAsync(int menuId)
         {
-            return await menuService.RemoveAsync(express:m => m.ID == id) ?
+            return await menuService.RemoveAsync(express:m => m.ID == menuId) ?
                 Json(new { success = true, message = "操作成功！" }) : Json(new { success = false, message = "操作失败！" });
         }
 
         [HttpGet]
-        public async Task<JsonResult> ListsAsync(int? index = 1, int? size = 10, string type = "", string title = "")
+        public async Task<JsonResult> ListsAsync(int? index = 1, int? size = 10, string type = null, string title = null)
         {
             Expression<Func<MenuInfo, bool>> express = inf => true;
             if (!string.IsNullOrEmpty(type))
                 express = inf => express.Compile()(inf) && inf.MenuType.ToString().Contains(type);
             if (!string.IsNullOrEmpty(title))
                 express = inf => express.Compile()(inf) && inf.Title.Contains(title);
-            var pageResult = await menuService.ListsAsync(index, size, express);
+            var pageResult = await menuService.PageListAsync(index, size, express);
             return Json(pageResult);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetParentsAsync(int? pid = 0)
+        {
+            var parents = await menuService.GetModelsAsync(express: m => m.ParentId == pid.Value);
+            return Json(new { success = true, rows = parents });
         }
 
         [HttpGet]

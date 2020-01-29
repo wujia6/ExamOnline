@@ -13,6 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\lib\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="wwwroot\lib\icheck-bootstrap\LICENSE" />
   </ItemGroup>
 
