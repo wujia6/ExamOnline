@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.Drawing.Imaging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -7,12 +11,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Application.IServices;
 using Application.DTO.Models;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.IO;
-using System.Drawing.Imaging;
 
 namespace ExamUI.Controllers
 {
@@ -64,16 +65,18 @@ namespace ExamUI.Controllers
 
                 if (applicationUser == null)
                     return Json(new { success = false, message = "错误的用户名或密码" });
-                
+
                 //创建身份证件单元：一张身份证由多个证件单元组成
                 //创建身份证件，添加证件单元
                 //创建身份证件使用者，添加身份证
                 var identitys = new ClaimsIdentity(new List<Claim>
                 {
                     new Claim(ClaimTypes.Sid,applicationUser.UserID.ToString()),
-                    new Claim(ClaimTypes.Name,applicationUser.UserAccount),
-                    //new Claim("Password",model.Password),
+                    new Claim(ClaimTypes.NameIdentifier,applicationUser.UserAccount),
                     new Claim(ClaimTypes.Role,applicationUser.InRoles),
+                    new Claim(ClaimTypes.Name,applicationUser.Name)
+                    //new Claim("Password",model.Password),
+                    //new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(applicationUser))
                 });
                 //写入客户端cookie
                 await HttpContext.SignInAsync(identitys.AuthenticationType, new ClaimsPrincipal(identitys), new AuthenticationProperties

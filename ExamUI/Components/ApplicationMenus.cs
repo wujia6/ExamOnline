@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Linq;
 using Application.DTO.Models;
 using Application.IServices;
@@ -12,13 +13,13 @@ namespace ExamUI.Components
     /// <summary>
     /// 系统菜单视图组件类
     /// </summary>
-    [ViewComponent(Name = "ApplicationMenu")]
-    public class ApplicationMenuViewCompontent : ViewComponent
+    [ViewComponent(Name = "ApplicationMenus")]
+    public class ApplicationMenus : ViewComponent
     {
         private readonly IRoleService roleService;
         private readonly IMemoryCache appCache;
 
-        public ApplicationMenuViewCompontent(IRoleService service, IMemoryCache cache)
+        public ApplicationMenus(IRoleService service, IMemoryCache cache)
         {
             this.roleService = service;
             this.appCache = cache;
@@ -29,17 +30,17 @@ namespace ExamUI.Components
         /// </summary>
         /// <param name="roles">角色字符串</param>
         /// <returns></returns>
-        public IViewComponentResult Invoke(string roles)
+        public IViewComponentResult Invoke()
         {
-            if (string.IsNullOrEmpty(roles))
-                return View("~/Views/Shared/Error.cshtml");
+            ViewBag.CurrentUser = UserClaimsPrincipal.FindFirstValue(ClaimTypes.Name);
+            string fromRoles = UserClaimsPrincipal.FindFirstValue(ClaimTypes.Role);
             //缓存角色菜单
             if (!appCache.TryGetValue("ApplicationMenus",out object cacheValue))
             {
-                var lst= ReadMenusBy(roles);
+                var lst= ReadMenusBy(fromRoles);
                 appCache.Set("ApplicationMenus", lst, new MemoryCacheEntryOptions
                 {
-                    AbsoluteExpiration = DateTime.Now.AddMinutes(2),  //设置缓存绝对过期时间
+                    AbsoluteExpiration = DateTime.Now.AddMinutes(20),  //设置缓存绝对过期时间
                     Priority = CacheItemPriority.Normal   //设置缓存优先级
                 });
             }
@@ -50,14 +51,14 @@ namespace ExamUI.Components
         /// <summary>
         /// 查询角色菜单
         /// </summary>
-        /// <param name="roles">角色字符串</param>
+        /// <param name="fromRoles">角色字符串</param>
         /// <returns></returns>
-        private List<MenuDto> ReadMenusBy(string roles)
+        private List<MenuDto> ReadMenusBy(string fromRoles)
         {
             List<MenuDto> menus = null;
-            if (roles.IndexOf(',') > 0)
+            if (fromRoles.IndexOf(',') > 0)
             {
-                foreach (var code in roles.Split(','))
+                foreach (var code in fromRoles.Split(','))
                 {
                     var role = roleService.Single(express: src => src.Code == code,
                         include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
@@ -66,7 +67,7 @@ namespace ExamUI.Components
             }
             else
             {
-                var role = roleService.Single(express: src => src.Code == roles,
+                var role = roleService.Single(express: src => src.Code == fromRoles,
                     include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
                 menus = BuilderTree(role.MenuDtos, null, 0);
             }

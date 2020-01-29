@@ -1,0 +1,69 @@
+﻿@{
+    Layout = null;
+}
+@model List<MenuDto>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>编辑菜单项</title>
+</head>
+<body>
+    <form id="frm_menu_edit" role="form">
+        <div class="card-body">
+            <div class="form-group">
+                <input type="hidden" id="hd_key" name="ID" value="0" />
+                <label for="lab_parent">父节点</label>
+                <select id="slt_menu_parent" name="ParentID" multiple class="custom-select"></select>
+                @*@Html.DropDownList("ParentID", (IEnumerable<SelectListItem>)ViewData["MenuParents"], new { @class= "custom-select" });*@
+            </div>
+            <div class="form-group">
+                <label for="lab_menutype">类型</label>
+                <select id="slt_menu_type" name="MenuType" multiple class="custom-select">
+                    <option value="20">menu</option>
+                    <option value="21">module</option>
+                    <option value="22">action</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="lab_title">标题</label>
+                <input id="txt_menu_title" name="Title" class="form-control" placeholder="菜单标题" />
+            </div>
+            <div class="form-group">
+                <label for="lab_controller">模块</label>
+                <input id="txt_menu_controller" name="Controller" class="form-control" placeholder="所属模块" />
+            </div>
+            <div class="form-group">
+                <label for="lab_action">功能</label>
+                <input id="txt_menu_action" name="Action" class="form-control" placeholder="功能名称" />
+            </div>
+            <div class="form-group">
+                <label for="lab_remarks">备注</label>
+                <input id="txt_menu_remarks" name="Remarks" class="form-control" placeholder="菜单备注" />
+            </div>
+        </div>
+    </form>
+    <script>
+        $(function () {
+            $("#slt_menu_parent").load(function () {
+                $.ajax({
+                    url: "/Menu/MenuParentsAsync",
+                    method: "get",
+                    data: { "pid": 0 },
+                    success: function (result) {
+                        var objs = $.parseJSON(result);
+                        $(this).html("").each(objs, function (index, dom) {
+                            $(this).append($("<option value=\"" + dom.ID + "\">" + objs[index].Name + "</option>"));
+                        });
+                    },
+                    error: function () {
+                        bt_dialog.error("控件初始化失败");
+                    }
+                });
+            })
+        })
+    </script>
+</body>
+</html>

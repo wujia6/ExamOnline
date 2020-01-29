@@ -2,7 +2,7 @@
 
 namespace Application.DTO.Models
 {
-    public sealed class PagingResult<T>
+    public sealed class PageResult<T>
     {
         public int Total { get; set; }
 

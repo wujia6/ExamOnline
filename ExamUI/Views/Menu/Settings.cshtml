@@ -1,6 +1,5 @@
 ﻿@{
     ViewData["Title"] = "菜单管理";
-    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.CurrentMenu = "Menu";
 }
 
@@ -24,7 +23,7 @@
                 <div class="card-header">
                     <div class="card-group">
                         <div class="card-title">查询条件</div>
-                        <div class="card-info">
+                        <div class="card-group">
                             类型：<input type="text" id="txt_type" class="form-control" placeholder="菜单类型" />
                             标题：<input type="text" id="txt_title" class="form-control" placeholder="菜单标题" />
                             <button type="button" id="btn_query" class="btn btn-success">查询</button>
@@ -46,38 +45,57 @@
 
 <script>
     $(function () {
+        //初始化表格
+        $("#tab_menus").bootstrapTable({
+            uniqueId: "ID",         //行标识，一般为主键列
+            showHeader: true,
+            showLoading: true,
+            striped: true,          //启用行交替颜色
+            toolbar: "#toolbar",    //指定工具条容器
+            clickToSelect: true,    //启用点击选中行
+            search: true,           //显示表格搜索
+            searchOnEnterKey: true,  //回车键执行搜索
+            showColumns: true,       //显示全部列
+            showRefresh: true,      //启用刷新按钮
+            showToggle: true,        //启用详细视图和列表视图
+            cache: false,           //是否启用缓存
+            url: "/Menu/ListsAsync",//数据请求地址
+            method: "get",          //ajax提交方式（*）
+            queryParams: function (params) {    //传递参数（*）
+                return {
+                    index: params.pageNumber,
+                    size: params.pageSize,
+                    type: $("#txt_type").val(),
+                    title: $("#txt_title").val()
+                }
+            },      
+            pagination: true,       //启用分页（*）
+            sidePagination: "server",   //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,              //当前页码初始化加载第一页，默认第一页
+            pageSize: 10,               //每页的记录行数（*）
+            pageList: [10, 20, 50, 100],    //可供选择的每页的行数（*）
+            columns: [
+                { checkbox: true },
+                { field: "ID", title: "编号" },
+                { field: "ParentID", title: "父节点" },
+                { field: "MenuType", title: "类型" },
+                { field: "Title", title: "标题" },
+                { field: "Controller", title: "模块" },
+                { field: "Action", title: "功能" },
+                { field: "Remarks", title: "备注" }
+            ]
+        });
+
         //查询
         $("#btn_query").click(function () {
-            initalizeTable({
-                tableTarget: $("#tab_menus"),
-                postUrl: "/Menu/ListsAsync",
-                queryParams: function (params) {
-                    var parms = {
-                        index: params.pageNumber,
-                        size: params.pageSize,
-                        type: $("#txt_type").val(),
-                        title: $("#txt_title").val()
-                    }
-                    return parms;
-                },
-                dataColumns: [
-                    { checkbox: true },
-                    { field: "ID", title: "编号" },
-                    { field: "ParentID", title: "父节点" },
-                    { field: "MenuType", title: "类型" },
-                    { field: "Title", title: "标题" },
-                    { field: "Controller", title: "模块" },
-                    { field: "Action", title: "功能" },
-                    { field: "Remarks", title: "备注" }
-                ]
-            });
+            $("#tab_menus").bootstrapTable("load")
         });
 
         //添加
         $("#btn_add").click(function () {
             bt_dialog.loadUrl({
                 title: "添加菜单项",
-                url: "~/Views/Menu/_EditPartial.cshtml",
+                url: "~/Views/Menu/Edit.cshtml",
                 event_submit: function (dialog) {
                     var frm = dialog.getModalBody().find("form");
                     $.ajax({
@@ -87,7 +105,7 @@
                         success: function (result) {
                             bt_dialog.information(result.message);
                             if (result.success) 
-                                form.clear(frm);
+                                formExt.clear(frm);
                         },
                         error: function () {
                             bt_dialog.error("未知错误，请重试");
@@ -104,12 +122,12 @@
                 bt_dialog.error("请选择有效数据,一次只能编辑一行");
                 return;
             }
-            //localStorage.setItem("RowData", selectRows[0].serializeObject()); //行对象存入本地localStorage
+            //localStorage.setItem("RowData", selectRows[0]); //行对象存入本地localStorage
             //打开url加载
             bt_dialog.remoteUrl({
                 title: "编辑菜单项",
-                url: "~/Views/Menu/_EditPartial.cshtml",
-                event_submit: function (dialog) {
+                url: "~/Views/Menu/Edit.cshtml",
+                event_submit: function (dialog) {   //提交按钮事件
                     var frm = dialog.getModalBody().find("form");
                     $.ajax({
                         url: "/Menu/EditAsync",
@@ -118,32 +136,17 @@
                         success: function (result) {
                             bt_dialog.information(result.message);
                             if (result.success)
-                                form.clear(frm);
+                                formExt.clear(frm);
                         },
                         error: function () {
                             bt_dialog.error("未知错误，请重试");
                         }
                     });
                 },
-                event_showed: function (dialog) {
-                    var slt = dialog.getModalBody().find("#slt_menu_parent");
-                    $.ajax({
-                        url: "/Menu/ParentsAsync",
-                        method: "get",
-                        data: { "pid": 0 },
-                        success: function (result) {
-                            var data = $.parseJSON(result);
-                            slt.html("").each(data, function (index, dom) {
-                                slt.append($("<option value=\"" + dom.ID + "\">" + data[index].Name + "</option>"));
-                            });
-                        },
-                        error: function () {
-                            bt_dialog.error("控件初始化失败");
-                        }
-                    });
+                event_showed: function (dialog) {   //显示后触发事件
                     if (selectRows[0] != null && selectRows[0] != "undefined") {
                         var frm = dialog.getModalBody().find("form");
-                        form.load(frm, selectRows[0]);
+                        formExt.load(frm, selectRows[0]);
                     }
                 }
             });
@@ -158,14 +161,14 @@
             }
             bt_dialog.confirm("确认删除选中数据？", function (res) {
                 if (res) {
-                    var ids = [];
+                    var keys = [];
                     for (var key in selectRows)
-                        ids.push(selectRows[key].uniqueId);
+                        keys.push(selectRows[key].uniqueId);
                     $.ajax({
                         url: "/Menu/RemoveAsync",
                         method: "post",
                         traditional: true,
-                        data: { "keys": ids },
+                        data: { "ids": keys },
                         success: function (result) {
                             bt_dialog.information(result.message);
                             if (result.success) {

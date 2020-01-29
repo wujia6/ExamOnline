@@ -87,7 +87,7 @@ function initalizeTable(parms) {
         bt_dialog.error("列表组件初始化失败,数据列未设置");
         return;
     }
-    parms.tableTarget.bootstrapTable("destroy").bootstrapTable({
+    parms.tableTarget.bootstrapTable({
         uniqueId: "ID",         //行标识，一般为主键列
         showHeader: true,
         showLoading: true,
@@ -101,7 +101,7 @@ function initalizeTable(parms) {
         showToggle: true,        //启用详细视图和列表视图
         cache: false,           //是否启用缓存
         url: parms.postUrl,               //数据请求地址
-        method: "get",          //ajax提交方式（*）
+        method: parms.method,          //ajax提交方式（*）
         queryParams: parms.queryParams,      //传递参数（*）
         pagination: true,       //启用分页（*）
         onlyInfoPagination: true,//显示总记录数
@@ -110,7 +110,7 @@ function initalizeTable(parms) {
         pageSize: 10,               //每页的记录行数（*）
         pageList: [10, 20, 50, 100],    //可供选择的每页的行数（*）
         columns: parms.dataColumns
-    })
+    });
 }
 
 //自定义dialog
@@ -196,7 +196,7 @@ var bt_dialog = {
 }
 
 //表单操作
-var form = {
+var formExt = {
     /**
      * clear 清空表单
      * @param {any} frm
@@ -219,16 +219,9 @@ var form = {
             if (v != null && v != 'undefined') 
                 this.val(v);
         });
-    },
-    /**
-     * getJson 获取表单JSON对象
-     * @param {any} frm 表单对象
-     */
-    getJsonObject: function (frm) {
-        if (frm == null || frm == 'undefined') {
-            bt_dialog.error("表单对象为空");
-            return;
-        }
-        return frm.serializeArray();
     }
+}
+
+function initSelect(slt, data) {
+
 }

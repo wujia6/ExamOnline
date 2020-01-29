@@ -6,7 +6,6 @@ using Application.IServices;
 using Domain.Entities.MenuAgg;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace ExamUI.Controllers
 {
@@ -21,14 +20,14 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public async Task<string> ParentsAsync(int? pid = 0)
+        public async Task<JsonResult> MenuParentsAsync(int? pid = 0)
         {
-            var result = await menuService.QuerysAsync(express: m => m.ParentId == pid);
-            return JsonConvert.SerializeObject(result);
+            var lstParents = await menuService.QuerySetAsync(express: m => m.ParentId == pid.Value);
+            return Json(lstParents);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(MenuDto model)
+        public async Task<JsonResult> AddAsync(MenuDto model)
         {
             if (model == null)
                 return Json(new { success = false, message = "请添加有效数据" });
@@ -37,29 +36,35 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditAsync(MenuDto model)
+        public async Task<JsonResult> EditAsync(MenuDto model)
         {
             return await menuService.EditAsync(model) ? 
                 Json(new { success = true, message = "提交成功！" }) : Json(new { success = false, message = "提交失败！" });
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveAsync(int id)
+        public async Task<JsonResult> RemoveAsync(int id)
         {
             return await menuService.RemoveAsync(express:m => m.ID == id) ?
                 Json(new { success = true, message = "操作成功！" }) : Json(new { success = false, message = "操作失败！" });
         }
 
         [HttpGet]
-        public async Task<IActionResult> ListsAsync(int? index = 1, int? size = 10, string type = "", string title = "")
+        public async Task<JsonResult> ListsAsync(int? index = 1, int? size = 10, string type = "", string title = "")
         {
             Expression<Func<MenuInfo, bool>> express = inf => true;
             if (!string.IsNullOrEmpty(type))
                 express = inf => express.Compile()(inf) && inf.MenuType.ToString().Contains(type);
             if (!string.IsNullOrEmpty(title))
                 express = inf => express.Compile()(inf) && inf.Title.Contains(title);
-            var result = await menuService.ListsAsync(index, size, express);
-            return Json(result);
+            var pageResult = await menuService.ListsAsync(index, size, express);
+            return Json(pageResult);
+        }
+
+        [HttpGet]
+        public IActionResult Settings()
+        {
+            return View();
         }
     }
 }

@@ -44,7 +44,9 @@ namespace Infrastructure.Repository
             return true;
         }
         
-        public T Single(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public T Single(
+            ISpecification<T> spec, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             if (include != null)
                 query = include(query);
@@ -85,14 +87,18 @@ namespace Infrastructure.Repository
         #endregion
 
         #region Async
-        public async Task<T> SingleAsync(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<T> SingleAsync(
+            ISpecification<T> spec, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             if (include != null)
                 query = include(query);
             return await query.SingleOrDefaultAsync(spec.Expression);
         }
 
-        public async Task<IEnumerable<T>> QuerySetAsync(ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+        public async Task<IEnumerable<T>> QuerySetAsync(
+            ISpecification<T> spec = null, 
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
             if (include != null)
                 query = include(query);

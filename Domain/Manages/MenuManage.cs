@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Domain.Entities;
 using Domain.Entities.MenuAgg;
 using Domain.IComm;
 using Domain.IManages;
@@ -19,6 +18,7 @@ namespace Domain.Manages
             this.efCore = ef;
         }
 
+        #region ### sync
         public bool Save(MenuInfo entity)
         {
             return efCore.SaveAs(entity);
@@ -31,36 +31,42 @@ namespace Domain.Manages
 
         public bool Remove(ISpecification<MenuInfo> spec)
         {
-            var entity = Single(spec);
+            var entity = efCore.Single(spec);
             return entity == null ? false : efCore.RemoveAs(entity);
         }
 
-        public MenuInfo Single(ISpecification<MenuInfo> spec)
-        {
-            return efCore.Single(spec);
-        }
+        //public MenuInfo Single(ISpecification<MenuInfo> spec)
+        //{
+        //    return efCore.Single(spec);
+        //}
 
-        public IEnumerable<MenuInfo> QuerySet(ISpecification<MenuInfo> spec)
-        {
-            return efCore.QuerySet(spec);
-        }
+        //public IEnumerable<MenuInfo> QuerySet(ISpecification<MenuInfo> spec)
+        //{
+        //    return efCore.QuerySet(spec);
+        //}
 
-        public IEnumerable<MenuInfo> Lists(
-            out int total, 
-            int? index, 
-            int? size, 
-            ISpecification<MenuInfo> spec = null, 
+        //public IEnumerable<MenuInfo> Lists(
+        //    out int total, 
+        //    int? index, 
+        //    int? size, 
+        //    ISpecification<MenuInfo> spec = null, 
+        //    Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
+        //{
+        //    return efCore.Lists(out total, index, size, spec, include);
+        //}
+        #endregion
+
+        #region ### async
+        public async Task<MenuInfo> SingleAsync(
+            ISpecification<MenuInfo> spec, 
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
-        {
-            return efCore.Lists(out total, index, size, spec, include);
-        }
-
-        public async Task<MenuInfo> SingleAsync(ISpecification<MenuInfo> spec)
         {
             return await efCore.SingleAsync(spec);
         }
 
-        public async Task<IEnumerable<MenuInfo>> QuerySetAsync(ISpecification<MenuInfo> spec)
+        public async Task<IEnumerable<MenuInfo>> QuerySetAsync(
+            ISpecification<MenuInfo> spec, 
+            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
             return await efCore.QuerySetAsync(spec);
         }
@@ -73,5 +79,6 @@ namespace Domain.Manages
         {
             return await efCore.ListsAsync(index, size, spec, include);
         }
+        #endregion
     }
 }

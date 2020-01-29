@@ -36,7 +36,7 @@ namespace Application.Services
 
         public async Task<bool> EditAsync(MenuDto model)
         {
-            if (model==null)
+            if (model == null)
                 return false;
             var entity = model.MapTo<MenuInfo>();
             return menuManage.Edit(entity) ? await context.SaveChangesAsync() > 0 : false;
@@ -48,20 +48,25 @@ namespace Application.Services
             return menuManage.Remove(spec) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public async Task<MenuDto> SingleAsync(Expression<Func<MenuInfo, bool>> express)
+        public async Task<MenuDto> SingleAsync(
+            Expression<Func<MenuInfo, bool>> express, 
+            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
             var spec = Specification<MenuInfo>.Eval(express);
             var entity = await menuManage.SingleAsync(spec);
             return entity.MapTo<MenuDto>();
         }
 
-        public async Task<List<MenuDto>> QuerysAsync(Expression<Func<MenuInfo, bool>> express = null)
+        public async Task<List<MenuDto>> QuerySetAsync(
+            Expression<Func<MenuInfo, bool>> express = null,
+            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
             var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
-            return await Task.Run(() => menuManage.QuerySet(spec).MapToList<MenuDto>());
+            var lsts = await menuManage.QuerySetAsync(spec);
+            return lsts.MapToList<MenuDto>();
         }
 
-        public async Task<PagingResult<MenuDto>> ListsAsync(
+        public async Task<PageResult<MenuDto>> ListsAsync(
             int? index, 
             int? size, 
             Expression<Func<MenuInfo, bool>> express = null, 
@@ -69,7 +74,7 @@ namespace Application.Services
         {
             var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
             var result = await menuManage.ListsAsync(index, size, spec, include);
-            var paging = new PagingResult<MenuDto>
+            var paging = new PageResult<MenuDto>
             {
                 Total = Convert.ToInt32(result.GetType().GetProperty("Total").GetValue(result)),
                 Rows = (result.GetType().GetProperty("Rows").GetValue(result) as IEnumerable<MenuInfo>).MapToList<MenuDto>()

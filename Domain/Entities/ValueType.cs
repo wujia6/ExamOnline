@@ -70,15 +70,4 @@ namespace Domain.Entities
         teacher=25,
         student=26
     }
-
-    /// <summary>
-    /// 分页查询返回类
-    /// </summary>
-    public struct PageResult<T>
-    {
-        //总记录数
-        public int Total { get; set; }
-        //分页数据
-        public IEnumerable<T> Rows { get; set; }
-    }
 }

@@ -21,7 +21,7 @@ namespace Application.DTO.Models
 
         public string RememberMe { get; set; }
 
-        public int ExpireMin { get; set; } = 15;    //cookie过期时间
+        public int ExpireMin { get; set; } = 20;    //cookie过期时间
 
         public string ReturnUrl { get; set; }   //返回rul
 
