@@ -10,6 +10,7 @@ using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore.Query;
+using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -24,41 +25,50 @@ namespace Application.Services
             this.context = cxt;
         }
 
-        public bool Save(RoleDto model)
+        public async Task<bool> SaveAsync(RoleDto model)
         {
             var entity = model.MapTo<RoleInfo>();
-            return roleManage.Save(entity) ? context.SaveChanges() > 0 : false;
+            return roleManage.SaveAs(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public bool Edit(RoleDto model)
+        public async Task<bool> EditAsync(RoleDto model)
         {
             var entity = model.MapTo<RoleInfo>();
-            return roleManage.Edit(entity) ? context.SaveChanges() > 0 : false;
+            return roleManage.EditTo(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public bool Remove(Expression<Func<RoleInfo, bool>> express)
+        public async Task<bool> RemoveAsync(Expression<Func<RoleInfo, bool>> express)
         {
             var spec = Specification<RoleInfo>.Eval(express);
-            return roleManage.Remove(spec) ? context.SaveChanges() > 0 : false;
+            return roleManage.RemoveAt(spec) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public List<RoleDto> Lists(
-            out int total,
-            int? index,
-            int? size,
-            Expression<Func<RoleInfo, bool>> express = null, 
-            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
-        {
-            var spec = express == null? null : Specification<RoleInfo>.Eval(express);
-            return roleManage.Lists(out total, index, size, spec, include).MapToList<RoleDto>();
-        }
-
-        public RoleDto Single(
+        public async Task<RoleDto> SingleAsync(
             Expression<Func<RoleInfo, bool>> express, 
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
         {
             var spec = Specification<RoleInfo>.Eval(express);
-            return roleManage.Single(spec, include).MapTo<RoleDto>();
+            var entity = await roleManage.SingleAsync(spec);
+            return entity.MapTo<RoleDto>();
+        }
+
+        public async Task<List<RoleDto>> QueryAsync(
+            Expression<Func<RoleInfo, bool>> express = null, 
+            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
+        {
+            var spec = express == null? null : Specification<RoleInfo>.Eval(express);
+            var entities = await roleManage.QueryAsync(spec,include);
+            return entities.MapToList<RoleDto>();
+        }
+
+        public async Task<PageResult<RoleDto>> QueryAsync(
+            int index, int size,
+            Expression<Func<RoleInfo, bool>> express = null, 
+            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
+        {
+            var spec = express == null? null : Specification<RoleInfo>.Eval(express);
+            var anonymous = await roleManage.QueryAsync(index, size, spec, include);
+            return anonymous.ToPageResult<RoleDto>();
         }
     }
 }

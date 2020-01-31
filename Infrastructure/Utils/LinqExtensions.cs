@@ -13,23 +13,23 @@ namespace System.Linq
         //Where异步扩展方法
         public async static Task<IQueryable<TSource>> WhereAsync<TSource>(
             this IQueryable<TSource> source,
-            Expression<Func<TSource, bool>> express,
-            CancellationToken cancellationToken = default)
+            Expression<Func<TSource, bool>> predicate,
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            if (express == null)
-                throw new ArgumentNullException(nameof(express));
-            var lst = new List<TSource>();
-            using (var e = source.ToAsyncEnumerable().GetEnumerator())
+            if (predicate == null)
+                throw new ArgumentNullException(nameof(predicate));
+            IQueryable<TSource> iQuery = new List<TSource>().AsQueryable();
+            using (var asyncEnumerator = source.ToAsyncEnumerable().GetEnumerator())
             {
-                while (await e.MoveNext(cancellationToken).ConfigureAwait(false))
+                while (await asyncEnumerator.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (express.Compile()(e.Current))
-                        lst.Add(e.Current);
+                    if (predicate.Compile()(asyncEnumerator.Current))
+                        iQuery.Append(asyncEnumerator.Current);
                 }
             }
-            return lst.AsQueryable();
+            return iQuery;
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.Entities;
+using System.Threading.Tasks;
+using Domain.Entities.ClassAgg;
 using Domain.IComm;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -10,73 +11,25 @@ namespace Domain.IManages
     /// <summary>
     /// 领域服务班级接口
     /// </summary>
-    public interface IClassManage<T> where T : BaseEntity, IAggregateRoot
-    {
-        /// <summary>
-        /// 插入或更新
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-        /// <returns></returns>
-        bool AddOrEdit(T entity);
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="spec">规约对象</param>
-        /// <returns></returns>
-        bool Remove(ISpecification<T> spec);
-
-        /// <summary>
-        /// 查询单个
-        /// </summary>
-        /// <param name="spec">规约对象</param>
-        /// <param name="include">包含导航属性</param>
-        /// <returns></returns>
-        T Single(ISpecification<T> spec = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="spec">规约对象</param>
-        /// <param name="include">包含导航属性</param>
-        /// <returns></returns>
-        IEnumerable<T> Lists(ISpecification<T> spec = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
-    }
-
     public interface IClassManage
     {
-        /// <summary>
-        /// 插入或更新
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-        /// <returns></returns>
-        bool AddOrEdit<T>(T entity) where T : BaseEntity;
+        bool SaveAs(ClassInfo entity);
 
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="spec">规约对象</param>
-        /// <returns></returns>
-        bool Remove<T>(ISpecification<T> spec) where T : BaseEntity;
+        bool EditTo(ClassInfo entity);
+        
+        bool RemoveAt(ISpecification<ClassInfo> spec);
+        
+        Task<ClassInfo> SingleAsync(
+            ISpecification<ClassInfo> spec = null,
+            Func<IQueryable<ClassInfo>, IIncludableQueryable<ClassInfo, object>> include = null);
 
-        /// <summary>
-        /// 查询单个
-        /// </summary>
-        /// <param name="spec">规约对象</param>
-        /// <param name="include">包含导航属性</param>
-        /// <returns></returns>
-        T Single<T>(ISpecification<T> spec = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null) where T : BaseEntity;
+        Task<IEnumerable<ClassInfo>> QueryAsync(
+            ISpecification<ClassInfo> spec = null,
+            Func<IQueryable<ClassInfo>, IIncludableQueryable<ClassInfo, object>> include = null);
 
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="spec">规约对象</param>
-        /// <param name="include">包含导航属性</param>
-        /// <returns></returns>
-        IEnumerable<T> Lists<T>(ISpecification<T> spec = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null) where T : BaseEntity;
+        Task<object> QueryAsync(
+            int index, int size,
+            ISpecification<ClassInfo> spec = null,
+            Func<IQueryable<ClassInfo>, IIncludableQueryable<ClassInfo, object>> include = null);
     }
 }

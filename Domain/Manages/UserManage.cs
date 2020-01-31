@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Domain.IManages;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.Manages
 {
@@ -20,73 +22,56 @@ namespace Domain.Manages
             this.efCore = ef;
         }
 
-        public bool AddOrEdit(dynamic entity)
+        public bool SaveAs(dynamic entity)
         {
-            if (entity == null)
-                return false;
-            return entity.ID > 0 ? efCore.EditAs(entity) : efCore.SaveAs(entity);
+            return efCore.SaveAs(entity);
         }
 
-        public bool Remove(ISpecification<UserInfo> spec)
+        public bool EditTo(UserInfo entity)
         {
-            var entity = Single(spec);
-            return entity == null ? false : efCore.RemoveAs(entity);
+            return efCore.EditTo(entity);
         }
 
-        public dynamic Single(ISpecification<UserInfo> spec, 
+        public bool RemoveAt(ISpecification<UserInfo> spec)
+        {
+            var entity = efCore.EntitySet.SingleOrDefault(spec.Expression);
+            return entity == null ? false : efCore.RemoveAt(entity);
+        }
+
+        public async Task<dynamic> SingleAsync(
+            ISpecification<UserInfo> spec, 
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
-            return efCore.GetEntity(spec, include);
+            if (include != null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            return await efCore.EntitySet.FirstOrDefaultAsync(spec.Expression);
         }
 
-        public IEnumerable<dynamic> Lists(ISpecification<UserInfo> spec = null, 
-            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
-        {
-            return efCore.GetEntities(spec, include);
-        }
-
-        public IEnumerable<UserInfo> Lists(out int total, int? pageIndex = 0, int? pageSize = 10, 
+        public async Task<IEnumerable<dynamic>> QueryAsync(
             ISpecification<UserInfo> spec = null, 
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
-            return efCore.Lists(out total, pageIndex, pageSize, spec, include);
-        }
-    }
-
-    /// <summary>
-    /// 领域用户泛型服务实现类
-    /// </summary>
-    public class UserManage<T> : IUserManage<T> where T : Entities.BaseEntity, IAggregateRoot
-    {
-        private readonly IEfCoreRepository<T> efCore;
-
-        public UserManage(IEfCoreRepository<T> ef)
-        {
-            this.efCore = ef;
+            if (include != null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            if (spec != null)
+                efCore.EntitySet = await efCore.EntitySet.WhereAsync(spec.Expression);
+            return efCore.EntitySet;
         }
 
-        public bool AddorEdit(T entity)
+        public async Task<object> QueryAsync(
+            int index, int size, 
+            ISpecification<UserInfo> spec = null, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
-            if (entity == null)
-                return false;
-            return entity.ID > 0 ? efCore.EditAs(entity) : efCore.SaveAs(entity);
-        }
-
-        public bool Remove(ISpecification<T> spec)
-        {
-            var entity = Single(spec);
-            return entity == null ? false : efCore.RemoveAs(entity);
-        }
-
-        public T Single(ISpecification<T> spec, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
-        {
-            return efCore.GetEntity(spec, include);
-        }
-
-        public IEnumerable<T> Lists(out int total, int? pageIndex = 1, int? pageSize = 10,
-            ISpecification<T> spec = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
-        {
-            return efCore.Lists(out total, pageIndex, pageSize, spec, include);
+            if (include != null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            if (spec != null)
+                efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
+            return new
+            {
+                Total = efCore.EntitySet.Count(),
+                Rows = await efCore.EntitySet.Skip((index - 1) * size).Take(size).ToListAsync()
+            };
         }
     }
 }

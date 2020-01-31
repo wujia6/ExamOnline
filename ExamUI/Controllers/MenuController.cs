@@ -50,14 +50,14 @@ namespace ExamUI.Controllers
                 express = inf => express.Compile()(inf) && inf.MenuType.ToString().Contains(type);
             if (!string.IsNullOrEmpty(title))
                 express = inf => express.Compile()(inf) && inf.Title.Contains(title);
-            var pageResult = await menuService.PageListAsync(index, size, express);
+            var pageResult = await menuService.QueryAsync(index.Value, size.Value, express);
             return Json(pageResult);
         }
 
         [HttpGet]
         public async Task<JsonResult> GetParentsAsync(int? pid = 0)
         {
-            var parents = await menuService.GetModelsAsync(express: m => m.ParentId == pid.Value);
+            var parents = await menuService.QueryAsync(express: m => m.ParentId == pid.Value);
             return Json(new { success = true, rows = parents });
         }
 

@@ -59,7 +59,7 @@ namespace ExamUI.Controllers
                 if (string.Compare(scode, model.VerificyCode) != 0)
                     return Json(new { success = false, message = "验证码错误" });
 
-                var applicationUser = userService.Single(
+                var applicationUser = await userService.SingleAsync(
                     express: usr => usr.Account == model.UserAccount && usr.Pwd == model.UserPassword,
                     include: src => src.Include(u => u.UserRoles).ThenInclude(r => r.RoleInfomation));
 

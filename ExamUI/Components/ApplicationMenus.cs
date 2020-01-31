@@ -7,6 +7,7 @@ using Application.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using System.Threading.Tasks;
 
 namespace ExamUI.Components
 {
@@ -53,21 +54,21 @@ namespace ExamUI.Components
         /// </summary>
         /// <param name="fromRoles">角色字符串</param>
         /// <returns></returns>
-        private List<MenuDto> ReadMenusBy(string fromRoles)
+        private async Task<List<MenuDto>> ReadMenusBy(string fromRoles)
         {
             List<MenuDto> menus = null;
             if (fromRoles.IndexOf(',') > 0)
             {
                 foreach (var code in fromRoles.Split(','))
                 {
-                    var role = roleService.Single(express: src => src.Code == code,
+                    var role = await roleService.SingleAsync(express: src => src.Code == code,
                         include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
                     menus = BuilderTree(role.MenuDtos, null, 0);
                 }
             }
             else
             {
-                var role = roleService.Single(express: src => src.Code == fromRoles,
+                var role = await roleService.SingleAsync(express: src => src.Code == fromRoles,
                     include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
                 menus = BuilderTree(role.MenuDtos, null, 0);
             }

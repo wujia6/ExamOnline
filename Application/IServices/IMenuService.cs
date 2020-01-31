@@ -17,17 +17,17 @@ namespace Application.IServices
         
         Task<bool> RemoveAsync(Expression<Func<MenuInfo, bool>> express);
         
-        Task<MenuDto> GetModelAsync(
+        Task<MenuDto> SingleAsync(
             Expression<Func<MenuInfo, bool>> express, 
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
         
-        Task<List<MenuDto>> GetModelsAsync(
+        Task<List<MenuDto>> QueryAsync(
             Expression<Func<MenuInfo, bool>> express = null, 
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
         
-        Task<PageResult<MenuDto>> PageListAsync(
-            int? index,
-            int? size,
+        Task<PageResult<MenuDto>> QueryAsync(
+            int index,
+            int size,
             Expression<Func<MenuInfo, bool>> express = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
     }

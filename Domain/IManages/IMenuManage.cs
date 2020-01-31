@@ -10,39 +10,23 @@ namespace Domain.IManages
 {
     public interface IMenuManage
     {
-        #region ### sync
-        bool Save(MenuInfo entity);
+        #region ### functions
+        bool SaveAs(MenuInfo entity);
 
-        bool Edit(MenuInfo entity);
+        bool EditTo(MenuInfo entity);
 
-        bool Remove(ISpecification<MenuInfo> spec);
+        bool RemoveAt(ISpecification<MenuInfo> spec);
 
-        //MenuInfo GetEntity(ISpecification<MenuInfo> spec);
-
-        //IEnumerable<MenuInfo> GetEntities(
-        //    ISpecification<MenuInfo> spec, 
-        //    Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
-
-        //IEnumerable<MenuInfo> Lists(
-        //    out int total, 
-        //    int? index, 
-        //    int? size,
-        //    ISpecification<MenuInfo> spec = null,
-        //    Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
-        #endregion
-
-        #region ### async
-        Task<MenuInfo> GetEntityAsync(
+        Task<MenuInfo> SingleAsync(
             ISpecification<MenuInfo> spec,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
 
-        Task<IEnumerable<MenuInfo>> GetEntitiesAsync(
+        Task<IEnumerable<MenuInfo>> QueryAsync(
             ISpecification<MenuInfo> spec = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
 
-        Task<object> PageListAsync(
-            int? index,
-            int? size,
+        Task<object> QueryAsync(
+            int index, int size,
             ISpecification<MenuInfo> spec = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
         #endregion

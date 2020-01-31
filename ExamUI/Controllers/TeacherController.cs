@@ -18,37 +18,5 @@ namespace ExamUI.Controllers
             this.userService = usr;
             this.classService = cls;
         }
-
-        [HttpPost]
-        public IActionResult AddOrEdit(TeacherDto model)
-        {
-            return userService.AddOrEdit(model) ? 
-                Json(new { success = true, message = "操作成功！" }) : Json(new { success = false, message = "操作失败！" });
-        }
-
-        [HttpPost]
-        public IActionResult Remove(int id)
-        {
-            if (id == 0)
-                return Json(new { success = false, message = "请选择删除记录" });
-            return userService.Remove(express:t=>t.ID==id)?
-                Json(new { success = true, message = "删除成功！" }) : Json(new { success = false, message = "删除失败！" });
-        }
-
-        [HttpGet]
-        public IActionResult Details(int? id)
-        {
-            var model = userService.Single(express: t => t.ID == id,
-                include: src => src.Include(x => (x as TeacherInfo).ClassTeachers).ThenInclude(ct => ct.ClassInfomation));
-            return View(model);
-        }
-
-        [HttpGet]
-        public IActionResult Lists(int? pageIndex = 1, int? pageSize = 10)
-        {
-            var lsts = userService.Lists(out int total, pageIndex, pageSize);
-            ViewBag.AllRecords = total;
-            return View(lsts);
-        }
     }
 }

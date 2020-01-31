@@ -10,6 +10,7 @@ using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore.Query;
 using AutoMapper.Execution;
 using Application.DTO.Models;
+using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -24,35 +25,54 @@ namespace Application.Services
             this.context = cxt;
         }
 
-        public bool AddOrEdit(ExaminationDto model)
+        public async Task<bool> SaveAsync(ExaminationDto model)
         {
             if (model == null)
                 return false;
             var entity = model.MapTo<ExaminationInfo>();
-            return examManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
+            return examManage.SaveAs(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public bool Remove(Expression<Func<ExaminationInfo, bool>> express)
+        public async Task<bool> EditAsync(ExaminationDto model)
+        {
+            if (model == null)
+                return false;
+            var entity = model.MapTo<ExaminationInfo>();
+            return examManage.EditTo(entity) ? await context.SaveChangesAsync() > 0 : false;
+        }
+
+        public async Task<bool> RemoveAsync(Expression<Func<ExaminationInfo, bool>> express)
         {
             var spec = Specification<ExaminationInfo>.Eval(express);
-            return examManage.Remove(spec) ? context.SaveChanges() > 0 : false;
+            return examManage.RemoveAt(spec) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public ExaminationDto Single(Expression<Func<ExaminationInfo, bool>> express = null,
+        public async Task<ExaminationDto> SingleAsync(
+            Expression<Func<ExaminationInfo, bool>> express,
             Func<IQueryable<ExaminationInfo>, IIncludableQueryable<ExaminationInfo, object>> include = null)
         {
             var spec = Specification<ExaminationInfo>.Eval(express);
-            var entity = examManage.Single(spec, include);
+            var entity = await examManage.SingleAsync(spec);
             return entity.MapTo<ExaminationDto>();
         }
 
-        public List<ExaminationDto> Lists(Expression<Func<ExaminationInfo, bool>> express = null,
+        public async Task<List<ExaminationDto>> QueryAsync(
+            Expression<Func<ExaminationInfo, bool>> express = null,
             Func<IQueryable<ExaminationInfo>, IIncludableQueryable<ExaminationInfo, object>> include = null)
         {
-            var spec = Specification<ExaminationInfo>.Eval(express);
-            var lst = examManage.Lists(spec, include);
-            return lst.MapToList<ExaminationDto>();
+            var spec = express == null ? null : Specification<ExaminationInfo>.Eval(express);
+            var entities = await examManage.QueryAsync(spec);
+            return entities.MapToList<ExaminationDto>();
+        }
 
+        public async Task<PageResult<ExaminationDto>> QueryAsync(
+            int index, int size,
+            Expression<Func<ExaminationInfo, bool>> express = null,
+            Func<IQueryable<ExaminationInfo>, IIncludableQueryable<ExaminationInfo, object>> include = null)
+        {
+            var spec = express == null ? null : Specification<ExaminationInfo>.Eval(express);
+            var anonymous = await examManage.QueryAsync(index, size, spec, include);
+            return anonymous.ToPageResult<ExaminationDto>();
         }
     }
 }

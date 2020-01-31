@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Application.DTO.Models;
 using Domain.Entities.ExamAgg;
 using Microsoft.EntityFrameworkCore.Query;
@@ -13,36 +14,23 @@ namespace Application.IServices
     /// </summary>
     public interface IExaminationService
     {
-        /// <summary>
-        /// 插入或更新
-        /// </summary>
-        /// <param name="model">实体对象</param>
-        /// <returns></returns>
-        bool AddOrEdit(ExaminationDto model);
+        Task<bool> SaveAsync(ExaminationDto model);
 
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="spec">规约对象</param>
-        /// <returns></returns>
-        bool Remove(Expression<Func<ExaminationInfo, bool>> express);
+        Task<bool> EditAsync(ExaminationDto model);
 
-        /// <summary>
-        /// 获取单个模型
-        /// </summary>
-        /// <param name="express">表达式</param>
-        /// <param name="include">包含导航属性</param>
-        /// <returns></returns>
-        ExaminationDto Single(Expression<Func<ExaminationInfo, bool>> express = null,
+        Task<bool> RemoveAsync(Expression<Func<ExaminationInfo, bool>> express);
+
+        Task<ExaminationDto> SingleAsync(
+            Expression<Func<ExaminationInfo, bool>> express,
             Func<IQueryable<ExaminationInfo>, IIncludableQueryable<ExaminationInfo, object>> include = null);
 
-        /// <summary>
-        /// 获取模型集合
-        /// </summary>
-        /// <param name="express">表达式</param>
-        /// <param name="include">包含导航属性</param>
-        /// <returns></returns>
-        List<ExaminationDto> Lists(Expression<Func<ExaminationInfo, bool>> express = null,
+        Task<List<ExaminationDto>> QueryAsync(
+            Expression<Func<ExaminationInfo, bool>> express = null,
+            Func<IQueryable<ExaminationInfo>, IIncludableQueryable<ExaminationInfo, object>> include = null);
+
+        Task<PageResult<ExaminationDto>> QueryAsync(
+            int index, int size,
+            Expression<Func<ExaminationInfo, bool>> express = null,
             Func<IQueryable<ExaminationInfo>, IIncludableQueryable<ExaminationInfo, object>> include = null);
     }
 }

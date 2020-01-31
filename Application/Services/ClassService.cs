@@ -9,53 +9,12 @@ using Domain.IManages;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore.Query;
 using AutoMapper.Execution;
+using System.Threading.Tasks;
+using Application.DTO.Models;
+using Domain.Entities.ClassAgg;
 
 namespace Application.Services
 {
-    public class ClassService<TSource, TDestination> : IClassService<TSource, TDestination> 
-        where TSource : BaseEntity, IAggregateRoot 
-        where TDestination : class
-    {
-        private readonly IClassManage<TSource> classManage;
-        private readonly IExamDbContext context;
-
-        public ClassService(IClassManage<TSource> manage, IExamDbContext cxt)
-        {
-            this.classManage = manage;
-            this.context = cxt;
-        }
-
-        public bool AddOrEdit(TDestination model)
-        {
-            if (model == null)
-                return false;
-            var entity = model.MapTo<TSource>();
-            return classManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
-        }
-
-        public bool Remove(Expression<Func<TSource, bool>> express)
-        {
-            var spec = Specification<TSource>.Eval(express);
-            return classManage.Remove(spec) ? context.SaveChanges() > 0 : false;
-        }
-
-        public TDestination Single(Expression<Func<TSource, bool>> express = null, 
-            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
-        {
-            var spec = Specification<TSource>.Eval(express);
-            var entity = classManage.Single(spec, include);
-            return entity.MapTo<TDestination>();
-        }
-
-        public List<TDestination> Lists(Expression<Func<TSource, bool>> express = null, 
-            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null)
-        {
-            var spec = Specification<TSource>.Eval(express);
-            var lst = classManage.Lists(spec, include);
-            return lst.MapToList<TDestination>();
-        }
-    }
-
     public class ClassService : IClassService
     {
         private readonly IClassManage classManage;
@@ -67,32 +26,54 @@ namespace Application.Services
             this.context = cxt;
         }
 
-        public bool AddOrEdit<TSource>(TSource entity) where TSource : BaseEntity
+        public async Task<bool> SaveAsync(ClassDto model)
         {
-            if (entity==null)
+            if (model == null)
                 return false;
-            return classManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
+            var entity = model.MapTo<ClassInfo>();
+            return classManage.SaveAs(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public bool Remove<TSource>(Expression<Func<TSource, bool>> express) where TSource : BaseEntity
+        public async Task<bool> EditAsync(ClassDto model)
         {
-            var spec = Specification<TSource>.Eval(express);
-            return classManage.Remove(spec) ? context.SaveChanges() > 0 : false;
+            if (model == null)
+                return false;
+            var entity = model.MapTo<ClassInfo>();
+            return classManage.EditTo(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public TDestination Single<TSource, TDestination>(Expression<Func<TSource, bool>> express,
-            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null) where TSource : BaseEntity
+        public async Task<bool> RemoveAsync(Expression<Func<ClassInfo, bool>> express)
         {
-            var spec = Specification<TSource>.Eval(express);
-            return classManage.Single(spec, include).MapTo<TDestination>();
+            var spec = Specification<ClassInfo>.Eval(express);
+            return classManage.RemoveAt(spec) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public List<TDestination> Lists<TSource, TDestination>(Expression<Func<TSource, bool>> express = null, 
-            Func<IQueryable<TSource>, IIncludableQueryable<TSource, object>> include = null) where TSource : BaseEntity
+        public async Task<ClassDto> SingleAsync(
+            Expression<Func<ClassInfo, bool>> express,
+            Func<IQueryable<ClassInfo>, IIncludableQueryable<ClassInfo, object>> include = null)
         {
-            var spec = Specification<TSource>.Eval(express);
-            var lst = classManage.Lists<TSource>(spec, include);
-            return lst.MapToList<TDestination>();
+            var spec = Specification<ClassInfo>.Eval(express);
+            var entity = await classManage.SingleAsync(spec);
+            return entity.MapTo<ClassDto>();
+        }
+
+        public async Task<List<ClassDto>> QueryAsync(
+            Expression<Func<ClassInfo, bool>> express = null,
+            Func<IQueryable<ClassInfo>, IIncludableQueryable<ClassInfo, object>> include = null)
+        {
+            var spec = express == null ? null : Specification<ClassInfo>.Eval(express);
+            var entities = await classManage.QueryAsync(spec);
+            return entities.MapToList<ClassDto>();
+        }
+
+        public async Task<PageResult<ClassDto>> QueryAsync(
+            int index, int size,
+            Expression<Func<ClassInfo, bool>> express = null,
+            Func<IQueryable<ClassInfo>, IIncludableQueryable<ClassInfo, object>> include = null)
+        {
+            var spec = express == null ? null : Specification<ClassInfo>.Eval(express);
+            var anonymous = await classManage.QueryAsync(index, size, spec, include);
+            return anonymous.ToPageResult<ClassDto>();
         }
     }
 }

@@ -2,23 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Application.DTO.Models;
 using Domain.Entities.UserAgg;
+using Domain.IManages;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.IServices
 {
-    public interface IAdminService
+    public interface IAdminService : IUserService
     {
-        bool AddOrEdit(AdminDto model);
+        //Task<bool> SaveAsync(AdminDto model);
 
-        bool Remove(Expression<Func<AdminInfo, bool>> express);
+        //Task<bool> EditAsync(AdminDto model);
 
-        AdminDto Single(Expression<Func<AdminInfo, bool>> express,
-            Func<IQueryable<AdminInfo>, IIncludableQueryable<AdminInfo, object>> include = null);
+        //Task<bool> RemoveAsync(Expression<Func<AdminInfo, bool>> express);
 
-        List<AdminDto> Lists(out int total, int? pageIndex = 1, int? pageSize = 10, 
-            Expression<Func<AdminInfo, bool>> express = null, 
-            Func<IQueryable<AdminInfo>, IIncludableQueryable<AdminInfo, object>> include = null);
+        //Task<AdminDto> SingleAsync(
+        //    Expression<Func<AdminInfo, bool>> express,
+        //    Func<IQueryable<AdminInfo>, IIncludableQueryable<AdminInfo, object>> include = null);
+
+        //Task<List<AdminDto>> QueryAsync(
+        //    Expression<Func<AdminInfo, bool>> express = null,
+        //    Func<IQueryable<AdminInfo>, IIncludableQueryable<AdminInfo, object>> include = null);
+
+        //Task<PageResult<AdminDto>> QueryAsync(
+        //    int index, int size,
+        //    Expression<Func<AdminInfo, bool>> express = null,
+        //    Func<IQueryable<AdminInfo>, IIncludableQueryable<AdminInfo, object>> include = null);
     }
 }

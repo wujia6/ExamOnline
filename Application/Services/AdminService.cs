@@ -3,52 +3,76 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
-using AutoMapper.Execution;
 using Application.DTO.Models;
 using Application.IServices;
 using Domain.Entities.UserAgg;
 using Domain.IComm;
 using Domain.IManages;
+using System.Threading.Tasks;
 using Infrastructure.Repository;
+using AutoMapper.Execution;
 
 namespace Application.Services
 {
     public class AdminService : IAdminService
     {
-        private readonly IUserManage<AdminInfo> adminManage;
+        private readonly IUserManage adminManage;
         private readonly IExamDbContext context;
 
-        public AdminService(IUserManage<AdminInfo> manage, IExamDbContext cxt)
+        public AdminService(IUserManage manage, IExamDbContext cxt)
         {
             this.adminManage = manage;
             this.context = cxt;
         }
 
-        public bool AddOrEdit(AdminDto model)
+        public async Task<bool> SaveAsync(dynamic model)
         {
             if (model == null)
                 return false;
-            return adminManage.AddorEdit(model.MapTo<AdminInfo>());
+            var entity = model.MapTo<AdminInfo>();
+            return adminManage.SaveAs(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public bool Remove(Expression<Func<AdminInfo, bool>> express)
+        public async Task<bool> EditAsync(dynamic model)
         {
-            var spec = Specification<AdminInfo>.Eval(express);
-            return adminManage.Remove(spec);
+            if (model == null)
+                return false;
+            var entity = model.MapTo<AdminInfo>();
+            return adminManage.EditTo(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public AdminDto Single(Expression<Func<AdminInfo, bool>> express, 
-            Func<IQueryable<AdminInfo>, IIncludableQueryable<AdminInfo, object>> include = null)
+        public async Task<bool> RemoveAsync(Expression<Func<UserInfo, bool>> express)
         {
-            var spec = Specification<AdminInfo>.Eval(express);
-            return adminManage.Single(spec, include).MapTo<AdminDto>();
+            var spec = Specification<UserInfo>.Eval(express);
+            return adminManage.RemoveAt(spec) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public List<AdminDto> Lists(out int total, int? pageIndex = 1, int? pageSize = 10, 
-            Expression<Func<AdminInfo, bool>> express = null, 
-            Func<IQueryable<AdminInfo>, IIncludableQueryable<AdminInfo, object>> include = null)
+        public async Task<ApplicationUser> SingleAsync(
+            Expression<Func<UserInfo, bool>> express, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
         {
-            throw new NotImplementedException();
+            var spec = Specification<UserInfo>.Eval(express);
+            var entity = await adminManage.SingleAsync(spec);
+            return entity.MapTo<ApplicationUser>();
+        }
+
+        public async Task<List<ApplicationUser>> QueryAsync(
+            Expression<Func<UserInfo, bool>> express = null, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        {
+            var spec = express == null ? null : Specification<UserInfo>.Eval(express);
+            var entities = await adminManage.QueryAsync(spec) as IEnumerable<UserInfo>;
+            return entities.MapToList<ApplicationUser>();
+        }
+
+        public async Task<PageResult<ApplicationUser>> QueryAsync(
+            int index, int size, 
+            Expression<Func<UserInfo, bool>> express = null, 
+            Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null)
+        {
+            var spec = express == null ? null : Specification<UserInfo>.Eval(express);
+            var anonymous = await adminManage.QueryAsync(index, size, spec, include);
+            return anonymous.ToPageResult<ApplicationUser>();
         }
     }
 }

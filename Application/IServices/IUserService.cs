@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.Query;
 using Domain.Entities.UserAgg;
 using Application.DTO.Models;
+using System.Threading.Tasks;
 
 namespace Application.IServices
 {
@@ -13,17 +14,22 @@ namespace Application.IServices
     /// </summary>
     public interface IUserService
     {
-        bool AddOrEdit(dynamic model);
+        Task<bool> SaveAsync(dynamic model);
 
-        bool Remove(Expression<Func<UserInfo, bool>> express);
+        Task<bool> EditAsync(dynamic model);
 
-        ApplicationUser Single(Expression<Func<UserInfo, bool>> express, 
+        Task<bool> RemoveAsync(Expression<Func<UserInfo, bool>> express);
+
+        Task<ApplicationUser> SingleAsync(
+            Expression<Func<UserInfo, bool>> express, 
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
-        List<ApplicationUser> Lists(Expression<Func<UserInfo, bool>> express = null,
+        Task<List<ApplicationUser>> QueryAsync(
+            Expression<Func<UserInfo, bool>> express = null,
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
 
-        List<ApplicationUser> Lists(out int total, int? pageIndex = 1, int? pageSize = 10, 
+        Task<PageResult<ApplicationUser>> QueryAsync(
+            int index, int size, 
             Expression<Func<UserInfo, bool>> express = null,
             Func<IQueryable<UserInfo>, IIncludableQueryable<UserInfo, object>> include = null);
     }

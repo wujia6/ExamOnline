@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Domain.Entities.AnwserAgg;
 using Domain.IComm;
 using Microsoft.EntityFrameworkCore.Query;
@@ -12,36 +13,23 @@ namespace Domain.IManages
     /// </summary>
     public interface IAnswerManage
     {
-        /// <summary>
-        /// 添加或修改
-        /// </summary>
-        /// <param name="entity">实体对象</param>
-        /// <returns></returns>
-        bool AddOrEdit(AnswerInfo entity);
+        bool SaveAs(AnswerInfo entity);
 
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="spec">规约表达式</param>
-        /// <returns></returns>
-        bool Remove(ISpecification<AnswerInfo> spec);
-
-        /// <summary>
-        /// 查询单个
-        /// </summary>
-        /// <param name="spec">规约对象</param>
-        /// <param name="include">包含导航属性</param>
-        /// <returns></returns>
-        AnswerInfo Single(ISpecification<AnswerInfo> spec = null,
+        bool EditTo(AnswerInfo entity);
+        
+        bool RemoveAt(ISpecification<AnswerInfo> spec);
+        
+        Task<AnswerInfo> SingleAsync(
+            ISpecification<AnswerInfo> spec = null,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null);
 
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="spec">规约对象</param>
-        /// <param name="include">包含导航属性</param>
-        /// <returns></returns>
-        IEnumerable<AnswerInfo> Lists(ISpecification<AnswerInfo> spec = null,
+        Task<IEnumerable<AnswerInfo>> QueryAsync(
+            ISpecification<AnswerInfo> spec = null,
+            Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null);
+
+        Task<object> QueryAsync(
+            int index, int size,
+            ISpecification<AnswerInfo> spec = null,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null);
     }
 }

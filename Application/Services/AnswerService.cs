@@ -10,6 +10,7 @@ using Domain.IManages;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore.Query;
 using Application.DTO.Models;
+using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -24,34 +25,54 @@ namespace Application.Services
             this.context = cxt;
         }
 
-        public bool AddOrEdit(AnswerDto model)
+        public async Task<bool> SaveAsync(AnswerDto model)
         {
             if (model == null)
                 return false;
             var entity = model.MapTo<AnswerInfo>();
-            return answerManage.AddOrEdit(entity) ? context.SaveChanges() > 0 : false;
+            return answerManage.SaveAs(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public bool Remove(Expression<Func<AnswerInfo, bool>> express)
+        public async Task<bool> EditAsync(AnswerDto model)
+        {
+            if (model == null)
+                return false;
+            var entity = model.MapTo<AnswerInfo>();
+            return answerManage.EditTo(entity) ? await context.SaveChangesAsync() > 0 : false;
+        }
+
+        public async Task<bool> RemoveAsync(Expression<Func<AnswerInfo, bool>> express)
         {
             var spec = Specification<AnswerInfo>.Eval(express);
-            return answerManage.Remove(spec) ? context.SaveChanges() > 0 : false;
+            return answerManage.RemoveAt(spec) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public AnswerDto Single(Expression<Func<AnswerInfo, bool>> express = null,
+        public async Task<AnswerDto> SingleAsync(
+            Expression<Func<AnswerInfo, bool>> express,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null)
         {
             var spec = Specification<AnswerInfo>.Eval(express);
-            var entity = answerManage.Single(spec, include);
+            var entity = await answerManage.SingleAsync(spec);
             return entity.MapTo<AnswerDto>();
         }
 
-        public List<AnswerDto> Lists(Expression<Func<AnswerInfo, bool>> express = null,
+        public async Task<List<AnswerDto>> QueryAsync(
+            Expression<Func<AnswerInfo, bool>> express = null,
             Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null)
         {
-            var spec = Specification<AnswerInfo>.Eval(express);
-            var lst = answerManage.Lists(spec, include);
-            return lst.MapToList<AnswerInfo, AnswerDto>();
+            var spec = express == null ? null : Specification<AnswerInfo>.Eval(express);
+            var entities = await answerManage.QueryAsync(spec);
+            return entities.MapToList<AnswerDto>();
+        }
+
+        public async Task<PageResult<AnswerDto>> QueryAsync(
+            int index, int size,
+            Expression<Func<AnswerInfo, bool>> express = null,
+            Func<IQueryable<AnswerInfo>, IIncludableQueryable<AnswerInfo, object>> include = null)
+        {
+            var spec = express == null ? null : Specification<AnswerInfo>.Eval(express);
+            var anonymous = await answerManage.QueryAsync(index, size, spec, include);
+            return anonymous.ToPageResult<AnswerDto>();
         }
     }
 }

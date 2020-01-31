@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Query;
-using Domain.Entities;
 using Domain.IComm;
 using Domain.IManages;
-using System.Collections.Generic;
 using Domain.Entities.ClassAgg;
 
 namespace Domain.Manages
@@ -12,42 +13,6 @@ namespace Domain.Manages
     /// <summary>
     /// 班级领域服务实现类
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class ClassManage<T> : IClassManage<T> where T : BaseEntity, IAggregateRoot
-    {
-        private readonly IEfCoreRepository<T> efCore;
-
-        public ClassManage(IEfCoreRepository<T> ef)
-        {
-            this.efCore = ef;
-        }
-
-        public bool AddOrEdit(T entity)
-        {
-            if (entity == null)
-                return false;
-            return entity.ID > 0 ? efCore.SaveAs(entity) : efCore.EditAs(entity);
-        }
-
-        public bool Remove(ISpecification<T> spec)
-        {
-            var entity = Single(spec);
-            return entity == null ? false : efCore.RemoveAs(entity);
-        }
-
-        public T Single(ISpecification<T> spec = null, 
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
-        {
-            return efCore.GetEntity(spec);
-        }
-
-        public IEnumerable<T> Lists(ISpecification<T> spec = null,
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
-        {
-            return efCore.GetEntities(spec, include);
-        }
-    }
-
     public class ClassManage : IClassManage
     {
         private readonly IEfCoreRepository<ClassInfo> efCore;
@@ -57,33 +22,57 @@ namespace Domain.Manages
             this.efCore = ef;
         }
 
-        public bool AddOrEdit<T>(T entity) where T : BaseEntity
+        public bool SaveAs(ClassInfo entity)
         {
-            if (entity == null)
-                return false;
-            var entitySet = efCore.ApplicationContext.Set<T>();
-            return (entity.ID > 0 ? entitySet.Update(entity) : entitySet.Add(entity)) != null;
+            return efCore.SaveAs(entity);
         }
 
-        public IEnumerable<T> Lists<T>(ISpecification<T> spec = null, 
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null) where T : BaseEntity
+        public bool EditTo(ClassInfo entity)
         {
-            IQueryable<T> query = efCore.ApplicationContext.Set<T>();
-            if (include!=null)
-                query = include(query);
-            return query.Where(spec.Expression);
+            return efCore.EditTo(entity);
         }
 
-        public bool Remove<T>(ISpecification<T> spec) where T : BaseEntity
+        public bool RemoveAt(ISpecification<ClassInfo> spec)
         {
-            var entity = Single(spec);
-            return entity == null ? false : efCore.ApplicationContext.Set<T>().Remove(entity) != null;
+            var entity = efCore.EntitySet.SingleOrDefault(spec.Expression);
+            return entity == null ? false : efCore.RemoveAt(entity);
         }
 
-        public T Single<T>(ISpecification<T> spec = null, 
-            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null) where T : BaseEntity
+        public async Task<ClassInfo> SingleAsync(
+            ISpecification<ClassInfo> spec,
+            Func<IQueryable<ClassInfo>, IIncludableQueryable<ClassInfo, object>> include = null)
         {
-            return include?.Invoke(efCore.ApplicationContext.Set<T>()).FirstOrDefault(spec.Expression);
+            if (include != null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            return await efCore.EntitySet.FirstOrDefaultAsync(spec.Expression);
+        }
+
+        public async Task<IEnumerable<ClassInfo>> QueryAsync(
+            ISpecification<ClassInfo> spec = null,
+            Func<IQueryable<ClassInfo>, IIncludableQueryable<ClassInfo, object>> include = null)
+        {
+            if (include != null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            if (spec != null)
+                efCore.EntitySet = await efCore.EntitySet.WhereAsync(spec.Expression);
+            return efCore.EntitySet;
+        }
+
+        public async Task<object> QueryAsync(
+            int index,
+            int size,
+            ISpecification<ClassInfo> spec = null,
+            Func<IQueryable<ClassInfo>, IIncludableQueryable<ClassInfo, object>> include = null)
+        {
+            if (include != null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            if (spec != null)
+                efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
+            return new
+            {
+                Total = efCore.EntitySet.Count(),
+                Rows = await efCore.EntitySet.Skip((index - 1) * size).Take(size).ToListAsync()
+            };
         }
     }
 }

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Domain.Entities;
 using Domain.Entities.RoleAgg;
 using Domain.IComm;
 using Domain.IManages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Domain.Manages
@@ -19,37 +19,56 @@ namespace Domain.Manages
             this.efCore = ef;
         }
 
-        public bool Save(RoleInfo entity)
+        public bool SaveAs(RoleInfo entity)
         {
             return efCore.SaveAs(entity);
         }
 
-        public bool Edit(RoleInfo entity)
+        public bool EditTo(RoleInfo entity)
         {
-            return efCore.EditAs(entity);
+            return efCore.EditTo(entity);
         }
 
-        public bool Remove(ISpecification<RoleInfo> spec)
+        public bool RemoveAt(ISpecification<RoleInfo> spec)
         {
-            var entity = Single(spec);
-            return efCore.RemoveAs(entity);
+            var entity = efCore.EntitySet.FirstOrDefault(spec.Expression);
+            return entity == null ? false : efCore.RemoveAt(entity);
         }
 
-        public IEnumerable<RoleInfo> Lists(
-            out int total,
-            int? index,
-            int? size,
+        public async Task<IEnumerable<RoleInfo>> QueryAsync(
             ISpecification<RoleInfo> spec = null, 
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
         {
-            return efCore.Lists(out total, index, size, spec, include);
+            if (include!=null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            if (spec!=null)
+                efCore.EntitySet = await efCore.EntitySet.WhereAsync(spec.Expression);
+            return efCore.EntitySet;
         }
 
-        public RoleInfo Single(
+        public async Task<object> QueryAsync(
+            int index,int size,
+            ISpecification<RoleInfo> spec = null, 
+            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
+        {
+            if (include != null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            if (spec != null)
+                efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
+            return new
+            {
+                Total = efCore.EntitySet.Count(),
+                Rows = await efCore.EntitySet.Skip((index - 1) * size).Take(size).ToListAsync()
+            };
+        }
+
+        public async Task<RoleInfo> SingleAsync(
             ISpecification<RoleInfo> spec, 
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
         {
-            return efCore.GetEntity(spec, include);
+            if (include!=null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            return await efCore.EntitySet.FirstOrDefaultAsync(spec.Expression);
         }
     }
 }
