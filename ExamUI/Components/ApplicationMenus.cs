@@ -7,7 +7,6 @@ using Application.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using System.Threading.Tasks;
 
 namespace ExamUI.Components
 {
@@ -36,17 +35,16 @@ namespace ExamUI.Components
             ViewBag.CurrentUser = UserClaimsPrincipal.FindFirstValue(ClaimTypes.Name);
             string fromRoles = UserClaimsPrincipal.FindFirstValue(ClaimTypes.Role);
             //缓存角色菜单
-            if (!appCache.TryGetValue("ApplicationMenus",out object cacheValue))
+            if (!(appCache.Get("ApplicationMenus") is List<MenuDto> appMenus) || appMenus.Count == 0)
             {
-                var lst= ReadMenusBy(fromRoles);
-                appCache.Set("ApplicationMenus", lst, new MemoryCacheEntryOptions
+                appMenus = ReadRoleMenus(fromRoles);
+                appCache.Set("ApplicationMenus", appMenus, new MemoryCacheEntryOptions
                 {
                     AbsoluteExpiration = DateTime.Now.AddMinutes(20),  //设置缓存绝对过期时间
                     Priority = CacheItemPriority.Normal   //设置缓存优先级
                 });
             }
-            var menus = appCache.Get("ApplicationMenus") as List<MenuDto>;
-            return View(menus);
+            return View(appMenus);
         }
 
         /// <summary>
@@ -54,25 +52,25 @@ namespace ExamUI.Components
         /// </summary>
         /// <param name="fromRoles">角色字符串</param>
         /// <returns></returns>
-        private async Task<List<MenuDto>> ReadMenusBy(string fromRoles)
+        private List<MenuDto> ReadRoleMenus(string fromRoles)
         {
-            List<MenuDto> menus = null;
+            List<MenuDto> appMenus = null;
             if (fromRoles.IndexOf(',') > 0)
             {
                 foreach (var code in fromRoles.Split(','))
                 {
-                    var role = await roleService.SingleAsync(express: src => src.Code == code,
+                    var dtoRole = roleService.SingleIn(express: src => src.Code == code,
                         include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
-                    menus = BuilderTree(role.MenuDtos, null, 0);
+                    appMenus = BuilderTree(dtoRole.MenuDtos, null, 0);
                 }
             }
             else
             {
-                var role = await roleService.SingleAsync(express: src => src.Code == fromRoles,
+                var dtoRole = roleService.SingleIn(express: src => src.Code == fromRoles, 
                     include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
-                menus = BuilderTree(role.MenuDtos, null, 0);
+                appMenus = BuilderTree(dtoRole.MenuDtos, null, 0);
             }
-            return menus;
+            return appMenus;
         }
 
         /// <summary>
@@ -80,19 +78,19 @@ namespace ExamUI.Components
         /// </summary>
         /// <param name="dtos">数据源</param>
         /// <param name="treeNode">节点对象</param>
-        /// <param name="id">层级ID</param>
+        /// <param name="levelID">层级ID</param>
         /// <returns></returns>
-        private List<MenuDto> BuilderTree(List<MenuDto> dtos, MenuDto treeNode, int id)
+        private List<MenuDto> BuilderTree(List<MenuDto> dtos, MenuDto treeNode, int levelID)
         {
-            var menus = dtos.Where(x => x.ParentID == id).Distinct().ToList();
-            if (menus != null && menus.Count > 0)
+            var appMenus = dtos.Where(x => x.ParentID == levelID).Distinct().ToList();
+            if (appMenus != null && appMenus.Count > 0)
             {
-                foreach (var node in menus)
+                foreach (var node in appMenus)
                 {
                     node.ChildNodes = BuilderTree(dtos, node, node.ID);
                 }
             }
-            return menus;
+            return appMenus;
         }
     }
 }

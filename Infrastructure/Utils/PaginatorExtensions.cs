@@ -4,7 +4,7 @@ using AutoMapper.Execution;
 namespace System
 {
     /// <summary>
-    /// 分页数据扩展
+    /// Object对象扩展类
     /// </summary>
     public static class PaginatorExtensions
     {
@@ -32,7 +32,22 @@ namespace System
     public class PageResult<TDestination>
     {
         /// <summary>
-        /// 总记录数
+        /// 系统代码
+        /// </summary>
+        public int SystemCode { get; set; }
+
+        /// <summary>
+        /// 操作状态
+        /// </summary>
+        public bool Success { get; set; }
+
+        /// <summary>
+        /// 消息
+        /// </summary>
+        public string Message { get; set; }
+
+        /// <summary>
+        /// 总分页记录数
         /// </summary>
         public int Total { get; set; }
 

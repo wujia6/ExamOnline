@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 
-<html>
+<html lang="zh-cn">
 <head>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <title>在线考试系统</title>
@@ -150,16 +150,7 @@
         <!-- 左侧菜单开始 -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- 用户面板 (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image"><img src="~/images/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"></div>
-                    <div class="info"><a href="#" class="d-block">@ViewBag.CurrentUser</a></div>
-                    <div class="info"><a href="/Account/Logout" class="d-block">退出登录</a></div>
-                </div>
-                <!-- 加载菜单视图组件-->
-                <nav class="mt-2">@await Component.InvokeAsync("ApplicationMenus");</nav>
-            </div>
+            @await Component.InvokeAsync("ApplicationMenus");
         </aside>
         <!-- 左侧菜单结束 -->
         <!-- 右侧内容开始 -->

@@ -35,6 +35,15 @@ namespace Domain.Manages
             return entity == null ? false : efCore.RemoveAt(entity);
         }
 
+        public RoleInfo SingleIn(
+            ISpecification<RoleInfo> spec, 
+            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
+        {
+            if (include != null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            return efCore.EntitySet.FirstOrDefault(spec.Expression);
+        }
+
         public async Task<IEnumerable<RoleInfo>> QueryAsync(
             ISpecification<RoleInfo> spec = null, 
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
@@ -70,5 +79,7 @@ namespace Domain.Manages
                 efCore.EntitySet = include(efCore.EntitySet);
             return await efCore.EntitySet.FirstOrDefaultAsync(spec.Expression);
         }
+
+        
     }
 }

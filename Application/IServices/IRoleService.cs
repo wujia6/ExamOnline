@@ -29,5 +29,9 @@ namespace Application.IServices
             int index, int size,
             Expression<Func<RoleInfo, bool>> express = null,
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null);
+
+        RoleDto SingleIn(
+            Expression<Func<RoleInfo, bool>> express,
+            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null);
     }
 }

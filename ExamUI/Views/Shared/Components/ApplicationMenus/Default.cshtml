@@ -1,34 +1,46 @@
 ﻿@model List<MenuDto>
 
-<!-- 菜单-->
-<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-    @foreach (var menu in Model)
-    {
-        if (menu.MenuType == "action")
-        {
-            continue;
-        }
-        var isActive = ViewBag.CurrentMenu == menu.Controller;
-        <li class="nav-item has-treeview">
-            <a href="/@menu.Controller/@menu.Action" class="nav-link @(isActive ? "active" : "")">
-                <i class="nav-icon fas fa-chart-pie"></i>
-                <p>@menu.Title</p>
-            </a>
-            @if (menu.ChildNodes.Count > 0)
+<div class="sidebar">
+    <!-- 用户面板 (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image"><img src="~/images/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"></div>
+        <div class="info"><a href="#" class="d-block">@ViewBag.CurrentUser</a></div>
+        <div class="info"><a href="/Account/Logout" class="d-block">退出登录</a></div>
+    </div>
+    <nav class="mt-2">
+        <!-- 菜单-->
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            @foreach (var menu in Model)
             {
-                <ul class="nav nav-treeview">
-                    @foreach (var child in menu.ChildNodes)
+                if (menu.MenuType == "action")
+                {
+                    continue;
+                }
+                var isActive = ViewBag.CurrentMenu == menu.Controller;
+                <li class="nav-item has-treeview">
+                    <a href="/@menu.Controller/@menu.Action" class="nav-link @(isActive ? "active" : "")">
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <p>@menu.Title</p>
+                    </a>
+                    @if (menu.ChildNodes.Count > 0)
                     {
-                        <li class="nav-item">
-                            <a href="/@child.Controller/@child.Action" class="nav-link @(isActive ? "active" : "")">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>@child.Title</p>
-                            </a>
-                        </li>
+                        <ul class="nav nav-treeview">
+                            @foreach (var child in menu.ChildNodes)
+                            {
+                                <li class="nav-item">
+                                    <a href="/@child.Controller/@child.Action" class="nav-link @(isActive ? "active" : "")">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>@child.Title</p>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
                     }
-                </ul>
+                </li>
             }
-        </li>
-    }
-</ul>
+        </ul>
+    </nav>
+</div>
+
+
     

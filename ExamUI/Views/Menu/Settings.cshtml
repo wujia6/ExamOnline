@@ -16,16 +16,17 @@
         </div>
     </div>
 </section>
+
 <section class="content">
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header"><h4 class="card-title">查询条件</h4></div>
                 <div class="card-body">
-                    <div class="card-info row">
-                        <div class="col-md-5">
-                            <label class="col-form-label">类型：</label>
-                            <select id="slt_search_menutype" name="MenuType" class="custom-select form-control">
+                    <form class="form-inline">
+                        <div class="form-group col-md-5">
+                            <label for="slt_search_menutype" class="col-md-2">类型</label>
+                            <select id="slt_search_menutype" name="MenuType" class="form-control">
                                 <option value="-1">---请选择---</option>
                                 <option value="20">menu</option>
                                 <option value="21">module</option>
@@ -33,12 +34,24 @@
                                 <option value="23">action</option>
                             </select>
                         </div>
-                        <div class="col-md-5">
-                            <label class="col-form-label">标题：</label>
+                        <div class="form-group col-md-5">
+                            <label for="txt_title" class="col-md-2">标题</label>
                             <input type="text" id="txt_title" class="form-control" placeholder="菜单标题" />
                         </div>
-                        <div class="row col-md-2"><button type="button" id="btn_query" class="btn btn-success">查询</button></div>
-                    </div>
+                        <button type="button" id="btn_query" class="btn btn-primary">查询</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                @*<div class="card-header"><h4 class="card-title">菜单项列表</h4></div>*@
+                <div class="card-body">
                     <div id="toolbar" class="btn-group">
                         <button type="button" id="btn_add" class="btn btn-default">
                             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
@@ -73,7 +86,7 @@
             showRefresh: true,      //启用刷新按钮
             showToggle: true,        //启用详细视图和列表视图
             cache: false,           //是否启用缓存
-            url: "/Menu/ListsAsync",//数据请求地址
+            url: "/Menu/PagingAsync",//数据请求地址
             method: "get",          //ajax提交方式（*）
             queryParams: function (params) {    //传递参数（*）
                 return {

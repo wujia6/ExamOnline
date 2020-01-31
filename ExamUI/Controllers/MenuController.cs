@@ -43,11 +43,11 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> ListsAsync(int? index = 1, int? size = 10, string type = null, string title = null)
+        public async Task<JsonResult> PagingAsync(int? index = 1, int? size = 10, int? type = -1, string title = null)
         {
             Expression<Func<MenuInfo, bool>> express = inf => true;
-            if (!string.IsNullOrEmpty(type))
-                express = inf => express.Compile()(inf) && inf.MenuType.ToString().Contains(type);
+            if (type.Value > 0 && !type.HasValue)
+                express = inf => express.Compile()(inf) && (int)inf.MenuType == type.Value;
             if (!string.IsNullOrEmpty(title))
                 express = inf => express.Compile()(inf) && inf.Title.Contains(title);
             var pageResult = await menuService.QueryAsync(index.Value, size.Value, express);

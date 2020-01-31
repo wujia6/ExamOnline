@@ -11,7 +11,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Application.IServices;
 using Application.DTO.Models;
 

@@ -70,5 +70,14 @@ namespace Application.Services
             var anonymous = await roleManage.QueryAsync(index, size, spec, include);
             return anonymous.ToPageResult<RoleDto>();
         }
+
+        public RoleDto SingleIn(
+            Expression<Func<RoleInfo, bool>> express, 
+            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
+        {
+            var spec = Specification<RoleInfo>.Eval(express);
+            var entity = roleManage.SingleIn(spec,include);
+            return entity.MapTo<RoleDto>();
+        }
     }
 }
