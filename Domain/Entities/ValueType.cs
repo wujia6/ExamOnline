@@ -61,10 +61,10 @@ namespace Domain.Entities
         中级=18,
         高级=19,
         //菜单类型
-        menu=20,
-        module=21,
-        function=22,
-        action=23,
+        菜单=20,
+        模块=21,
+        控制器=22,
+        功能=23,
         //用户角色
         admin=24,
         teacher=25,

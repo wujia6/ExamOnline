@@ -7,24 +7,26 @@
     @*import css*@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link href="~/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
-    @*<link href="~/lib/bootstrap-modal/css/bootstrap-modal.min.css" rel="stylesheet" />*@
-    <link href="~/lib/bootstrap3-dialog/css/bootstrap-dialog.min.css" rel="stylesheet" />
+    @*<link href="~/lib/bootstrap-modal/css/bootstrap-modal.min.css" rel="stylesheet" />
+        <link href="~/lib/bootstrap3-dialog/css/bootstrap-dialog.min.css" rel="stylesheet" />
+        <link href="~/lib/iCheck/skins/all.css" rel="stylesheet" />*@
+    <link href="~/lib/overlayscrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.css" />
+
     <link rel="stylesheet" href="~/css/adminlte.min.css" />
-    <link href="~/lib/iCheck/skins/all.css" rel="stylesheet" />
-    <link href="~/lib/overlayscrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />
     @*import js*@
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/lib/bootstrap-table/bootstrap-table.min.js"></script>
     <script src="~/lib/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
-    @*<script src="~/lib/bootstrap-modal/js/bootstrap-modal.min.js"></script>*@
-    <script src="~/lib/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
-    <script src="~/lib/iCheck/icheck.js"></script>
+    @*<script src="~/lib/bootstrap-modal/js/bootstrap-modal.min.js"></script>
+        <script src="~/lib/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
+        <script src="~/lib/iCheck/icheck.js"></script>*@
     <script src="~/lib/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <script src="~/js/adminlte.js"></script>
     <script src="~/js/common.js"></script>
+    @RenderSection("Script", false);
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -44,14 +46,14 @@
                 </li>
             </ul>
             <!-- 搜索栏 -->
-            <form class="form-inline ml-3">
-                <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="搜索" aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit"><i class="fas fa-search"></i></button>
+            @*<form class="form-inline ml-3">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control form-control-navbar" type="search" placeholder="搜索" aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-navbar" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>*@
             <!-- 右侧链接 -->
             <ul class="navbar-nav ml-auto">
                 <!-- Messages Dropdown Menu -->
@@ -168,6 +170,14 @@
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
         </aside>
+    </div>
+    <!--定义模态框-->
+    <div id="dialogModal" class="modal fade" tableindex="-1" role="dialog" aria-labelledby="dialog_title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div id="dialog_content" class="modal-content">
+                <!--插入网页内容-->
+            </div>
+        </div>
     </div>
 </body>
 </html>

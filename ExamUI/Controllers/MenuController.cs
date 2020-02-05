@@ -6,6 +6,8 @@ using Application.IServices;
 using Domain.Entities.MenuAgg;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 
 namespace ExamUI.Controllers
 {
@@ -25,14 +27,14 @@ namespace ExamUI.Controllers
             if (model == null)
                 return Json(new { success = false, message = "请添加有效数据" });
             return await menuService.SaveAsync(model) ? 
-                Json(new { success = true, message = "添加成功" }) : Json(new { success = false, message = "添加失败，请重试" });
+                Json(new { success = true, message = "保存成功" }) : Json(new { success = false, message = "保存失败，请重试" });
         }
 
         [HttpPost]
         public async Task<JsonResult> EditAsync(MenuDto model)
         {
             return await menuService.EditAsync(model) ? 
-                Json(new { success = true, message = "提交成功！" }) : Json(new { success = false, message = "提交失败！" });
+                Json(new { success = true, message = "保存成功" }) : Json(new { success = false, message = "保存失败，请重试" });
         }
 
         [HttpPost]
@@ -54,17 +56,26 @@ namespace ExamUI.Controllers
             return Json(pageResult);
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<JsonResult> GetParentsAsync(int? pid = 0)
         {
-            var parents = await menuService.QueryAsync(express: m => m.ParentId == pid.Value);
-            return Json(new { success = true, rows = parents });
+            var result = await menuService.QueryAsync(express: m => m.ParentId == pid.Value);
+            return result.Count > 0 ?
+                Json(new { success = true, rows = result }) : Json(new { success = false });
         }
 
         [HttpGet]
         public IActionResult Settings()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> EditPartial()
+        {
+            var result = await menuService.QueryAsync(express: src => (int)src.MenuType > 20 && (int)src.MenuType < 23);
+            ViewData["ParentList"] = new SelectList(result.AsEnumerable(), "ID", "Title");
+            return PartialView("EditPartial");
         }
     }
 }

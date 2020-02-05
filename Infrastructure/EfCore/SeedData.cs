@@ -30,14 +30,14 @@ namespace Infrastructure.EfCore
                 return;
             var lstMenus = new List<MenuInfo>
             {
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.menu, Title="首页", Controller="Home", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.module, Title="系统管理", Controller="System", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.module, Title="班级管理", Controller="Class", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.module, Title="教师管理", Controller="Teacher", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.module, Title="学生管理", Controller="Student", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.module, Title="考试管理", Controller="Examination", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.module, Title="试卷管理", Controller="Answer", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.module, Title="题库管理", Controller="Question", Action="Index" }
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.菜单, Title="首页", Controller="Home", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.模块, Title="系统管理", Controller="System", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.模块, Title="班级管理", Controller="Class", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.模块, Title="教师管理", Controller="Teacher", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.模块, Title="学生管理", Controller="Student", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.模块, Title="考试管理", Controller="Examination", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.模块, Title="试卷管理", Controller="Answer", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=CommType.模块, Title="题库管理", Controller="Question", Action="Index" }
             };
             foreach (var menu in lstMenus)
             {

@@ -52,8 +52,8 @@ namespace Domain.Manages
             if (include != null)
                 efCore.EntitySet = include(efCore.EntitySet);
             if (spec != null)
-                efCore.EntitySet = await efCore.EntitySet.WhereAsync(spec.Expression);
-            return efCore.EntitySet;
+                efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
+            return await efCore.EntitySet.ToListAsync();
         }
 
         public async Task<object> QueryAsync(
