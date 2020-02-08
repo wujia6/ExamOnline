@@ -45,23 +45,15 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> PagingAsync(int? index = 1, int? size = 10, int? type = -1, string title = null)
+        public async Task<JsonResult> PagingAsync(int? offset, int? limit, int? type, string title = null)
         {
             Expression<Func<MenuInfo, bool>> express = inf => true;
             if (type.Value > 0 && !type.HasValue)
                 express = inf => express.Compile()(inf) && (int)inf.MenuType == type.Value;
             if (!string.IsNullOrEmpty(title))
                 express = inf => express.Compile()(inf) && inf.Title.Contains(title);
-            var pageResult = await menuService.QueryAsync(index.Value, size.Value, express);
+            var pageResult = await menuService.QueryAsync(offset.Value, limit.Value, express);
             return Json(pageResult);
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> GetParentsAsync(int? pid = 0)
-        {
-            var result = await menuService.QueryAsync(express: m => m.ParentId == pid.Value);
-            return result.Count > 0 ?
-                Json(new { success = true, rows = result }) : Json(new { success = false });
         }
 
         [HttpGet]

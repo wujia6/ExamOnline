@@ -172,12 +172,32 @@
         </aside>
     </div>
     <!--定义模态框-->
-    <div id="dialogModal" class="modal fade" tableindex="-1" role="dialog" aria-labelledby="dialog_title" aria-hidden="true">
+    <div id="dialogModal" class="modal fade" tableindex="-1" role="dialog" aria-labelledby="dialogTitle" aria-hidden="true">
         <div class="modal-dialog">
-            <div id="dialog_content" class="modal-content">
+            <div class="modal-content">
                 <!--插入网页内容-->
             </div>
         </div>
     </div>
+    <script>
+        /**
+         * 显示模态框
+         * @@param {object} opts 参数对象
+         * @@param {string} opts.remote：远程url
+         * @@param {string} opts.title：模态框标题
+         * @@param {function} opts.onSaveEvent：保存按钮回调事件
+         * @@param {function} opts.onClosedEvent：窗口关闭后回调事件
+         */
+        function showModal(opts) {
+            //设置对象
+            var options = $.extend({}, { id: "#dialogModal", backdrop: true, keyboard: false }, opts);
+            $(options.id).on("show.bs.modal", function () { //调用show函数时触发事件
+                $(this).find(".modal-content").load(options.remote, {}, function () {
+                    $(this).find(".modal-title").text(options.title);
+                    $(this).find(".modal-footer").children("#btn_modal_save").bind("click", options.onSaveEvent);
+                });
+            }).on("hidden.bs.modal", options.onClosedEvent).modal("show");
+        }
+    </script>
 </body>
 </html>

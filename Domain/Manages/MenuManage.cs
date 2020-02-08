@@ -57,8 +57,7 @@ namespace Domain.Manages
         }
 
         public async Task<object> QueryAsync(
-            int index,
-            int size,
+            int offset, int limit,
             ISpecification<MenuInfo> spec = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
@@ -69,7 +68,7 @@ namespace Domain.Manages
             return new
             {
                 Total = efCore.EntitySet.Count(),
-                Rows = await efCore.EntitySet.Skip((index - 1) * size).Take(size).ToListAsync()
+                Rows = await efCore.EntitySet.Skip(offset).Take(limit).ToListAsync()
             };
         }
         #endregion

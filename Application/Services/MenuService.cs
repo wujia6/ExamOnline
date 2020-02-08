@@ -67,12 +67,12 @@ namespace Application.Services
         }
 
         public async Task<PageResult<MenuDto>> QueryAsync(
-            int index, int size, 
+            int offset, int limit, 
             Expression<Func<MenuInfo, bool>> express = null, 
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
             var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
-            var anonymous = await menuManage.QueryAsync(index, size, spec, include);
+            var anonymous = await menuManage.QueryAsync(offset, limit, spec, include);
             return anonymous.ToPageResult<MenuDto>();
         }
         #endregion

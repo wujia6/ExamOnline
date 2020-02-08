@@ -30,18 +30,12 @@
                 //窗口大小位置
                 var h = modal.height() - modal.find(".modal-header").outerHeight() - modal.find(".modal-footer").outerHeight() - 5;
                 modal.css({ 'margin-left': opts.width / 2 * -1, 'margin-top': opts.height / 2 * -1, 'top': '50%' }).find(".modal-body").innerHeight(h);
-                modal
-                    //显示窗口
-                    .modal('show')
-                    //隐藏窗口后删除窗口html
-                    .on('hidden', function () {
+                modal.modal('show').on('hidden', function () {  //隐藏窗口后删除窗口html
                         modal.remove();
                         $(".modal-backdrop").remove();
                         if (opts.closeEvent) 
                             eval(opts.closeEvent);
-                    })
-                    //窗口显示后 
-                    .on('shown', function () {
+                    }).on('shown', function () {  //窗口显示后
                         if (opts.openEvent) 
                             eval(opts.openEvent);
                         //绑定按钮事件
@@ -77,13 +71,3 @@
         });
     };
 })(jQuery);
-
-function showModal(id, url, callback) {
-    var elem = $("#" + id);
-    elem.modal()
-    elem.modal({
-        remote: url,
-        backdrop: false,
-        keyboard: false
-    });
-}

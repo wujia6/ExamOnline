@@ -54,13 +54,13 @@
                 <div class="card-body">
                     <div id="tb_menus_toolbar" class="btn-group">
                         <button type="button" id="btn_add" class="btn btn-default">
-                            <i class="fas fa-plus"></i>新增
+                            <i class="fas fa-plus"></i> 新增
                         </button>
                         <button type="button" id="btn_edit" class="btn btn-default">
-                            <i class="fas fa-edit"></i>编辑
+                            <i class="fas fa-edit"></i> 编辑
                         </button>
                         <button type="button" id="btn_remove" class="btn btn-default">
-                            <i class="fas fa-remove"></i>删除
+                            <i class="fas fa-trash"></i> 删除
                         </button>
                     </div>
                     <table id="tab_menus"></table>
@@ -73,7 +73,7 @@
 <script>
     $(function () {
         //初始化表格
-        $("#tab_menus").bootstrapTable({
+        $("#tab_menus").bootstrapTable("destroy").bootstrapTable({
             uniqueId: "ID",         //行标识，一般为主键列
             showHeader: true,
             showLoading: true,
@@ -89,19 +89,23 @@
             url: "/Menu/PagingAsync",//数据请求地址
             method: "get",          //ajax提交方式（*）
             queryParams: function (params) {    //传递参数（*）
-                return {
-                    index: params.pageNumber,
-                    size: params.pageSize,
+                var parms = {
+                    search: params.search,
+                    sort: params.sort,
+                    order: params.order,
+                    offset: params.offset,
+                    limit: params.limit,
                     type: $("#slt_search_menutype").val(),
                     title: $("#txt_title").val()
                 }
+                return parms;
             },
             paginationLoop: false,  //是否无限循环
             pagination: true,       //启用分页（*）
             sidePagination: "server",   //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,              //当前页码初始化加载第一页，默认第一页
-            //pageSize: 10,               //每页的记录行数（*）
-            pageList: [10, 20, 50, 100],    //可供选择的每页的行数（*）
+            pageSize: 10,               //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],    //可供选择的每页的行数（*）
             columns: [
                 { checkbox: true, align: "center", valign: "middle" },
                 //{ field: "id", title: "编号", align: "center", valign: "middle" },
@@ -116,7 +120,7 @@
                 return data;
             },
             onLoadSuccess: function (data) {
-                console.log(data);
+                //console.log(data);
             }
         });
 
@@ -127,7 +131,21 @@
 
         //添加
         $("#btn_add").click(function () {
-            showModal(null,"新建菜单项");
+            showModal({
+                remote: "/Menu/EditPartial",
+                title: "新建菜单项",
+                onSaveEvent: function () {
+                    var frm = $("#frm_menu_edit");
+                    $.post("/Menu/AddAsync", frm.serializeArray(), function (result) {
+                        bt_dialog.information(result.message);
+                        if (result.success)
+                            formExt.clear(frm);
+                    });
+                },
+                onClosedEvent: function () {
+                    console.log("Hello World");
+                }
+            });
         });
 
         //编辑
@@ -169,27 +187,27 @@
         });
 
         //显示模态框
-        function showModal(selectRow, title) {
-            //模态框显示调用事件
-            $("#dialogModal").on("show.bs.modal", function () {
-                var modal = $(this);
-                modal.find(".modal-content").load("/Menu/EditPartial", {}, function () {
-                    modal.find(".modal-title").text(title);
-                    var action = selectRow == null ? "/Menu/AddAsync" : "/Menu/EditAsync";
-                    $("#btn_modal_save").click(function () {
-                        var frm = $("#frm_menu_edit");
-                        $.post(action, frm.serializeArray(), function (result) {
-                            bt_dialog.information(result.message);
-                            if (result.success)
-                                formExt.clear(frm);
-                        });
-                    });
-                });
-            }).modal({
-                backdrop: true,
-                keyboard: false
-            });
-        }
+        //function showModal(selectRow, title, localUrl, actionUrl) {
+        //    //模态框显示调用事件
+        //    $("#dialogModal").on("show.bs.modal", function () {
+        //        var modal = $(this);
+        //        modal.find(".modal-content").load(localUrl, {}, function () {
+        //            modal.find(".modal-title").text(title);
+        //            var action = selectRow == null ? "/Menu/AddAsync" : "/Menu/EditAsync";
+        //            $("#btn_modal_save").click(function () {
+        //                var frm = $("#frm_modal");
+        //                $.post(actionUrl, frm.serializeArray(), function (result) {
+        //                    bt_dialog.information(result.message);
+        //                    if (result.success)
+        //                        formExt.clear(frm);
+        //                });
+        //            });
+        //        });
+        //    }).modal({
+        //        backdrop: true,
+        //        keyboard: false
+        //    });
+        //}
     })
 </script>
 
