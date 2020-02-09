@@ -20,26 +20,23 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header"><h4 class="card-title">查询条件</h4></div>
+                @*<div class="card-header"><h4 class="card-title">查询条件</h4></div>*@
                 <div class="card-body">
                     <form id="frm_search_menu" class="form-inline">
-                        <div class="form-group col-md-5">
-                            <label for="slt_search_menutype" class="col-md-4">类型</label>
-                            <select id="slt_search_menutype" name="MenuType" class="form-control col-md-8">
-                                <option value="-1">---全部---</option>
-                                <option value="20">菜单</option>
-                                <option value="21">模块</option>
-                                <option value="22">功能</option>
-                                <option value="23">动作</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-5">
-                            <label for="txt_title" class="col-md-4">标题</label>
-                            <input type="text" id="txt_title" class="form-control col-md-8" placeholder="标题关键字" />
-                        </div>
-                        <div class="form-group col-md-2">
-                            <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                        </div>
+                        <h4 class="card-title  col-md-2 text-right">查询条件</h4>
+                        <select id="slt_search_type" name="MenuType" class="form-control  col-md-4">
+                            <option value="-1">---全部类型---</option>
+                            <option value="20">菜单</option>
+                            <option value="21">模块</option>
+                            <option value="22">功能</option>
+                            <option value="23">动作</option>
+                        </select>
+                        <input type="text" id="txt_search_title" class="form-control col-md-4" placeholder="标题关键字" />
+                        <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                        @*<div class="form-group col-md-2"></div>
+                        <div class="form-group col-md-4"> </div>
+                        <div class="form-group col-md-4"></div>
+                        <div class="form-group col-md-2"></div>*@
                     </form>
                 </div>
             </div>
@@ -52,7 +49,7 @@
             <div class="card">
                 @*<div class="card-header"><h4 class="card-title">菜单项列表</h4></div>*@
                 <div class="card-body">
-                    <div id="tb_menus_toolbar" class="btn-group">
+                    <div id="tab_toolbar" class="btn-group">
                         <button type="button" id="btn_add" class="btn btn-default">
                             <i class="fas fa-plus"></i> 新增
                         </button>
@@ -72,41 +69,18 @@
 
 <script>
     $(function () {
-        //初始化表格
-        $("#tab_menus").bootstrapTable("destroy").bootstrapTable({
-            uniqueId: "ID",         //行标识，一般为主键列
-            showHeader: true,
-            showLoading: true,
-            striped: true,          //启用行交替颜色
-            toolbar: "#tb_menus_toolbar",    //指定工具条容器
-            clickToSelect: true,    //启用点击选中行
-            search: false,           //显示表格搜索
-            //searchOnEnterKey: true,  //回车键执行搜索
-            showColumns: true,       //显示全部列
-            showRefresh: true,      //启用刷新按钮
-            showToggle: true,        //启用详细视图和列表视图
-            cache: false,           //是否启用缓存
-            url: "/Menu/PagingAsync",//数据请求地址
-            method: "get",          //ajax提交方式（*）
-            queryParams: function (params) {    //传递参数（*）
-                var parms = {
-                    search: params.search,
-                    sort: params.sort,
-                    order: params.order,
-                    offset: params.offset,
-                    limit: params.limit,
-                    type: $("#slt_search_menutype").val(),
-                    title: $("#txt_title").val()
+        //table初始化
+        var manageTable = new initDataTable({
+            tableId: "#tab_menus",
+            requestUrl: "/Menu/PagingAsync",
+            ajaxMethod: "get",
+            callback: function () {
+                return {
+                    type: $("#slt_search_type").val(),
+                    title: $("#txt_search_title").val()
                 }
-                return parms;
             },
-            paginationLoop: false,  //是否无限循环
-            pagination: true,       //启用分页（*）
-            sidePagination: "server",   //分页方式：client客户端分页，server服务端分页（*）
-            pageNumber: 1,              //当前页码初始化加载第一页，默认第一页
-            pageSize: 10,               //每页的记录行数（*）
-            pageList: [10, 25, 50, 100],    //可供选择的每页的行数（*）
-            columns: [
+            dataColumns: [
                 { checkbox: true, align: "center", valign: "middle" },
                 //{ field: "id", title: "编号", align: "center", valign: "middle" },
                 { field: "parentID", title: "父节点", align: "center", valign: "middle" },
@@ -115,18 +89,15 @@
                 { field: "controller", title: "模块", align: "center", valign: "middle" },
                 { field: "action", title: "动作", align: "center", valign: "middle" },
                 { field: "remarks", title: "备注", align: "center", valign: "middle" }
-            ],
-            responseHandler: function (data) {
-                return data;
-            },
-            onLoadSuccess: function (data) {
-                //console.log(data);
-            }
+            ]
         });
 
         //搜索
         $("#btn_query").click(function () {
-            $("#tab_menus").bootstrapTable("load")
+            manageTable.reload("/Menu/PagingAsync", {
+                type: $("#slt_search_type").val(),
+                title: $("#txt_search_title").val()
+            });
         });
 
         //添加
@@ -134,40 +105,54 @@
             showModal({
                 remote: "/Menu/EditPartial",
                 title: "新建菜单项",
+                onOpenedEvent: null,
+                onClosedEvent: null,
                 onSaveEvent: function () {
                     var frm = $("#frm_menu_edit");
                     $.post("/Menu/AddAsync", frm.serializeArray(), function (result) {
-                        bt_dialog.information(result.message);
+                        showDialog.information(result.message);
                         if (result.success)
                             formExt.clear(frm);
                     });
-                },
-                onClosedEvent: function () {
-                    console.log("Hello World");
                 }
             });
         });
 
         //编辑
         $("#btn_edit").click(function () {
-            var selectRows = $("#tab_menus").bootstrapTable("getSelections");   //获取选择项
-            if (selectRows.length != 1) {
-                bt_dialog.error("请选择有效数据,一次只能编辑一行");
+            var rowSelect = manageTable.getSelectRows();
+            if (rowSelect.length == 0) {
+                showDialog.error("请选择有效数据。");
                 return;
             }
-            showModal(selectRows[0], "编辑菜单项");
-            //localStorage.setItem("RowData", selectRows[0]); //行对象存入本地localStorage
+            var frm = null;
+            showModal({
+                remote: "/Menu/EditPartial",
+                title: "编辑菜单项",
+                onOpenedEvent: function () {
+                    frm = $("#frm_menu_edit");
+                    formExt.load(rowSelect, frm);
+                },
+                onClosedEvent: function () {
+                    manageTable.refresh;
+                },
+                onSaveEvent: function () {
+                    $.post("/Menu/EditAsync", frm.serializeArray(), function (result) {
+                        showDialog.information(result.message);
+                        if (result.success)
+                            formExt.clear(frm);
+                    });
+                }
+            });
         });
 
         //删除
         $("#btn_remove").click(function () {
-            var selectRows = $("#tab_menus").bootstrapTable("getSelections");
-            if (selectRows.length == 0 || selectRows == "undefined") {
-                bt_dialog.error("请选择有效数据");
-                return;
-            }
-            bt_dialog.confirm("确认删除选中行及关联数据？删除后无法恢复！", function (res) {
-                if (res) {
+            var selectRows = manageTable.getSelectRows;
+            showDialog.confirm({
+                title: "警告信息",
+                message: "确认删除选中行及关联数据？删除后无法恢复！",
+                onSureEvent: function () {
                     var keys = [];
                     for (var key in selectRows)
                         keys.push(selectRows[key].uniqueId);
@@ -175,39 +160,16 @@
                         url: "/Menu/RemoveAsync",
                         method: "post",
                         traditional: true,
-                        data: { ids: keys },
+                        data: keys,
                         success: function (result) {
-                            bt_dialog.information(result.message);
-                            if (result.success) 
-                                $("#tab_menus").bootstrapTable("refresh");
+                            showDialog.information(result.message);
+                            if (result.success)
+                                manageTable.refresh;
                         }
                     });
                 }
             });
         });
-
-        //显示模态框
-        //function showModal(selectRow, title, localUrl, actionUrl) {
-        //    //模态框显示调用事件
-        //    $("#dialogModal").on("show.bs.modal", function () {
-        //        var modal = $(this);
-        //        modal.find(".modal-content").load(localUrl, {}, function () {
-        //            modal.find(".modal-title").text(title);
-        //            var action = selectRow == null ? "/Menu/AddAsync" : "/Menu/EditAsync";
-        //            $("#btn_modal_save").click(function () {
-        //                var frm = $("#frm_modal");
-        //                $.post(actionUrl, frm.serializeArray(), function (result) {
-        //                    bt_dialog.information(result.message);
-        //                    if (result.success)
-        //                        formExt.clear(frm);
-        //                });
-        //            });
-        //        });
-        //    }).modal({
-        //        backdrop: true,
-        //        keyboard: false
-        //    });
-        //}
     })
 </script>
 

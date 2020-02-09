@@ -32,7 +32,13 @@ namespace Infrastructure.Repository
             ApplicationContext.Entry(entity).State = EntityState.Deleted;
             return true;
         }
-        
+
+        public bool RemoveAt(IQueryable<T> entities)
+        {
+            ApplicationContext.Set<T>().RemoveRange(entities);
+            return true;
+        }
+
         public bool EditTo(T entity)
         {
             ApplicationContext.Set<T>().Attach(entity);

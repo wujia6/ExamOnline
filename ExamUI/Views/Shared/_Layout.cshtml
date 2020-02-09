@@ -13,7 +13,6 @@
     <link href="~/lib/overlayscrollbars/css/OverlayScrollbars.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.css" />
-
     <link rel="stylesheet" href="~/css/adminlte.min.css" />
     @*import js*@
     <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -26,7 +25,7 @@
     <script src="~/lib/overlayscrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <script src="~/js/adminlte.js"></script>
     <script src="~/js/common.js"></script>
-    @RenderSection("Script", false);
+    @*@RenderSection("Script", false);*@
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -179,25 +178,5 @@
             </div>
         </div>
     </div>
-    <script>
-        /**
-         * 显示模态框
-         * @@param {object} opts 参数对象
-         * @@param {string} opts.remote：远程url
-         * @@param {string} opts.title：模态框标题
-         * @@param {function} opts.onSaveEvent：保存按钮回调事件
-         * @@param {function} opts.onClosedEvent：窗口关闭后回调事件
-         */
-        function showModal(opts) {
-            //设置对象
-            var options = $.extend({}, { id: "#dialogModal", backdrop: true, keyboard: false }, opts);
-            $(options.id).on("show.bs.modal", function () { //调用show函数时触发事件
-                $(this).find(".modal-content").load(options.remote, {}, function () {
-                    $(this).find(".modal-title").text(options.title);
-                    $(this).find(".modal-footer").children("#btn_modal_save").bind("click", options.onSaveEvent);
-                });
-            }).on("hidden.bs.modal", options.onClosedEvent).modal("show");
-        }
-    </script>
 </body>
 </html>

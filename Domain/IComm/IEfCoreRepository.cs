@@ -34,6 +34,13 @@ namespace Domain.IComm
         bool RemoveAt(T entity);
 
         /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="entities">集合对象</param>
+        /// <returns></returns>
+        bool RemoveAt(IQueryable<T> entities);
+
+        /// <summary>
         /// 修改
         /// </summary>
         /// <param name="entity">实体类</param>

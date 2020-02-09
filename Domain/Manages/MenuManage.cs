@@ -32,8 +32,9 @@ namespace Domain.Manages
 
         public bool RemoveAt(ISpecification<MenuInfo> spec)
         {
-            var entity = efCore.EntitySet.SingleOrDefault(spec.Expression);
-            return entity == null ? false : efCore.RemoveAt(entity);
+            //var entity = efCore.EntitySet.SingleOrDefault(spec.Expression);
+            var entities = efCore.EntitySet.Where(spec.Expression);
+            return entities == null ? false : efCore.RemoveAt(entities);
         }
 
         public async Task<MenuInfo> SingleAsync(

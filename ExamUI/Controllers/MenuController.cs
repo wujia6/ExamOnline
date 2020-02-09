@@ -38,10 +38,18 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> RemoveAsync(int menuId)
+        public async Task<JsonResult> RemoveAsync(int[] keys)
         {
-            return await menuService.RemoveAsync(express:m => m.ID == menuId) ?
+            return await menuService.RemoveAsync(express:m => keys.Contains(m.ID) ? true : false) ? 
                 Json(new { success = true, message = "操作成功！" }) : Json(new { success = false, message = "操作失败！" });
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> EditPartial()
+        {
+            var result = await menuService.QueryAsync(express: src => (int)src.MenuType > 20 && (int)src.MenuType < 23);
+            ViewData["ParentList"] = new SelectList(result.AsEnumerable(), "ID", "Title");
+            return PartialView("EditPartial");
         }
 
         [HttpGet]
@@ -60,14 +68,6 @@ namespace ExamUI.Controllers
         public IActionResult Settings()
         {
             return View();
-        }
-
-        [HttpPost]
-        public async Task<PartialViewResult> EditPartial()
-        {
-            var result = await menuService.QueryAsync(express: src => (int)src.MenuType > 20 && (int)src.MenuType < 23);
-            ViewData["ParentList"] = new SelectList(result.AsEnumerable(), "ID", "Title");
-            return PartialView("EditPartial");
         }
     }
 }
