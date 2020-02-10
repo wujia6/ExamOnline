@@ -2,6 +2,9 @@
     ViewData["Title"] = "菜单管理";
     ViewBag.CurrentMenu = "Menu";
 }
+<style>
+    #frm_search_menu .col-md-2,.col-md-3,.col-md-4 { padding:0 15px; }
+</style>
 
 <section class="content-header">
     <div class="container-fluid">
@@ -24,19 +27,15 @@
                 <div class="card-body">
                     <form id="frm_search_menu" class="form-inline">
                         <h4 class="card-title  col-md-2 text-right">查询条件</h4>
-                        <select id="slt_search_type" name="MenuType" class="form-control  col-md-4">
+                        <select id="slt_search_type" name="MenuType" class="form-control col-md-3">
                             <option value="-1">---全部类型---</option>
                             <option value="20">菜单</option>
                             <option value="21">模块</option>
                             <option value="22">功能</option>
                             <option value="23">动作</option>
                         </select>
-                        <input type="text" id="txt_search_title" class="form-control col-md-4" placeholder="标题关键字" />
-                        <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                        @*<div class="form-group col-md-2"></div>
-                        <div class="form-group col-md-4"> </div>
-                        <div class="form-group col-md-4"></div>
-                        <div class="form-group col-md-2"></div>*@
+                        <input type="text" id="txt_search_title" class="form-control col-md-3" placeholder="标题关键字" />
+                        <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i> 查询</button>
                     </form>
                 </div>
             </div>
@@ -50,13 +49,13 @@
                 @*<div class="card-header"><h4 class="card-title">菜单项列表</h4></div>*@
                 <div class="card-body">
                     <div id="tab_toolbar" class="btn-group">
-                        <button type="button" id="btn_add" class="btn btn-default">
+                        <button type="button" id="btn_add" class="btn btn-success">
                             <i class="fas fa-plus"></i> 新增
                         </button>
-                        <button type="button" id="btn_edit" class="btn btn-default">
+                        <button type="button" id="btn_edit" class="btn btn-primary">
                             <i class="fas fa-edit"></i> 编辑
                         </button>
-                        <button type="button" id="btn_remove" class="btn btn-default">
+                        <button type="button" id="btn_remove" class="btn btn-warning">
                             <i class="fas fa-trash"></i> 删除
                         </button>
                     </div>
@@ -70,7 +69,7 @@
 <script>
     $(function () {
         //table初始化
-        var manageTable = new initDataTable({
+        var manageTable = new initTable({
             tableId: "#tab_menus",
             requestUrl: "/Menu/PagingAsync",
             ajaxMethod: "get",
@@ -102,7 +101,7 @@
 
         //添加
         $("#btn_add").click(function () {
-            showModal({
+            modalUtils.showModal({
                 remote: "/Menu/EditPartial",
                 title: "新建菜单项",
                 onOpenedEvent: null,
@@ -110,7 +109,7 @@
                 onSaveEvent: function () {
                     var frm = $("#frm_menu_edit");
                     $.post("/Menu/AddAsync", frm.serializeArray(), function (result) {
-                        showDialog.information(result.message);
+                        openDialog.info(result.message);
                         if (result.success)
                             formExt.clear(frm);
                     });
@@ -120,27 +119,27 @@
 
         //编辑
         $("#btn_edit").click(function () {
-            var rowSelect = manageTable.getSelectRows();
-            if (rowSelect.length == 0) {
-                showDialog.error("请选择有效数据。");
+            var rows = manageTable.getSelecteds();
+            if (rows.length != 1) {
+                layerUtils.info("请选择有效数据！", 2);
                 return;
             }
             var frm = null;
-            showModal({
+            modalUtils.showModal({
                 remote: "/Menu/EditPartial",
                 title: "编辑菜单项",
                 onOpenedEvent: function () {
                     frm = $("#frm_menu_edit");
-                    formExt.load(rowSelect, frm);
+                    formUtils.load(frm, rows[0]);
                 },
                 onClosedEvent: function () {
                     manageTable.refresh;
                 },
                 onSaveEvent: function () {
-                    $.post("/Menu/EditAsync", frm.serializeArray(), function (result) {
-                        showDialog.information(result.message);
+                    $.post("/Menu/EditAsync", frm.serialize(), function (result) {
+                        layerUtils.info(result.message);
                         if (result.success)
-                            formExt.clear(frm);
+                            formUtils.clear(frm);
                     });
                 }
             });
@@ -148,21 +147,25 @@
 
         //删除
         $("#btn_remove").click(function () {
-            var selectRows = manageTable.getSelectRows;
-            showDialog.confirm({
-                title: "警告信息",
+            var rows = manageTable.getSelecteds();
+            if (rows.length == 0) {
+                layerUtils.info("请选择有效数据！", 2);
+                return;
+            }
+            modalUtils.showConfirm({
+                title: "警告",
                 message: "确认删除选中行及关联数据？删除后无法恢复！",
                 onSureEvent: function () {
                     var keys = [];
-                    for (var key in selectRows)
-                        keys.push(selectRows[key].uniqueId);
+                    for (var key in rows)
+                        keys.push(rows[key].uniqueId);
                     $.ajax({
                         url: "/Menu/RemoveAsync",
                         method: "post",
                         traditional: true,
                         data: keys,
                         success: function (result) {
-                            showDialog.information(result.message);
+                            openDialog.info(result.message);
                             if (result.success)
                                 manageTable.refresh;
                         }

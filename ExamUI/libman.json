@@ -78,6 +78,19 @@
         "js/bootstrap-dialog.min.js",
         "css/bootstrap-dialog.min.css"
       ]
+    },
+    {
+      "library": "layer@2.3",
+      "destination": "wwwroot/lib/layer/",
+      "files": [
+        "layer.js",
+        "skin/layer.css",
+        "skin/default/icon-ext.png",
+        "skin/default/icon.png",
+        "skin/default/loading-0.gif",
+        "skin/default/loading-1.gif",
+        "skin/default/loading-2.gif"
+      ]
     }
   ]
 }
