@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Application.DTO.Models;
-using Application.IServices;
-using Domain.Entities.MenuAgg;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Linq;
 using Infrastructure.Utils;
+using Application.DTO.Models;
+using Application.IServices;
+using Domain.Entities.MenuAgg;
 
 namespace ExamUI.Controllers
 {
@@ -61,7 +61,7 @@ namespace ExamUI.Controllers
         public async Task<JsonResult> PagingAsync(int? offset, int? limit, int? type, string title = null)
         {
             Expression<Func<MenuInfo, bool>> express = inf => true;
-            if (type.Value > 0 && !type.HasValue)
+            if (type.Value > 0)
                 express = inf => express.Compile()(inf) && (int)inf.MenuType == type.Value;
             if (!string.IsNullOrEmpty(title))
                 express = inf => express.Compile()(inf) && inf.Title.Contains(title);

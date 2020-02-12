@@ -46,13 +46,13 @@
                 @*<div class="card-header"><h4 class="card-title">菜单项列表</h4></div>*@
                 <div class="card-body">
                     <div id="tab_toolbar" class="btn-group">
-                        <button type="button" id="btn_add" class="btn btn-success">
+                        <button type="button" id="btn_add" class="btn btn-default">
                             <i class="fas fa-plus"></i> 新增
                         </button>
-                        <button type="button" id="btn_edit" class="btn btn-primary">
+                        <button type="button" id="btn_edit" class="btn btn-default">
                             <i class="fas fa-edit"></i> 编辑
                         </button>
-                        <button type="button" id="btn_remove" class="btn btn-warning">
+                        <button type="button" id="btn_remove" class="btn btn-default">
                             <i class="fas fa-trash"></i> 删除
                         </button>
                     </div>
@@ -67,10 +67,10 @@
     $(function () {
         //table初始化
         var manageTable = new initTable({
-            tableId: "#tab_menus",
+            tableId: "tab_menus",
             requestUrl: "/Menu/PagingAsync",
             ajaxMethod: "get",
-            callback: function () {
+            queryParamsCallback: function () {
                 return {
                     type: $("#slt_search_type").val(),
                     title: $("#txt_search_title").val()
@@ -90,10 +90,7 @@
 
         //搜索
         $("#btn_query").click(function () {
-            manageTable.reload("/Menu/PagingAsync", {
-                type: $("#slt_search_type").val(),
-                title: $("#txt_search_title").val()
-            });
+            manageTable.setRefresh();
         });
 
         //添加
@@ -102,13 +99,15 @@
                 remote: "/Menu/EditPartial",
                 title: "新建菜单项",
                 onOpenedEvent: null,
-                onClosedEvent: null,
+                onClosedEvent: function () {
+                    manageTable.setRefresh();
+                },
                 onSaveEvent: function () {
                     var frm = $("#frm_menu_edit");
                     $.post("/Menu/AddAsync", frm.serializeArray(), function (result) {
-                        openDialog.info(result.message);
+                        layerUtils.info(result.message,1);
                         if (result.success)
-                            formExt.clear(frm);
+                            formUtils.clear(frm);
                     });
                 }
             });
@@ -130,7 +129,7 @@
                     formUtils.load(frm, rows[0]);
                 },
                 onClosedEvent: function () {
-                    manageTable.refresh;
+                    manageTable.setRefresh();
                 },
                 onSaveEvent: function () {
                     $.post("/Menu/EditTo", frm.serialize(), function (result) {
@@ -162,9 +161,9 @@
                         traditional: true,
                         data: keys,
                         success: function (result) {
-                            openDialog.info(result.message);
+                            layerUtils.info(result.message, 1);
                             if (result.success)
-                                manageTable.refresh;
+                                manageTable.setRefresh();
                         }
                     });
                 }

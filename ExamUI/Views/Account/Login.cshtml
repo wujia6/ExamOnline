@@ -94,9 +94,11 @@
             //user login
             function ajaxLogin(postUrl, frmId) {
                 $.post(postUrl, $("#" + frmId).serializeArray(), function (data) {
-                    layerUtils.info(data.message, 1);
-                    if (data.success)
-                        window.location.href = encodeURI(data.pathUrl);
+                    if (!data.success) {
+                        layerUtils.info(data.message, 2);
+                        return;
+                    }
+                    window.location.href = encodeURI(data.pathUrl);
                 });
             }
         });

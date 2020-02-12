@@ -74,19 +74,20 @@ var formUtils = {
      * @param {object} frm 表单对象
      */
     clear: function (frm) {
-        var dmTps = ["text", "password", "radio", "checkbox", "hidden", "file", "select", "textarea"];
-        for (var i = 0; i < dmTps.length; i++) {
-            switch (dmTps[i]) {
-                case "radio": frm.find("input[type='radio']").attr("checked", "1"); break;
-                case "checkbox": frm.find("input[type='checkbox']").attr("checked", false); break;
-                case "hidden": frm.find("input[type='hidden']").val("0"); break;
-                case "select": frm.find("select option:first-child").attr("selected", true); break;
-                case "textarea": frm.find("textarea").val(""); break;
-                default: frm.find("input").val("");
-            }
-        }
-        frm.reset();
-        //$(":*", frm).not(":button,:submit,:reset").val('').removeAttr("checked").removeAttr("selected");
+        //var dmTps = ["text", "password", "radio", "checkbox", "hidden", "file", "select", "textarea"];
+        //for (var i = 0; i < dmTps.length; i++) {
+        //    switch (dmTps[i]) {
+        //        case "text":
+        //        case "password": frm.find("input: text, input: password").val(""); break;
+        //        case "radio": frm.find("input: radio").prop("checked", "1"); break;
+        //        case "checkbox": frm.find("input: checkbox").removeAttr("checked"); break;
+        //        case "hidden": frm.find("input: hidden").val("0"); break;
+        //        case "select": frm.find("option: first-child").attr("selected", true); break;
+        //        case "textarea": frm.find("input: textarea").val(""); break;
+        //    }
+        //}
+        $(":input", frm).not(":button,:submit,:reset,:option").val('').removeAttr("checked");
+        $(":option: first-child", frm).attr("selected", true);
     },
 
     /**
@@ -118,7 +119,11 @@ var formUtils = {
 //layer组件封装
 var layerUtils = {
     //弹窗
-    alert: function (msg, callback) { lyer.alert(msg, { icon: 1, closeButton: 0 }, callback); },
+    alert: function (msg) {
+        lyer.alert(msg, { icon: 1, closeButton: 0 }, function (index) {
+            layer.close(index);
+        });
+    },
     //消息框
     info: function (msg, iconId) { layer.msg(msg, { icon: iconId }); },
     //提示
@@ -148,17 +153,23 @@ var layerUtils = {
  * bootstrapTable组件封装
  * @param {object} opts 参数对象
  * @param {string} opts.tableId 表格ID
- * @param {string} opts.requestUrl ajax请求地址
+ * @param {string} opts.ajaxUrl ajax请求地址
  * @param {string} opts.ajaxMethod ajax请求方法
- * @param {object} opts.callback ajax请求自定义参数回调函数
+ * @param {object} opts.queryParamsCallback 自定义ajax查询参数回调函数
  * @param {array} opts.dataColumns 需绑定的数据列
  */
-var initTable = function (opts) {
-    var tab = new Object();
+window.initTable = function (opts) {
+    //参数初始化
+    opts = opts || {};
+    opts.tableId = opts.tableId || "";
+    opts.ajaxUrl = opts.ajaxUrl || "";
+    opts.ajaxMethod = opts.ajaxMethod || "get";
+    opts.queryParamsCallback = opts.queryParamsCallback || this.setQueryParams;
+    opts.dataColumns = opts.dataColumns || this.setDataColumns;
     //实列
-    tab.instance = $(opts.tableId);
+    this.instance = $("#" + opts.tableId);
     //初始化table组件
-    tab.instance.bootstrapTable({
+    this.instance.bootstrapTable({
         uniqueId: "ID",
         showHeader: true,
         showLoading: true,
@@ -174,16 +185,14 @@ var initTable = function (opts) {
         url: opts.requestUrl,
         method: opts.ajaxMethod,
         queryParams: function (params) {
-            var temp = {
+            var querys = opts.queryParamsCallback();
+            return $.extend({}, {
                 search: params.search,
                 sort: params.sort,
                 order: params.order,
                 offset: params.offset,  //偏移量（跳过的记录数）
                 limit: params.limit,    //页记录大小
-            }
-            var inputs = opts.callback();
-            var parms = $.extend({}, temp, inputs);
-            return parms;
+            }, querys);
         },
         paginationLoop: false,
         pagination: true,
@@ -203,33 +212,28 @@ var initTable = function (opts) {
     /**
      * 获取table组件已选择行
      * */
-    tab.getSelecteds = function () {
-        return tab.instance.bootstrapTable("getSelections");
+    this.getSelecteds = function () {
+        return this.instance.bootstrapTable("getSelections");
     }
     /**
      * 设置table组件额外查询参数
      * @param {object} params 参数对象
      */
-    tab.setQueryParams = function (params) {
-        var options = opts.callback(params);
-        return options;
+    this.setQueryParams = function (querys) {
+        return querys;
     }
     /**
-     * 加载数据
-     * @param {string} url：请求地址
-     * @param {object} parms：查询参数
+     * 设置table组件数据列
+     * @param {array} dataColumns
      */
-    tab.reload = function (url, parms) {
-        var params = tab.setQueryParams(parms);
-        $.get(url, params, function (data) {
-            tab.instance.bootstrapTable("load", data);
-        });
+    this.setDataColumns = function (dataColumns) {
+        return dataColumns;
     }
     /**
      * 刷新table组件
      * */
-    tab.refresh = function () {
-        tab.instance.bootstrapTable("refresh");
+    this.setRefresh = function () {
+        this.instance.bootstrapTable("refresh");
     }
-    return tab;
+    return this;
 }
