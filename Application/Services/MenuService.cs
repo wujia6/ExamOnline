@@ -10,6 +10,7 @@ using Domain.Entities.MenuAgg;
 using Domain.IComm;
 using Domain.IManages;
 using Infrastructure.Repository;
+using Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.Services
@@ -25,13 +26,25 @@ namespace Application.Services
             this.context = cxt;
         }
 
+        #region ### sync
+        public bool EditTo(MenuDto model)
+        {
+            if (model == null)
+                return false;
+            var entity = model.MapTo<MenuInfo>();
+            return menuManage.EditTo(entity) ? context.SaveChanges() > 0 : false;
+        }
+        #endregion
+
         #region ### async
         public async Task<bool> SaveAsync(MenuDto model)
         {
             if (model == null)
                 return false;
             var entity = model.MapTo<MenuInfo>();
-            return menuManage.SaveAs(entity) ? await context.SaveChangesAsync() > 0 : false;
+            menuManage.SaveAs(entity);
+            int res = await context.SaveChangesAsync();
+            return res > 0;
         }
 
         public async Task<bool> EditAsync(MenuDto model)
@@ -39,7 +52,9 @@ namespace Application.Services
             if (model == null)
                 return false;
             var entity = model.MapTo<MenuInfo>();
-            return menuManage.EditTo(entity) ? await context.SaveChangesAsync() > 0 : false;
+            menuManage.EditTo(entity);
+            int res = await context.SaveChangesAsync();
+            return res > 0;
         }
 
         public async Task<bool> RemoveAsync(Expression<Func<MenuInfo, bool>> express)

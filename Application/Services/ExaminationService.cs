@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using AutoMapper.Execution;
 using Application.DTO.Models;
 using System.Threading.Tasks;
+using Infrastructure.Utils;
 
 namespace Application.Services
 {

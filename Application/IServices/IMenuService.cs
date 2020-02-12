@@ -5,12 +5,15 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Application.DTO.Models;
 using Domain.Entities.MenuAgg;
+using Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.IServices
 {
     public interface IMenuService
     {
+        bool EditTo(MenuDto model);
+
         Task<bool> SaveAsync(MenuDto model);
         
         Task<bool> EditAsync(MenuDto model);

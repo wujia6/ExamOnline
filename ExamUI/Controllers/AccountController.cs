@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Application.IServices;
 using Application.DTO.Models;
+using Infrastructure.Utils;
 
 namespace ExamUI.Controllers
 {
@@ -56,14 +57,14 @@ namespace ExamUI.Controllers
             {
                 var scode = HttpContext.Session.GetString("VCode").ToLower();
                 if (string.Compare(scode, model.VerificyCode) != 0)
-                    return Json(new { success = false, message = "验证码错误" });
+                    return Json(new HttpResult { Success = false, Message = "验证码错误" });
 
                 var applicationUser = await userService.SingleAsync(
                     express: usr => usr.Account == model.UserAccount && usr.Pwd == model.UserPassword,
                     include: src => src.Include(u => u.UserRoles).ThenInclude(r => r.RoleInfomation));
 
                 if (applicationUser == null)
-                    return Json(new { success = false, message = "错误的用户名或密码" });
+                    return Json(new HttpResult { Success = false, Message = "错误的用户名或密码" });
 
                 //创建身份证件单元：一张身份证由多个证件单元组成
                 //创建身份证件，添加证件单元
@@ -84,12 +85,12 @@ namespace ExamUI.Controllers
                     IsPersistent = true,
                     AllowRefresh = true
                 });
-                return Json(new { success = true, message = "登录成功", path = "/Home/Index" });
+                return Json(new HttpResult { Success = true, Message = "登录成功", PathUrl = "/Home/Index" });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //return LocalRedirect("~/Views/Shared/Error.cshtml");
-                throw ex;
+                return Json(new HttpResult { Success = false, Message = "发生内部错误，请重新登录或联系管理员" });
+                //throw ex;
             }
         }
 

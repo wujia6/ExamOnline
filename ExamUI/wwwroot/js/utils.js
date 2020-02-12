@@ -74,7 +74,19 @@ var formUtils = {
      * @param {object} frm 表单对象
      */
     clear: function (frm) {
-        $(":input", frm).not(":button,:submit,:reset").val('').removeAttr("checked").removeAttr("selected");
+        var dmTps = ["text", "password", "radio", "checkbox", "hidden", "file", "select", "textarea"];
+        for (var i = 0; i < dmTps.length; i++) {
+            switch (dmTps[i]) {
+                case "radio": frm.find("input[type='radio']").attr("checked", "1"); break;
+                case "checkbox": frm.find("input[type='checkbox']").attr("checked", false); break;
+                case "hidden": frm.find("input[type='hidden']").val("0"); break;
+                case "select": frm.find("select option:first-child").attr("selected", true); break;
+                case "textarea": frm.find("textarea").val(""); break;
+                default: frm.find("input").val("");
+            }
+        }
+        frm.reset();
+        //$(":*", frm).not(":button,:submit,:reset").val('').removeAttr("checked").removeAttr("selected");
     },
 
     /**
@@ -86,21 +98,19 @@ var formUtils = {
      */
     load: function (frm, obj) {
         if (frm == null || frm == 'undefined' || obj == null || obj == 'undefined') {
-            layerUtils.info("表单或数据对象为空", 2);
+            layerUtils.info("表单对象或数据对象为空", 2);
             return;
         }
         for (var key in obj) {
-            //console.log(key + ":" + json[key]);
-            var propName = "";
-            if (key == "0" || obj[key] == null)
-                continue;
-            else if (key == "id")
-                propName = key.toUpperCase()
-            else
-                propName = key.substr(0, 1).toUpperCase() + key.substr(1, key.lenght);   //重新拼凑json属性名(parnetID=ParentID)
-            var domEle = frm.find("input[name=" + propName + "]");
-            if (domEle != "undefined" && domEle != null)
-                domEle.val(obj[key]);
+            if (key == "0" || obj[key] == null) continue;
+            //重新拼凑json属性名(parnetID=ParentID)
+            var propName = key == "id" ? key.toUpperCase() : key.substr(0, 1).toUpperCase() + key.substr(1, key.lenght);
+            var dmEle = frm.find("*[name=" + propName + "]");
+            if (dmEle == "undefined" || dmEle == null)  continue;
+            if ($(dmEle).is("select") && $.type(obj[key]) == "string") 
+                dmEle.find("option:contains(" + obj[key] + ")").attr("selected", true);
+            else   
+                dmEle.val(obj[key]);
         }
     }
 }
@@ -131,44 +141,6 @@ var layerUtils = {
             anim: 1, //0-6的动画形式，-1不开启
             content: contentHtml
         });
-    }
-}
-
-//dialog组件封装
-var dialogUtils = {
-    instance: function (title, message) {
-        var dlgHtml = $("#dlg").html();
-        if (dlgHtml == "undefined" || dlgHtml == null) {
-            $("body").append(
-                "<div id='dlg' class='' style='width:50%; top:40% left:35%;'>" +
-                    "<a href='#' class='close' data-dismiss='alert'>&times;</a>" +
-                    "<strong>" + title + "</strong> " + message +
-                "</div>"
-            );
-        }
-        var dlg = $("#dlg");
-        return dlg;
-    },
-    error: function (message) {
-        //var dlg = this.instance("错误", message);
-        //dlg.removeAttr("class").attr("class", "alert alert-danger alert-dismissible");
-        //dlg.alert();
-        $("#showAlert").alert();
-    },
-    info: function (message) {
-        var dlg = this.instance("信息", message);
-        dlg.removeAttr("class").attr("class", "alert alert-info alert-dismissible");
-        dlg.alert();
-    },
-    success: function (message) {
-        var dlg = this.instance("成功", message);
-        dlg.removeAttr("class").attr("class", "alert alert-success alert-dismissible");
-        dlg.alert();
-    },
-    warning: function (message) {
-        var dlg = this.instance("警告", message);
-        dlg.removeAttr("class").attr("class", "alert alert-warning alert-dismissible");
-        dlg.alert();
     }
 }
 
@@ -232,8 +204,7 @@ var initTable = function (opts) {
      * 获取table组件已选择行
      * */
     tab.getSelecteds = function () {
-        var rows = tab.instance.bootstrapTable("getSelections");
-        return rows;
+        return tab.instance.bootstrapTable("getSelections");
     }
     /**
      * 设置table组件额外查询参数

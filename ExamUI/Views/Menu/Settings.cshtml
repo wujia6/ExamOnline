@@ -2,9 +2,6 @@
     ViewData["Title"] = "菜单管理";
     ViewBag.CurrentMenu = "Menu";
 }
-<style>
-    #frm_search_menu .col-md-2,.col-md-3,.col-md-4 { padding:0 15px; }
-</style>
 
 <section class="content-header">
     <div class="container-fluid">
@@ -136,7 +133,7 @@
                     manageTable.refresh;
                 },
                 onSaveEvent: function () {
-                    $.post("/Menu/EditAsync", frm.serialize(), function (result) {
+                    $.post("/Menu/EditTo", frm.serialize(), function (result) {
                         layerUtils.info(result.message);
                         if (result.success)
                             formUtils.clear(frm);

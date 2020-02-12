@@ -12,6 +12,7 @@ using AutoMapper.Execution;
 using System.Threading.Tasks;
 using Application.DTO.Models;
 using Domain.Entities.ClassAgg;
+using Infrastructure.Utils;
 
 namespace Application.Services
 {

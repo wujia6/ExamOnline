@@ -11,6 +11,7 @@ using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore.Query;
 using Application.DTO.Models;
 using System.Threading.Tasks;
+using Infrastructure.Utils;
 
 namespace Application.Services
 {

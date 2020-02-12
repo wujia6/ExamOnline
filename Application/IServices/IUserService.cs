@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Query;
 using Domain.Entities.UserAgg;
 using Application.DTO.Models;
 using System.Threading.Tasks;
+using Infrastructure.Utils;
 
 namespace Application.IServices
 {

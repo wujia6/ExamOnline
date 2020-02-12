@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Application.DTO.Models;
 using Domain.Entities.ExamAgg;
+using Infrastructure.Utils;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.IServices

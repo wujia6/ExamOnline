@@ -16,6 +16,7 @@
     <link href="~/lib/icheck-bootstrap/icheck-bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap3-dialog/css/bootstrap-dialog.min.css" rel="stylesheet" />
     <link href="~/css/adminlte.min.css" rel="stylesheet" />
+    <link href="~/lib/layer/skin/layer.css" rel="stylesheet" />
     @*<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">*@
 </head>
 <body class="hold-transition login-page">
@@ -70,7 +71,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/bootstrap3-dialog/js/bootstrap-dialog.min.js"></script>
     <script src="~/js/adminlte.min.js"></script>
-    <script src="~/js/common.js"></script>
+    <script src="~/lib/layer/layer.js"></script>
+    <script src="~/js/utils.js"></script>
     <script>
         $(function () {
             //刷新验证码
@@ -80,19 +82,23 @@
 
             //表单提交
             $("#btnSubmit").click(function () {
-                $.ajax({
-                    type: 'post',
-                    url: '/Account/Login',
-                    data: $("#frm_account_login").serializeArray(),
-                    success: function (data) {
-                        if (!data.success) {
-                            bt_dialog.error("登录失败，请重试");
-                            return;
-                        }
-                        window.location.href = encodeURI(data.path);
-                    }
-                });
+                ajaxLogin('/Account/Login', 'frm_account_login');
             });
+
+            //监听回车键
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13)
+                    ajaxLogin('/Account/Login', 'frm_account_login');
+            });
+
+            //user login
+            function ajaxLogin(postUrl, frmId) {
+                $.post(postUrl, $("#" + frmId).serializeArray(), function (data) {
+                    layerUtils.info(data.message, 1);
+                    if (data.success)
+                        window.location.href = encodeURI(data.pathUrl);
+                });
+            }
         });
     </script>
 </body>
