@@ -20,16 +20,17 @@ namespace System.Linq
                 throw new ArgumentNullException(nameof(source));
             if (predicate == null)
                 throw new ArgumentNullException(nameof(predicate));
-            IQueryable<TSource> iQuery = new List<TSource>().AsQueryable();
-            using (var asyncEnumerator = source.ToAsyncEnumerable().GetEnumerator())
+            var querys = new List<TSource>();
+            using (var asyncEnum = source.ToAsyncEnumerable().GetEnumerator())
             {
-                while (await asyncEnumerator.MoveNext(cancellationToken).ConfigureAwait(false))
+                while (await asyncEnum.MoveNext(cancellationToken).ConfigureAwait(false))
                 {
-                    if (predicate.Compile()(asyncEnumerator.Current))
-                        iQuery.Append(asyncEnumerator.Current);
+                    
+                    if (predicate.Compile().Invoke(asyncEnum.Current))
+                        querys.Add(asyncEnum.Current);
                 }
             }
-            return iQuery;
+            return querys.AsQueryable();
         }
     }
 }

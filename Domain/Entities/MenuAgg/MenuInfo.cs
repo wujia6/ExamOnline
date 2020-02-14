@@ -13,7 +13,7 @@ namespace Domain.Entities.MenuAgg
         public int ParentId { get; set; }
 
         //菜单类型
-        public CommType MenuType { get; set; }
+        public int MenuType { get; set; }
 
         //菜单标题
         public string Title { get; set; }

@@ -11,7 +11,7 @@ namespace Domain.Entities.UserAgg
         //专业
         public string Profssion { get; set; }
         //课程
-        public CommType Course { get; set; } = CommType.C语言;
+        public int Course { get; set; }
         //导航属性
         public virtual IEnumerable<ClassTeacher> ClassTeachers { get; set; }
     }

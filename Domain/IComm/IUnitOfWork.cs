@@ -20,16 +20,16 @@ namespace Domain.IComm
         /// <summary>
         /// 开始事务
         /// </summary>
-        void BeginTransaction();
+        void BeginTrans();
 
         /// <summary>
         /// 提交事务
         /// </summary>
-        void CommitTransaction();
+        void CommitTrans();
 
         /// <summary>
         /// 回滚事务
         /// </summary>
-        void RollBackTransaction();
+        void RollBackTrans();
     }
 }

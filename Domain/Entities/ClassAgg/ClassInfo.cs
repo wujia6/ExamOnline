@@ -18,12 +18,12 @@ namespace Domain.Entities.ClassAgg
         /// <summary>
         /// 年级
         /// </summary>
-        public ClassGrade Grade { get; set; } = ClassGrade.一年级;
+        public int Grade { get; set; }
 
         /// <summary>
         /// 类别
         /// </summary>
-        public CommType Category { get; set; } = CommType.专业班;
+        public int Category { get; set; }
 
         /// <summary>
         /// 创建日期
@@ -33,7 +33,7 @@ namespace Domain.Entities.ClassAgg
         /// <summary>
         /// 状态
         /// </summary>
-        public ClassStatus Status { get; set; } = ClassStatus.未启用;
+        public int Status { get; set; }
 
         /// <summary>
         /// 导航属性

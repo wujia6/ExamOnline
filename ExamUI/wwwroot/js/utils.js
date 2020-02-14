@@ -23,7 +23,15 @@ var modalUtils = {
      * @param {function} opts.onSaveEvent：保存按钮回调事件
      */
     showModal: function (opts) {
-        var options = $.extend({}, { id: "#dialogModal", backdrop: true, keyboard: false }, opts);  //合并设置对象
+        //参数初始化
+        opts = opts || "";
+        opts.remote = opts.remote || "";
+        opts.title = opts.title || "";
+        opts.onOpenedEvent = opts.onOpenedEvent || Function;
+        opts.onClosedEvent = opts.onClosedEvent || Function;
+        opts.onSaveEvent = opts.onSaveEvent || Function;
+        //合并设置对象
+        var options = $.extend({}, { id: "#dialogModal", backdrop: true, keyboard: false }, opts);  
         var self = $(options.id);
         self.on("show.bs.modal", function () { //调用show函数时触发事件
             self.find(".modal-content").load(options.remote, {}, function () {
@@ -44,6 +52,12 @@ var modalUtils = {
      * @param {function} opts.onSureEvent    确定按钮事件的回调函数
      */
     showConfirm: function (opts) {
+        //初始化参数
+        opts = opts || {};
+        opts.title = opts.title || "";
+        opts.message = opts.message || "";
+        opts.onSureEvent = opts.onSureEvent || Function;
+        //html
         var contentHtml =
             "<div class='modal-header'>" +
             "<h4 class='modal-title'></h4><a class='close' data-dismiss='modal'>×</a>" +
@@ -53,7 +67,8 @@ var modalUtils = {
             "<a href ='#' class='btn btn-default' data-dismiss='modal'><i class='fas fa-close'></i> 取消</a>" +
             "<a id ='btn_confirm' href='#' class='btn btn-primary'><i class='fas fa-check'> 确定</a>" +
             "</div>";
-        var options = $.extend({}, { id: "#dialogModal", backdrop: true, keyboard: false }, opts);  //合并设置对象
+        //合并设置对象
+        var options = $.extend({}, { id: "#dialogModal", backdrop: true, keyboard: false }, opts);  
         var self = $(options.id);
         self.on("show.bs.modal", function () {
             self.find(".modal-content").html(contentHtml);

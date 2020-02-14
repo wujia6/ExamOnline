@@ -21,7 +21,10 @@ namespace Application.DTO.Profiles
         public MappingConfig()
         {
             //菜单映射
-            CreateMap<MenuInfo, MenuDto>().ReverseMap();
+            CreateMap<MenuInfo, MenuDto>()
+                .ForMember(dst => dst.ChildNodes, opt => opt.Ignore());
+            CreateMap<MenuDto, MenuInfo>()
+                .ForMember(dst => dst.RoleMenus, opt => opt.Ignore());
             //角色映射
             CreateMap<RoleInfo, RoleDto>()
                 .ForMember(dst => dst.MenuDtos, opt => opt.MapFrom(src => Mapper.Map<List<MenuDto>>(src.RoleMenus.Select(x => x.MenuInfomation))))

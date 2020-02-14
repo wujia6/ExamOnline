@@ -11,12 +11,12 @@ namespace Domain.Entities.QuestionAgg
         /// <summary>
         /// 试题类别
         /// </summary>
-        public CommType Category { get; set; }
+        public int Category { get; set; }
 
         /// <summary>
         /// 等级
         /// </summary>
-        public CommType Level { get; set; }
+        public int Level { get; set; }
 
         /// <summary>
         /// 试题标题

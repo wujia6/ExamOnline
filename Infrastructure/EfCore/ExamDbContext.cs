@@ -59,25 +59,10 @@ namespace Infrastructure.EfCore
         }
 
         #region ###实现IExamDbContext接口
-        public async Task<int> SaveChangesAsync()
-        {
-            return await this.SaveChangesAsync();
-        }
-
-        public void BeginTransaction()
-        {
-            this.Database.BeginTransaction();
-        }
-
-        public void CommitTransaction()
-        {
-            this.Database.CommitTransaction();
-        }
-
-        public void RollBackTransaction()
-        {
-            this.Database.RollbackTransaction();
-        }
+        public async Task<int> SaveChangesAsync() => await base.SaveChangesAsync();
+        public void BeginTrans() => base.Database.BeginTransaction();
+        public void CommitTrans() => base.Database.CommitTransaction();
+        public void RollBackTrans() => base.Database.RollbackTransaction();
 
         public DbSet<MenuInfo> Menus { get; set; }
         public DbSet<RoleInfo> Roles { get; set; }

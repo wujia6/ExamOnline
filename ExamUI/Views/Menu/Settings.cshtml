@@ -24,13 +24,14 @@
                 <div class="card-body">
                     <form id="frm_search_menu" class="form-inline">
                         <h4 class="card-title  col-md-2 text-right">查询条件</h4>
-                        <select id="slt_search_type" name="MenuType" class="form-control col-md-3">
+                        @*<select id="slt_search_type" name="MenuType" class="form-control col-md-3">
                             <option value="-1">---全部类型---</option>
                             <option value="20">菜单</option>
                             <option value="21">模块</option>
                             <option value="22">功能</option>
                             <option value="23">动作</option>
-                        </select>
+                        </select>*@
+                        @Html.DropDownList("slt_search_type", ViewData["MenuTypeList"] as SelectList, new { @class="form-control" })
                         <input type="text" id="txt_search_title" class="form-control col-md-3" placeholder="标题关键字" />
                         <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i> 查询</button>
                     </form>
@@ -72,8 +73,8 @@
             ajaxMethod: "get",
             queryParamsCallback: function () {
                 return {
-                    type: $("#slt_search_type").val(),
-                    title: $("#txt_search_title").val()
+                    cls: $("#slt_search_type").val(),
+                    tle: $("#txt_search_title").val()
                 }
             },
             dataColumns: [
@@ -87,11 +88,9 @@
                 { field: "remarks", title: "备注", align: "center", valign: "middle" }
             ]
         });
-
+        
         //搜索
-        $("#btn_query").click(function () {
-            manageTable.setRefresh();
-        });
+        $("#btn_query").bind("click", manageTable.setRefresh());
 
         //添加
         $("#btn_add").click(function () {
@@ -99,9 +98,7 @@
                 remote: "/Menu/EditPartial",
                 title: "新建菜单项",
                 onOpenedEvent: null,
-                onClosedEvent: function () {
-                    manageTable.setRefresh();
-                },
+                onClosedEvent: manageTable.setRefresh(),
                 onSaveEvent: function () {
                     var frm = $("#frm_menu_edit");
                     $.post("/Menu/AddAsync", frm.serializeArray(), function (result) {
@@ -128,11 +125,9 @@
                     frm = $("#frm_menu_edit");
                     formUtils.load(frm, rows[0]);
                 },
-                onClosedEvent: function () {
-                    manageTable.setRefresh();
-                },
+                onClosedEvent: manageTable.setRefresh(),
                 onSaveEvent: function () {
-                    $.post("/Menu/EditTo", frm.serialize(), function (result) {
+                    $.post("/Menu/EditTo", frm.serializeArray(), function (result) {
                         layerUtils.info(result.message);
                         if (result.success)
                             formUtils.clear(frm);
