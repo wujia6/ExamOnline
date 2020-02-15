@@ -37,7 +37,11 @@ namespace ExamUI.Controllers
                 express = src => src.Name == name;
             if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(code))
                 express = src => src.Code == code;
-            var pageResult = await roleService.QueryAsync(offset.Value, limit.Value, express, include: src => src.Include(rms => rms.RoleMenus));
+            var pageResult = await roleService.QueryAsync(
+                    offset.Value, 
+                    limit.Value, 
+                    express, 
+                    include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
             return Json(pageResult);
         }
 
@@ -52,14 +56,16 @@ namespace ExamUI.Controllers
         public async Task<JsonResult> EditAsync(RoleDto model)
         {
             return await roleService.EditAsync(model) ?
-                Json(new HttpResult { Success = true, Message = "操作成功" }) : Json(new HttpResult { Success = false, Message = "操作失败，请重试" });
+                Json(new HttpResult { Success = true, Message = "操作成功" }) : 
+                Json(new HttpResult { Success = false, Message = "操作失败，请重试" });
         }
 
         [HttpPost]
         public async Task<JsonResult> RemoveAsync(int rid)
         {
             return await roleService.RemoveAsync(express:src=>src.ID==rid && src.ID != 1)?
-                Json(new HttpResult { Success = true, Message = "操作成功" }) : Json(new HttpResult { Success = false, Message = "操作失败，请重试" });
+                Json(new HttpResult { Success = true, Message = "操作成功" }) : 
+                Json(new HttpResult { Success = false, Message = "操作失败，请重试" });
         }
     }
 }

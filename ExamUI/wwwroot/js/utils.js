@@ -144,20 +144,24 @@ var layerUtils = {
  * bootstrapTable组件封装
  * @param {object} opts 参数对象
  * @param {string} opts.tableId 表格ID
+ * @param {bool} opts.showDetail 显示子表
  * @param {string} opts.ajaxUrl ajax请求地址
  * @param {string} opts.ajaxMethod ajax请求方法
  * @param {object} opts.queryParamsCallback 自定义ajax查询参数回调函数
  * @param {array} opts.dataColumns 需绑定的数据列
+ * @param {function} opts.onRowExpandCallback 行展开事件回调函数
  */
 window.initTable = function (opts) {
     //参数初始化
     opts = opts || {};
     opts.tableId = opts.tableId || "";
+    opts.detailView = opts.showDetail || false;
     opts.ajaxUrl = opts.ajaxUrl || "";
     opts.ajaxMethod = opts.ajaxMethod || "get";
     opts.queryParamsCallback = opts.queryParamsCallback || this.setQueryParams;
     opts.dataColumns = opts.dataColumns || this.setDataColumns;
-    //实列
+    opts.onRowExpandCallback = opts.onRowExpandCallback || Function;
+    //父表实列
     this.instance = $("#" + opts.tableId);
     //初始化table组件
     this.instance.bootstrapTable({
@@ -169,6 +173,7 @@ window.initTable = function (opts) {
         clickToSelect: true,
         search: false,
         //searchOnEnterKey: true,
+        detailView: opts.detailView,
         showColumns: true,
         showRefresh: true,
         showToggle: true,
@@ -198,6 +203,9 @@ window.initTable = function (opts) {
         },
         onLoadSuccess: function () {
             console.log("数据加载成功");
+        },
+        onExpandRow: function (index, row, $detail) {
+            opts.onRowExpandCallback(row, $detail);
         }
     });
     /**
@@ -225,6 +233,30 @@ window.initTable = function (opts) {
      * */
     this.setRefresh = function () {
         this.instance.bootstrapTable("refresh");
+    }
+    return this;
+}
+
+/**
+ * bootstrapTable子表组件封装
+ * @param {object} options 参数对象
+ * @param {json} options.srcData 父表列绑定数据
+ * @param {object} options.domEle 父表行td对象
+ * @param {array} options.dataColumns 数据列数组
+ */
+window.initRowTable = function (options) {
+    this.instance = options.domEle.html("<table></table>").find("table");
+    this.instance.bootstrapTable({
+        uniqueId: "ID",
+        showHeader: true,
+        showLoading: true,
+        striped: true,
+        data: options.srcData,
+        columns: options.dataColumns
+    });
+
+    this.getSelecteds = function () {
+        return this.instance.find("input[type='checkbox']: checked");
     }
     return this;
 }

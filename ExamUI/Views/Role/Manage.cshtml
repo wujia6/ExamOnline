@@ -60,4 +60,49 @@
         </div>
     </div>
 </section>
+<script>
+    $(function () {
+        //初始化table
+        var manageTable = new initTable({
+            tableId: "tab_roles",
+            showDetail: true,
+            ajaxUrl: "/Role/BrowseAsync",
+            ajaxMethod: "get",
+            queryParamsCallback: function () {
+                return {
+                    name: $("#txt_search_role").val(),
+                    code: $("#txt_search_code").val()
+                }
+            },
+            dataColumns: [
+                { checkbox: true, align: "center", valign: "middle" },
+                { field: "name", title: "角色名称", align: "center", valign: "middle" },
+                { field: "code", title: "角色代码", align: "center", valign: "middle" },
+                { field: "remarks", title: "备注其他", align: "center", valign: "middle" }
+            ],
+            onRowExpandCallback: function (row, $detail) {
+                var subTable = new initRowTable({
+                    srcData: row.menuDtos,
+                    domEle: $detail,
+                    dataColumns: [
+                        { checkbox: true, align: "center", valign: "middle" },
+                        { field: "title", width: "200", title: "标题", align: "center", valign: "middle" },
+                        {field: "", width:"700", title: "模块功能权限", align: "center", valign: "middle", formatter: function () {
+                            var menuId = row.id;
+                            srcdata = row.menuDtos;
+                            $.each(srcdata, function (name, value) {
+                                if (name == "parentID" && value == menuId) {
+
+                                }
+                            })
+                        }},
+
+                        { field: "controller",title:"模块", align: "center", valign: "middle" },
+                        { field: "action", title:"功能", align: "center", valign: "middle" }
+                    ]
+                });
+            }
+        });
+    })
+</script>
 
