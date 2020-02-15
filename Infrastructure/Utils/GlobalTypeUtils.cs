@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Infrastructure.Utils
 {
-    public enum GlobalTypes
+    public enum ApplicationTypes
     {
         //科目
         无 = 0,
@@ -53,7 +53,7 @@ namespace Infrastructure.Utils
         美女=33
     }
 
-    public class GlobalTypesExtensions
+    public class GlobalTypeUtils
     {
         /// <summary>
         /// 从全局枚举获取指定值并封装SelectList返回
@@ -64,18 +64,28 @@ namespace Infrastructure.Utils
         public static SelectList GetSelectList(int start, int end)
         {
             var selectList = new List<SelectListItem>();
-            var arr = Enum.GetValues(typeof(GlobalTypesExtensions));
+            var arr = Enum.GetValues(typeof(ApplicationTypes));
             foreach (int tp in arr)
             {
                 if (tp >= start && tp <= end)
                 {
-                    string itemName = Enum.GetName(typeof(GlobalTypesExtensions), tp);
+                    string itemName = Enum.GetName(typeof(ApplicationTypes), tp);
                     var item = new SelectListItem(itemName, tp.ToString());
                     selectList.Add(item);
                 }
             }
             selectList.Insert(0, new SelectListItem { Text = "--所有类型--", Value = "0", Selected = true });
-            return new SelectList(selectList.AsEnumerable());
+            return new SelectList(selectList.AsEnumerable(), "Value", "Text");
+        }
+
+        /// <summary>
+        /// 获取指定枚举值的名称
+        /// </summary>
+        /// <param name="typeValue">枚举值</param>
+        /// <returns></returns>
+        public static string GetTypeName(int typeValue)
+        {
+            return Enum.GetName(typeof(ApplicationTypes), typeValue);
         }
     }
 }

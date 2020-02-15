@@ -68,7 +68,7 @@ namespace Domain.Manages
                 efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
             return new
             {
-                Total = efCore.EntitySet.Count(),
+                Total = await efCore.EntitySet.CountAsync(),
                 Rows = await efCore.EntitySet.Skip(offset).Take(limit).ToListAsync()
             };
         }

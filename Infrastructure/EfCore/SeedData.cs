@@ -29,14 +29,14 @@ namespace Infrastructure.EfCore
                 return;
             var lstMenus = new List<MenuInfo>
             {
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)GlobalTypes.菜单, Title="首页", Controller="Home", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)GlobalTypes.模块, Title="系统管理", Controller="System", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)GlobalTypes.模块, Title="班级管理", Controller="Class", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)GlobalTypes.模块, Title="教师管理", Controller="Teacher", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)GlobalTypes.模块, Title="学生管理", Controller="Student", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)GlobalTypes.模块, Title="考试管理", Controller="Examination", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)GlobalTypes.模块, Title="试卷管理", Controller="Answer", Action="Index" },
-                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)GlobalTypes.模块, Title="题库管理", Controller="Question", Action="Index" }
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)ApplicationTypes.菜单, Title="首页", Controller="Home", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)ApplicationTypes.模块, Title="系统管理", Controller="System", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)ApplicationTypes.模块, Title="班级管理", Controller="Class", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)ApplicationTypes.模块, Title="教师管理", Controller="Teacher", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)ApplicationTypes.模块, Title="学生管理", Controller="Student", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)ApplicationTypes.模块, Title="考试管理", Controller="Examination", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)ApplicationTypes.模块, Title="试卷管理", Controller="Answer", Action="Index" },
+                new MenuInfo{ Remarks="暂无", ParentId=0, MenuType=(int)ApplicationTypes.模块, Title="题库管理", Controller="Question", Action="Index" }
             };
             foreach (var menu in lstMenus)
             {
@@ -193,10 +193,10 @@ namespace Infrastructure.EfCore
             {
                 cls.Remarks = "暂无";
                 cls.Name = "1701";
-                cls.Grade = (int)GlobalTypes.三年级;
-                cls.Category = (int)GlobalTypes.高考班;
+                cls.Grade = (int)ApplicationTypes.三年级;
+                cls.Category = (int)ApplicationTypes.高考班;
                 cls.CreateDate = DateTime.Now;
-                cls.Status = (int)GlobalTypes.未启用;
+                cls.Status = (int)ApplicationTypes.未启用;
                 return cls;
             }));
             context.SaveChanges();
@@ -216,7 +216,7 @@ namespace Infrastructure.EfCore
                 adm.Remarks = "系统管理员";
                 adm.Account = "sysadmin";
                 adm.Pwd = "a1234567";
-                adm.Gender = (int)GlobalTypes.帅哥;
+                adm.Gender = (int)ApplicationTypes.帅哥;
                 adm.Age = 38;
                 adm.Tel = "18673968186";
                 adm.CreateDate = DateTime.Now;
@@ -228,12 +228,12 @@ namespace Infrastructure.EfCore
                 thr.Remarks = "C语言教师";
                 thr.Account = "teacher1";
                 thr.Pwd = "a1234567";
-                thr.Gender = (int)GlobalTypes.帅哥;
+                thr.Gender = (int)ApplicationTypes.帅哥;
                 thr.Age = 38;
                 thr.Tel = "18673968186";
                 thr.CreateDate = DateTime.Now;
                 thr.Profssion = "软件工程";
-                thr.Course = (int)GlobalTypes.C语言;
+                thr.Course = (int)ApplicationTypes.C语言;
                 return thr;
             }));
             //初始化学生数据
@@ -242,7 +242,7 @@ namespace Infrastructure.EfCore
                 stu.Remarks = "学生";
                 stu.Account = "student1";
                 stu.Pwd = "a1234567";
-                stu.Gender = (int)GlobalTypes.帅哥;
+                stu.Gender = (int)ApplicationTypes.帅哥;
                 stu.Age = 16;
                 stu.Tel = "18673968186";
                 stu.CreateDate = DateTime.Now;

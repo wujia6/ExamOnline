@@ -19,14 +19,14 @@ namespace ExamUI.Controllers
 
         public MenuController(IMenuService service)
         {
-            this.menuService = service;
+            this.menuService = service ?? throw new ArgumentNullException(nameof(menuService));
         }
 
         [HttpPost]
         public async Task<JsonResult> AddAsync(MenuDto model)
         {
             if (model == null)
-                return Json(new HttpResult { Success = false, Message = "请添加有效数据" });
+                throw new ArgumentNullException(nameof(model));
             return await menuService.SaveAsync(model) ? 
                 Json(new HttpResult{ Success = true, Message = "保存成功" }) : 
                 Json(new HttpResult { Success = false, Message = "保存失败，请重试" });
@@ -43,7 +43,7 @@ namespace ExamUI.Controllers
         [HttpPost]
         public async Task<JsonResult> RemoveAsync(int[] keys)
         {
-            return await menuService.RemoveAsync(express:m => keys.Contains(m.ID) ? true : false) ? 
+            return await menuService.RemoveAsync(express:src => keys.Contains(src.ID) ? true : false) ? 
                 Json(new HttpResult { Success = true, Message = "操作成功！" }) : 
                 Json(new HttpResult { Success = false, Message = "操作失败！" });
         }
@@ -54,33 +54,28 @@ namespace ExamUI.Controllers
             var result = await menuService.QueryAsync(express: src => src.MenuType > 20 && src.MenuType < 23);
             result.Insert(0, new MenuDto { ID = 0, Title = "--所属父类--" });
             ViewData["ParentList"] = new SelectList(result.AsEnumerable(), "ID", "Title");
+            ViewData["MenuTypeList"] = GlobalTypeUtils.GetSelectList(20, 23);
             return PartialView("EditPartial");
         }
 
         [HttpGet]
-        public async Task<JsonResult> PagingAsync(int? offset, int? limit, int? cls, string tle = null)
+        public async Task<JsonResult> PagingAsync(int? offset, int? limit, int? tp = 0, string tle = null)
         {
-            Expression<Func<MenuInfo, bool>> express = inf => true;
-            if (cls.Value > 0 && cls.HasValue)
-                express = src => express.Compile().Invoke(src) && src.MenuType == cls.Value;
-            if (!string.IsNullOrEmpty(tle))
-                express = src => express.Compile().Invoke(src) && src.Title.Contains(tle);
+            Expression<Func<MenuInfo, bool>> express = null;
+            if (tp.Value > 0 && !string.IsNullOrEmpty(tle))
+                express = src => src.MenuType == tp.Value && src.Title.Contains(tle);
+            if (tp.Value > 0 && string.IsNullOrEmpty(tle))
+                express = src => src.MenuType == tp.Value;
+            if (tp.Value == 0 && !string.IsNullOrEmpty(tle))
+                express = src => src.Title.Contains(tle);
             var pageResult = await menuService.QueryAsync(offset.Value, limit.Value, express);
             return Json(pageResult);
-        }
-
-        [HttpPost]
-        public IActionResult EditTo(MenuDto model)
-        {
-            return menuService.EditTo(model) ?
-                Json(new HttpResult { Success = true, Message = "操作成功" }) :
-                Json(new HttpResult { Success = false, Message = "操作失败，请重试" });
         }
 
         [HttpGet]
         public IActionResult Settings()
         {
-            ViewData["MenuTypeList"] = GlobalTypesExtensions.GetSelectList(20, 23);
+            ViewData["MenuTypeList"] = GlobalTypeUtils.GetSelectList(20, 23);
             return View();
         }
     }

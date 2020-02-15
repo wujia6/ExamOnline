@@ -21,8 +21,8 @@ namespace ExamUI.Components
 
         public ApplicationMenus(IRoleService service, IMemoryCache cache)
         {
-            this.roleService = service;
-            this.appCache = cache;
+            this.roleService = service ?? throw new ArgumentNullException(nameof(roleService));
+            this.appCache = cache ?? throw new ArgumentNullException(nameof(appCache));
         }
 
         /// <summary>

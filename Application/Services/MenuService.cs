@@ -22,8 +22,8 @@ namespace Application.Services
 
         public MenuService(IMenuManage manage, IExamDbContext cxt)
         {
-            this.menuManage = manage;
-            this.context = cxt;
+            this.menuManage = manage ?? throw new ArgumentNullException(nameof(manage));
+            this.context = cxt ?? throw new ArgumentNullException(nameof(cxt));
         }
 
         #region ### sync
@@ -42,9 +42,7 @@ namespace Application.Services
             if (model == null)
                 return false;
             var entity = model.MapTo<MenuInfo>();
-            menuManage.SaveAs(entity);
-            int res = await context.SaveChangesAsync();
-            return res > 0;
+            return menuManage.SaveAs(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
         public async Task<bool> EditAsync(MenuDto model)
@@ -52,9 +50,7 @@ namespace Application.Services
             if (model == null)
                 return false;
             var entity = model.MapTo<MenuInfo>();
-            menuManage.EditTo(entity);
-            int res = await context.SaveChangesAsync();
-            return res > 0;
+            return menuManage.EditTo(entity) ? await context.SaveChangesAsync() > 0 : false;
         }
 
         public async Task<bool> RemoveAsync(Expression<Func<MenuInfo, bool>> express)

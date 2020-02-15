@@ -23,20 +23,13 @@ var modalUtils = {
      * @param {function} opts.onSaveEvent：保存按钮回调事件
      */
     showModal: function (opts) {
-        //参数初始化
-        opts = opts || "";
-        opts.remote = opts.remote || "";
-        opts.title = opts.title || "";
-        opts.onOpenedEvent = opts.onOpenedEvent || Function;
-        opts.onClosedEvent = opts.onClosedEvent || Function;
-        opts.onSaveEvent = opts.onSaveEvent || Function;
         //合并设置对象
-        var options = $.extend({}, { id: "#dialogModal", backdrop: true, keyboard: false }, opts);  
+        var options = $.extend({}, { id: "#dialogModal", backdrop: true, keyboard: false }, opts);
         var self = $(options.id);
-        self.on("show.bs.modal", function () { //调用show函数时触发事件
-            self.find(".modal-content").load(options.remote, {}, function () {
-                self.find(".modal-title").text(options.title);
-                self.find(".modal-footer").children("#btn_modal_save").bind("click", options.onSaveEvent);
+        $(self).on("show.bs.modal", function () { //调用show函数时触发事件
+            $(self).find(".modal-content").load(options.remote, {}, function () {
+                $(self).find(".modal-title").text(options.title);
+                $(self).find(".modal-footer").children("#btn_modal_save").bind("click", options.onSaveEvent);
             });
         })
             .on("shown.bs.modal", opts.onOpenedEvent)
@@ -52,11 +45,6 @@ var modalUtils = {
      * @param {function} opts.onSureEvent    确定按钮事件的回调函数
      */
     showConfirm: function (opts) {
-        //初始化参数
-        opts = opts || {};
-        opts.title = opts.title || "";
-        opts.message = opts.message || "";
-        opts.onSureEvent = opts.onSureEvent || Function;
         //html
         var contentHtml =
             "<div class='modal-header'>" +
@@ -70,13 +58,13 @@ var modalUtils = {
         //合并设置对象
         var options = $.extend({}, { id: "#dialogModal", backdrop: true, keyboard: false }, opts);  
         var self = $(options.id);
-        self.on("show.bs.modal", function () {
-            self.find(".modal-content").html(contentHtml);
-            self.find(".modal-title").text(opts.title);
-            self.find(".modal-body").html("<strong>" + opts.message + "</strong>");
-            self.find(".modal-footer").children("#btn_confirm").bind("click", function () {
+        $(self).on("show.bs.modal", function () {
+            $(self).find(".modal-content").html(contentHtml);
+            $(self).find(".modal-title").text(opts.title);
+            $(self).find(".modal-body").html("<strong>" + opts.message + "</strong>");
+            $(self).find(".modal-footer").children("#btn_confirm").bind("click", function () {
                 opts.onSureEvent();
-                self.modal("hide");
+                $(self).modal("hide");
             });
         }).modal("show");
     }
@@ -89,18 +77,6 @@ var formUtils = {
      * @param {object} frm 表单对象
      */
     clear: function (frm) {
-        //var dmTps = ["text", "password", "radio", "checkbox", "hidden", "file", "select", "textarea"];
-        //for (var i = 0; i < dmTps.length; i++) {
-        //    switch (dmTps[i]) {
-        //        case "text":
-        //        case "password": frm.find("input: text, input: password").val(""); break;
-        //        case "radio": frm.find("input: radio").prop("checked", "1"); break;
-        //        case "checkbox": frm.find("input: checkbox").removeAttr("checked"); break;
-        //        case "hidden": frm.find("input: hidden").val("0"); break;
-        //        case "select": frm.find("option: first-child").attr("selected", true); break;
-        //        case "textarea": frm.find("input: textarea").val(""); break;
-        //    }
-        //}
         $(":input", frm).not(":button,:submit,:reset,:option").val('').removeAttr("checked");
         $(":option: first-child", frm).attr("selected", true);
     },

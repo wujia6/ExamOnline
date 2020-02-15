@@ -20,17 +20,9 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                @*<div class="card-header"><h4 class="card-title">查询条件</h4></div>*@
                 <div class="card-body">
                     <form id="frm_search_menu" class="form-inline">
                         <h4 class="card-title  col-md-2 text-right">查询条件</h4>
-                        @*<select id="slt_search_type" name="MenuType" class="form-control col-md-3">
-                            <option value="-1">---全部类型---</option>
-                            <option value="20">菜单</option>
-                            <option value="21">模块</option>
-                            <option value="22">功能</option>
-                            <option value="23">动作</option>
-                        </select>*@
                         @Html.DropDownList("slt_search_type", ViewData["MenuTypeList"] as SelectList, new { @class="form-control" })
                         <input type="text" id="txt_search_title" class="form-control col-md-3" placeholder="标题关键字" />
                         <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i> 查询</button>
@@ -44,7 +36,6 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                @*<div class="card-header"><h4 class="card-title">菜单项列表</h4></div>*@
                 <div class="card-body">
                     <div id="tab_toolbar" class="btn-group">
                         <button type="button" id="btn_add" class="btn btn-default">
@@ -57,7 +48,7 @@
                             <i class="fas fa-trash"></i> 删除
                         </button>
                     </div>
-                    <table id="tab_menus"></table>
+                    <table id="tab_menus" data-locale="zh-CN"></table>
                 </div>
             </div>
         </div>
@@ -73,15 +64,17 @@
             ajaxMethod: "get",
             queryParamsCallback: function () {
                 return {
-                    cls: $("#slt_search_type").val(),
+                    tp: $("#slt_search_type").val(),
                     tle: $("#txt_search_title").val()
                 }
             },
             dataColumns: [
                 { checkbox: true, align: "center", valign: "middle" },
                 //{ field: "id", title: "编号", align: "center", valign: "middle" },
-                { field: "parentID", title: "父节点", align: "center", valign: "middle" },
-                { field: "menuType", title: "类型", align: "center", valign: "middle" },
+                { field: "parentID", title: "层级", align: "center", valign: "middle" },
+                { field: "menuType", title: "类型", align: "center", valign: "middle", formatter: function (value, row, index) {
+                    return $("#slt_search_type option[value='" + value + "']").text();
+                }},
                 { field: "title", title: "标题", align: "center", valign: "middle" },
                 { field: "controller", title: "模块", align: "center", valign: "middle" },
                 { field: "action", title: "动作", align: "center", valign: "middle" },
@@ -90,7 +83,9 @@
         });
         
         //搜索
-        $("#btn_query").bind("click", manageTable.setRefresh());
+        $("#btn_query").click(function () {
+            manageTable.setRefresh();
+        });
 
         //添加
         $("#btn_add").click(function () {
@@ -98,11 +93,13 @@
                 remote: "/Menu/EditPartial",
                 title: "新建菜单项",
                 onOpenedEvent: null,
-                onClosedEvent: manageTable.setRefresh(),
+                onClosedEvent: function () {
+                    manageTable.setRefresh();
+                },
                 onSaveEvent: function () {
                     var frm = $("#frm_menu_edit");
                     $.post("/Menu/AddAsync", frm.serializeArray(), function (result) {
-                        layerUtils.info(result.message,1);
+                        layerUtils.alert(result.message,1);
                         if (result.success)
                             formUtils.clear(frm);
                     });
@@ -114,7 +111,7 @@
         $("#btn_edit").click(function () {
             var rows = manageTable.getSelecteds();
             if (rows.length != 1) {
-                layerUtils.info("请选择有效数据！", 2);
+                layerUtils.info("请选择有效数据行！", 2);
                 return;
             }
             var frm = null;
@@ -125,11 +122,13 @@
                     frm = $("#frm_menu_edit");
                     formUtils.load(frm, rows[0]);
                 },
-                onClosedEvent: manageTable.setRefresh(),
+                onClosedEvent: function () {
+                    manageTable.setRefresh();
+                },
                 onSaveEvent: function () {
-                    $.post("/Menu/EditTo", frm.serializeArray(), function (result) {
-                        layerUtils.info(result.message);
-                        if (result.success)
+                    $.post("/Menu/EditAsync", frm.serializeArray(), function (result) {
+                        layerUtils.alert(result.message);
+                        if (result.success) 
                             formUtils.clear(frm);
                     });
                 }
@@ -156,7 +155,7 @@
                         traditional: true,
                         data: keys,
                         success: function (result) {
-                            layerUtils.info(result.message, 1);
+                            layerUtils.alert(result.message, 1);
                             if (result.success)
                                 manageTable.setRefresh();
                         }

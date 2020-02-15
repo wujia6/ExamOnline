@@ -51,12 +51,12 @@ namespace Domain.Manages
             if (include!=null)
                 efCore.EntitySet = include(efCore.EntitySet);
             if (spec!=null)
-                efCore.EntitySet = await efCore.EntitySet.WhereAsync(spec.Expression);
-            return efCore.EntitySet;
+                efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
+            return await efCore.EntitySet.ToArrayAsync();
         }
 
         public async Task<object> QueryAsync(
-            int index, int size, 
+            int offset, int limit, 
             ISpecification<QuestionInfo> spec = null, 
             Func<IQueryable<QuestionInfo>, IIncludableQueryable<QuestionInfo, object>> include = null)
         {
@@ -66,8 +66,8 @@ namespace Domain.Manages
                 efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
             return new
             {
-                Total = efCore.EntitySet.Count(),
-                Rows = await efCore.EntitySet.Skip((index - 1) * size).Take(size).ToListAsync()
+                Total = await efCore.EntitySet.CountAsync(),
+                Rows = await efCore.EntitySet.Skip(offset).Take(limit).ToListAsync()
             };
         }
     }
