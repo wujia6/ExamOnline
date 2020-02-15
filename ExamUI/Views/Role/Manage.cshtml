@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "角色管理";
+    ViewBag.CurrentMenu = "Role";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6"><h1>角色管理</h1></div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">角色管理</a></li>
+                    <li class="breadcrumb-item active">浏览</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form id="frm_search_role" role="form" class="form-group-inline">
+                        <h4 class="card-title  col-md-2 text-right">查询条件</h4>
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"><i class="fade fa-user"></i></span>
+                            <input type="text" id="txt_search_role" class="form-control" placeholder="输入角色名称">
+                        </div>
+                        <div class="input-group col-md-4">
+                            <span class="input-group-addon"><i class="fade fa-code"></i></span>
+                            <input type="text" id="txt_search_code" class="form-control" placeholder="输入角色代码">
+                        </div>
+                        <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id="tab_toolbar" class="btn-group">
+                        <button type="button" id="btn_add" class="btn btn-default">
+                            <i class="fas fa-plus"></i> 新增
+                        </button>
+                        <button type="button" id="btn_edit" class="btn btn-default">
+                            <i class="fas fa-edit"></i> 编辑
+                        </button>
+                        <button type="button" id="btn_remove" class="btn btn-default">
+                            <i class="fas fa-trash"></i> 删除
+                        </button>
+                    </div>
+                    <table id="tab_roles" data-locale="zh-CN"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

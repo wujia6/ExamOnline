@@ -27,7 +27,7 @@ namespace Application.IServices
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null);
 
         Task<PageResult<RoleDto>> QueryAsync(
-            int index, int size,
+            int offset, int limit,
             Expression<Func<RoleInfo, bool>> express = null,
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null);
 
