@@ -7,6 +7,7 @@ using Domain.Entities.ExamAgg;
 using Domain.Entities.AnwserAgg;
 using Domain.Entities.MenuAgg;
 using Domain.Entities.RoleAgg;
+using Domain.Entities.PermissionAgg;
 
 namespace Domain.IComm
 {
@@ -15,8 +16,10 @@ namespace Domain.IComm
         DbSet<T> Set<T>() where T : class;
         EntityEntry<T> Entry<T>(T entry) where T : class;
 
+        DbSet<PermissionInfo> Permissions { get; set; }
         DbSet<MenuInfo> Menus { get; set; }
         DbSet<RoleInfo> Roles { get; set; }
+        DbSet<RoleAuthorize> RoleAuthorizes { get; set; }
         DbSet<RoleMenu> RoleMenus { get; set; }
         DbSet<UserInfo> Users{ get; set; }
         DbSet<AdminInfo> Admins { get; set; }

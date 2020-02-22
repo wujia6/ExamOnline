@@ -12,10 +12,10 @@ namespace Domain.Entities.MenuAgg
         //父ID
         public int ParentId { get; set; }
 
-        //菜单类型
+        //类型
         public int MenuType { get; set; }
 
-        //菜单标题
+        //标题
         public string Title { get; set; }
 
         //控制器名称

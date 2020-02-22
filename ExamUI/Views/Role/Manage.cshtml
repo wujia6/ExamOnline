@@ -21,8 +21,8 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form id="frm_search_role" role="form" class="form-group-inline">
-                        <h4 class="card-title  col-md-2 text-right">查询条件</h4>
+                    <div class="form-inline">
+                        <h4 class="card-title col-md-2 d-md-inline text-right">查询条件</h4>
                         <div class="input-group col-md-4">
                             <span class="input-group-addon"><i class="fade fa-user"></i></span>
                             <input type="text" id="txt_search_role" class="form-control" placeholder="输入角色名称">
@@ -32,7 +32,7 @@
                             <input type="text" id="txt_search_code" class="form-control" placeholder="输入角色代码">
                         </div>
                         <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
                             <i class="fas fa-trash"></i> 删除
                         </button>
                     </div>
-                    <table id="tab_roles" data-locale="zh-CN"></table>
+                    <table id="tab_roles"></table>
                 </div>
             </div>
         </div>
@@ -63,7 +63,7 @@
 <script>
     $(function () {
         //初始化table
-        var manageTable = new initTable({
+        var manageTable = new btTable.parentTable({
             tableId: "tab_roles",
             showDetail: true,
             ajaxUrl: "/Role/BrowseAsync",
@@ -76,33 +76,38 @@
             },
             dataColumns: [
                 { checkbox: true, align: "center", valign: "middle" },
-                { field: "name", title: "角色名称", align: "center", valign: "middle" },
-                { field: "code", title: "角色代码", align: "center", valign: "middle" },
-                { field: "remarks", title: "备注其他", align: "center", valign: "middle" }
+                { field: "name", title: "角色", align: "center", valign: "middle" },
+                { field: "code", title: "代码", align: "center", valign: "middle" },
+                { field: "remarks", title: "备注", align: "center", valign: "middle" }
             ],
-            onRowExpandCallback: function (row, $detail) {
-                var subTable = new initRowTable({
-                    srcData: row.menuDtos,
+            onRowExpandCallback: function (row, $detail) {  //行展开事件
+                var subTable = new btTable.childTable({
+                    rowData: row.menuDtos,
                     domEle: $detail,
+                    ajaxUrl: "/Role/CompleteMenusAsync",
+                    ajaxMethod: "get",
                     dataColumns: [
                         { checkbox: true, align: "center", valign: "middle" },
-                        { field: "title", width: "200", title: "标题", align: "center", valign: "middle" },
-                        {field: "", width:"700", title: "模块功能权限", align: "center", valign: "middle", formatter: function () {
-                            var menuId = row.id;
-                            srcdata = row.menuDtos;
-                            $.each(srcdata, function (name, value) {
-                                if (name == "parentID" && value == menuId) {
-
+                        { field: "title", width: "200", align: "center", valign: "middle" },
+                        { field: "controller", width: "100", align: "center", valign: "middle" },
+                        {
+                            field: "", width: "600", align: "center", valign: "middle", formatter: function (row, index, value) {
+                                var childs = row.menuDtos;
+                                var actionHtml = "<div class='form-inline'><div class='col-sm-offset-2 col-sm-10'>";
+                                for (var key in childs) {
+                                    if (key == "action") {
+                                        actionHtml.append("<div class='checkbox'>");
+                                        actionHtml.append("<label><input type='checkbox'>" + childs[key] + "</label>");
+                                        actionHtml.append("</div>");
+                                    }
                                 }
-                            })
-                        }},
-
-                        { field: "controller",title:"模块", align: "center", valign: "middle" },
-                        { field: "action", title:"功能", align: "center", valign: "middle" }
+                                actionHtml.append("</div></div>");
+                                return actionHtml;
+                            }
+                        }
                     ]
                 });
             }
         });
     })
 </script>
-

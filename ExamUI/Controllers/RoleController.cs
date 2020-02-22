@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Application.DTO.Models;
@@ -8,6 +9,7 @@ using Infrastructure.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ExamUI.Controllers
 {
@@ -15,10 +17,14 @@ namespace ExamUI.Controllers
     public class RoleController : Controller
     {
         private readonly IRoleService roleService;
+        private readonly IMenuService menuService;
+        private readonly IMemoryCache appCache;
 
-        public RoleController(IRoleService service)
+        public RoleController(IRoleService roleSvr, IMenuService menuSvr, IMemoryCache cache)
         {
-            this.roleService = service ?? throw new ArgumentNullException(nameof(roleService));
+            this.roleService = roleSvr ?? throw new ArgumentNullException(nameof(roleService));
+            this.menuService = menuSvr ?? throw new ArgumentNullException(nameof(menuService));
+            this.appCache = cache ?? throw new ArgumentNullException(nameof(appCache));
         }
 
         [HttpGet]
@@ -49,7 +55,8 @@ namespace ExamUI.Controllers
         public async Task<JsonResult> AddAsync(RoleDto model)
         {
             return await roleService.SaveAsync(model) ? 
-                Json(new HttpResult { Success = true, Message = "保存成功" }) : Json(new HttpResult { Success = false, Message = "保存失败，请重试" });
+                Json(new HttpResult { Success = true, Message = "保存成功" }) : 
+                Json(new HttpResult { Success = false, Message = "保存失败，请重试" });
         }
 
         [HttpPost]
@@ -66,6 +73,22 @@ namespace ExamUI.Controllers
             return await roleService.RemoveAsync(express:src=>src.ID==rid && src.ID != 1)?
                 Json(new HttpResult { Success = true, Message = "操作成功" }) : 
                 Json(new HttpResult { Success = false, Message = "操作失败，请重试" });
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> CompleteMenusAsync()
+        {
+            if (!(appCache.Get("AllMenus") is List<MenuDto> allMenus) || allMenus.Count == 0)
+            {
+                allMenus = await menuService.QueryAsync();
+                allMenus = GlobalUtils.Recursion(allMenus, 0);
+                appCache.Set("AllMenus", allMenus, new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpiration = DateTime.Now.AddMinutes(5),  //设置缓存绝对过期时间
+                    Priority = CacheItemPriority.Normal   //设置缓存优先级
+                });
+            }
+            return Json(allMenus);
         }
     }
 }

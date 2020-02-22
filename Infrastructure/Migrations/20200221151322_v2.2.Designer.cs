@@ -4,14 +4,16 @@ using Infrastructure.EfCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ExamDbContext))]
-    partial class ExamDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200221151322_v2.2")]
+    partial class v22
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,32 +169,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Menus");
                 });
 
-            modelBuilder.Entity("Domain.Entities.PermissionAgg.PermissionInfo", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Command")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.Property<int>("LevelID");
-
-                    b.Property<string>("Named")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("Remarks")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("TypeAt");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Permissions");
-                });
-
             modelBuilder.Entity("Domain.Entities.QuestionAgg.QuestionInfo", b =>
                 {
                     b.Property<int>("ID")
@@ -224,28 +200,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("ExaminationInfomationID");
 
                     b.ToTable("Questions");
-                });
-
-            modelBuilder.Entity("Domain.Entities.RoleAgg.RoleAuthorize", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("PermissionInformationID");
-
-                    b.Property<string>("Remarks")
-                        .HasMaxLength(50);
-
-                    b.Property<int?>("RoleInformationID");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("PermissionInformationID");
-
-                    b.HasIndex("RoleInformationID");
-
-                    b.ToTable("RoleAuthorizes");
                 });
 
             modelBuilder.Entity("Domain.Entities.RoleAgg.RoleInfo", b =>
@@ -452,17 +406,6 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.ExamAgg.ExaminationInfo", "ExaminationInfomation")
                         .WithMany("QuestionInfomations")
                         .HasForeignKey("ExaminationInfomationID");
-                });
-
-            modelBuilder.Entity("Domain.Entities.RoleAgg.RoleAuthorize", b =>
-                {
-                    b.HasOne("Domain.Entities.PermissionAgg.PermissionInfo", "PermissionInformation")
-                        .WithMany("RoleAuthorizes")
-                        .HasForeignKey("PermissionInformationID");
-
-                    b.HasOne("Domain.Entities.RoleAgg.RoleInfo", "RoleInformation")
-                        .WithMany("RoleAuthorizes")
-                        .HasForeignKey("RoleInformationID");
                 });
 
             modelBuilder.Entity("Domain.Entities.RoleAgg.RoleMenu", b =>

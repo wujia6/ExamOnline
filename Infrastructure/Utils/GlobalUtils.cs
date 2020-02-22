@@ -53,7 +53,7 @@ namespace Infrastructure.Utils
         美女=33
     }
 
-    public class GlobalTypeUtils
+    public class GlobalUtils
     {
         /// <summary>
         /// 从全局枚举获取指定值并封装SelectList返回
@@ -86,6 +86,26 @@ namespace Infrastructure.Utils
         public static string GetTypeName(int typeValue)
         {
             return Enum.GetName(typeof(ApplicationTypes), typeValue);
+        }
+
+        /// <summary>
+        /// 通用递归方法
+        /// </summary>
+        /// <param name="srcList">数据源</param>
+        /// <param name="levelId">层级ID</param>
+        /// <returns></returns>
+        public static List<T> Recursion<T>(List<T> srcList, int levelId = 0) where T : class
+        {
+            var matchs = srcList.Where(x => {
+                dynamic cls = x;
+                return cls.ParentID == levelId ? true : false;
+            });
+            if (matchs != null && matchs.Count() > 0)
+            {
+                foreach (dynamic item in matchs)
+                    item.ChildNodes = Recursion(srcList, item.ID);
+            }
+            return matchs.ToList();
         }
     }
 }

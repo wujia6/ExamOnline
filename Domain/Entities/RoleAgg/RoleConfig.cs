@@ -14,6 +14,17 @@ namespace Domain.Entities.RoleAgg
         }
     }
 
+    public class RoleAuthorizeConfig : IEntityTypeConfiguration<RoleAuthorize>
+    {
+        public void Configure(EntityTypeBuilder<RoleAuthorize> builder)
+        {
+            builder.HasKey(e => e.ID);
+            builder.Property(e => e.Remarks).HasMaxLength(50);
+            builder.HasOne(e => e.RoleInformation).WithMany(s => s.RoleAuthorizes);
+            builder.HasOne(e => e.PermissionInformation).WithMany(s => s.RoleAuthorizes);
+        }
+    }
+
     public class RoleMenuConfig : IEntityTypeConfiguration<RoleMenu>
     {
         public void Configure(EntityTypeBuilder<RoleMenu> builder)

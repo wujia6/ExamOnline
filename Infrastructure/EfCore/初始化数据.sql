@@ -3,14 +3,11 @@ select * from Menus
 insert into Menus 
 	(Remarks,ParentId,MenuType,Title,Controller,[Action])
 values
-	('暂无',0,20,'首页','Home','Index'),
-	('暂无',0,21,'系统管理','Home','Index'),
+	('暂无',0,21,'系统设置','System','Settings'),
 	('暂无',0,21,'班级管理','Class','Index'),
 	('暂无',0,21,'教师管理','Teacher','Index'),
 	('暂无',0,21,'学生管理','Student','Index'),
 	('暂无',0,21,'考试管理','Examination','Index'),
-	('暂无',0,21,'试卷管理','Answer','Index'),
-	('暂无',0,21,'题库管理','Question','Index')
 
 --初始化角色
 select * from Roles

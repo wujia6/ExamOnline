@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using AutoMapper.Execution;
 using Domain.Entities.MenuAgg;
 using Domain.Entities.RoleAgg;
 using Domain.Entities.UserAgg;
@@ -10,6 +9,7 @@ using Domain.Entities.ClassAgg;
 using Domain.Entities.ExamAgg;
 using Domain.Entities.AnwserAgg;
 using Domain.Entities.QuestionAgg;
+using Domain.Entities.PermissionAgg;
 
 namespace Application.DTO.Profiles
 {
@@ -20,13 +20,15 @@ namespace Application.DTO.Profiles
     {
         public MappingConfig()
         {
+            //权限映射
+            CreateMap<PermissionInfo, PermissionDto>().ForMember(dst => dst.Childs, opt => opt.Ignore());
+            CreateMap<PermissionDto, PermissionInfo>().ForMember(dst => dst.RoleAuthorizes, opt => opt.Ignore());
             //菜单映射
-            CreateMap<MenuInfo, MenuDto>()
-                .ForMember(dst => dst.ChildNodes, opt => opt.Ignore());
-            CreateMap<MenuDto, MenuInfo>()
-                .ForMember(dst => dst.RoleMenus, opt => opt.Ignore());
+            CreateMap<MenuInfo, MenuDto>().ForMember(dst => dst.ChildNodes, opt => opt.Ignore());
+            CreateMap<MenuDto, MenuInfo>().ForMember(dst => dst.RoleMenus, opt => opt.Ignore());
             //角色映射
             CreateMap<RoleInfo, RoleDto>()
+                .ForMember(dst => dst.PermssionDtos, opt => opt.MapFrom(src => Mapper.Map<List<PermissionDto>>(src.RoleAuthorizes.Select(r => r.PermissionInformation))))
                 .ForMember(dst => dst.MenuDtos, opt => opt.MapFrom(src => Mapper.Map<List<MenuDto>>(src.RoleMenus.Select(x => x.MenuInfomation))))
                 .ForMember(dst => dst.UserDtos, opt => opt.MapFrom(src => Mapper.Map<List<ApplicationUser>>(src.UserRoles.Select(s => s.UserInfomation))))
                 .ReverseMap();

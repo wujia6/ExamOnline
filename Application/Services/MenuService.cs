@@ -72,7 +72,7 @@ namespace Application.Services
             Expression<Func<MenuInfo, bool>> express = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
-           var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
+            var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
             var lsts = await menuManage.QueryAsync(spec);
             return lsts.MapToList<MenuDto>();
         }

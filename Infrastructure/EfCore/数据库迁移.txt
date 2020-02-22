@@ -1,0 +1,5 @@
+﻿1.注释ExamDbContext代码publicExamDbContext(DbContextOptions<ExamDbContext> options) : base(options) { }
+2.取消protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)方法注释
+3.程序包管理控制台
+4.命令：add-migration [版本号]
+5.命令：update-database

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Infrastructure.Utils;
 using Domain.Entities.AnwserAgg;
 using Domain.Entities.ClassAgg;
 using Domain.Entities.ExamAgg;
@@ -7,9 +9,8 @@ using Domain.Entities.MenuAgg;
 using Domain.Entities.QuestionAgg;
 using Domain.Entities.RoleAgg;
 using Domain.Entities.UserAgg;
+using Domain.Entities.PermissionAgg;
 using Domain.IComm;
-using Microsoft.Extensions.Configuration;
-using Infrastructure.Utils;
 
 namespace Infrastructure.EfCore
 {
@@ -29,10 +30,13 @@ namespace Infrastructure.EfCore
 
         protected override void OnModelCreating(ModelBuilder model)
         {
+            //permssions
+            model.ApplyConfiguration(new PermissionConfig());
             //menus
             model.ApplyConfiguration(new MenuConfig());
             //roles
             model.ApplyConfiguration(new RoleConfig());
+            model.ApplyConfiguration(new RoleAuthorizeConfig());
             model.ApplyConfiguration(new RoleMenuConfig());
             //users
             model.ApplyConfiguration(new UserConfig())
@@ -64,8 +68,10 @@ namespace Infrastructure.EfCore
         public void CommitTrans() => base.Database.CommitTransaction();
         public void RollBackTrans() => base.Database.RollbackTransaction();
 
+        public DbSet<PermissionInfo> Permissions { get; set; }
         public DbSet<MenuInfo> Menus { get; set; }
         public DbSet<RoleInfo> Roles { get; set; }
+        public DbSet<RoleAuthorize> RoleAuthorizes { get; set; }
         public DbSet<RoleMenu> RoleMenus { get; set; }
         public DbSet<UserInfo> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }

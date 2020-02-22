@@ -54,7 +54,7 @@ namespace ExamUI.Controllers
             var result = await menuService.QueryAsync(express: src => src.MenuType > 20 && src.MenuType < 23);
             result.Insert(0, new MenuDto { ID = 0, Title = "--所属父类--" });
             ViewData["ParentList"] = new SelectList(result.AsEnumerable(), "ID", "Title");
-            ViewData["MenuTypeList"] = GlobalTypeUtils.GetSelectList(20, 23);
+            ViewData["MenuTypeList"] = GlobalUtils.GetSelectList(20, 23);
             return PartialView("EditPartial");
         }
 
@@ -75,7 +75,7 @@ namespace ExamUI.Controllers
         [HttpGet]
         public IActionResult Settings()
         {
-            ViewData["MenuTypeList"] = GlobalTypeUtils.GetSelectList(20, 23);
+            ViewData["MenuTypeList"] = GlobalUtils.GetSelectList(20, 23);
             return View();
         }
     }
