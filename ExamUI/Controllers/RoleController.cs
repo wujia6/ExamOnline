@@ -47,7 +47,7 @@ namespace ExamUI.Controllers
                     offset.Value, 
                     limit.Value, 
                     express, 
-                    include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
+                    include: src => src.Include(r => r.RoleAuthorizes).ThenInclude(m => m.PermissionInformation));
             return Json(pageResult);
         }
 

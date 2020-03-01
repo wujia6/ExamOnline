@@ -37,7 +37,7 @@ namespace Infrastructure.EfCore
             //roles
             model.ApplyConfiguration(new RoleConfig());
             model.ApplyConfiguration(new RoleAuthorizeConfig());
-            model.ApplyConfiguration(new RoleMenuConfig());
+            //model.ApplyConfiguration(new RoleMenuConfig());
             //users
             model.ApplyConfiguration(new UserConfig())
                 .Entity<UserInfo>()

@@ -23,7 +23,7 @@
                 <div class="card-body">
                     <form id="frm_search_menu" class="form-inline">
                         <h4 class="card-title  col-md-2 text-right">查询条件</h4>
-                        @Html.DropDownList("slt_search_type", ViewData["MenuTypeList"] as SelectList, new { @class="form-control" })
+                        @*@Html.DropDownList("slt_search_type", ViewData["MenuTypeList"] as SelectList, new { @class="form-control" })*@
                         <input type="text" id="txt_search_title" class="form-control col-md-3" placeholder="标题关键字" />
                         <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i> 查询</button>
                     </form>
@@ -64,20 +64,24 @@
             ajaxMethod: "get",
             queryParamsCallback: function () {
                 return {
-                    tp: $("#slt_search_type").val(),
+                    //tp: $("#slt_search_type").val(),
                     tle: $("#txt_search_title").val()
                 }
             },
             dataColumns: [
                 { checkbox: true, align: "center", valign: "middle" },
                 //{ field: "id", title: "编号", align: "center", valign: "middle" },
-                { field: "parentID", title: "层级", align: "center", valign: "middle" },
-                { field: "menuType", title: "类型", align: "center", valign: "middle", formatter: function (value, row, index) {
-                    return $("#slt_search_type option[value='" + value + "']").text();
-                }},
+                //{ field: "parentID", title: "层级", align: "center", valign: "middle" },
+                //{ field: "menuType", title: "类型", align: "center", valign: "middle", formatter: function (value, row, index) {
+                //    return $("#slt_search_type option[value='" + value + "']").text();
+                //}},
+                //{ field: "controller", title: "模块", align: "center", valign: "middle" },
+                //{ field: "action", title: "动作", align: "center", valign: "middle" },
                 { field: "title", title: "标题", align: "center", valign: "middle" },
-                { field: "controller", title: "模块", align: "center", valign: "middle" },
-                { field: "action", title: "动作", align: "center", valign: "middle" },
+                { field: "pathUrl", title: "路径", align: "center", valign: "middle" },
+                { field: "enabled", title: "启用", align: "center", valign: "middle", formatter: function (row, index, value) {
+                        return value ? "已启用" : "未启用";
+                }},
                 { field: "remarks", title: "备注", align: "center", valign: "middle" }
             ]
         });

@@ -14,6 +14,8 @@ namespace Domain.Entities.PermissionAgg
         public string Named { get; set; }
         //命令
         public string Command { get; set; }
+        //启用
+        public bool Enabled { get; set; }
         //导航属性
         public IEnumerable<RoleAuthorize> RoleAuthorizes { get; set; }
     }

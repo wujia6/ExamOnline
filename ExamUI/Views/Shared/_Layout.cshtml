@@ -40,15 +40,6 @@
                     <a href="#" class="nav-link">联系人</a>
                 </li>
             </ul>
-            <!-- 搜索栏 -->
-            @*<form class="form-inline ml-3">
-                    <div class="input-group input-group-sm">
-                        <input class="form-control form-control-navbar" type="search" placeholder="搜索" aria-label="Search">
-                        <div class="input-group-append">
-                            <button class="btn btn-navbar" type="submit"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>*@
             <!-- 右侧链接 -->
             <ul class="navbar-nav ml-auto">
                 <!-- Messages Dropdown Menu -->
@@ -147,7 +138,7 @@
         <!-- 左侧菜单开始 -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Sidebar -->
-            @await Component.InvokeAsync("ApplicationMenus");
+            @await Component.InvokeAsync("ApplicationAuthorizes");
         </aside>
         <!-- 左侧菜单结束 -->
         <!-- 右侧内容开始 -->

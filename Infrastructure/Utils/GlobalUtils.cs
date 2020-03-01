@@ -32,11 +32,11 @@ namespace Infrastructure.Utils
         基本 = 17,
         中级 = 18,
         高级 = 19,
-        //菜单类型
-        菜单 = 20,
-        模块 = 21,
-        控制器 = 22,
-        功能 = 23,
+        //权限类型
+        menu = 20,
+        module = 21,
+        controller = 22,
+        action = 23,
         //用户角色
         admin = 24,
         teacher = 25,
@@ -83,7 +83,7 @@ namespace Infrastructure.Utils
         /// </summary>
         /// <param name="typeValue">枚举值</param>
         /// <returns></returns>
-        public static string GetTypeName(int typeValue)
+        public static string GetApplicationTypeName(int typeValue)
         {
             return Enum.GetName(typeof(ApplicationTypes), typeValue);
         }
@@ -96,14 +96,11 @@ namespace Infrastructure.Utils
         /// <returns></returns>
         public static List<T> Recursion<T>(List<T> srcList, int levelId = 0) where T : class
         {
-            var matchs = srcList.Where(x => {
-                dynamic cls = x;
-                return cls.ParentID == levelId ? true : false;
-            });
+            var matchs = srcList.Where(x => { dynamic cls = x; return cls.LevelID == levelId ? true : false; });
             if (matchs != null && matchs.Count() > 0)
             {
                 foreach (dynamic item in matchs)
-                    item.ChildNodes = Recursion(srcList, item.ID);
+                    item.Childs = Recursion(srcList, item.ID);
             }
             return matchs.ToList();
         }

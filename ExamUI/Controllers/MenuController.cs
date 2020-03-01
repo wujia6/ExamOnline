@@ -51,7 +51,7 @@ namespace ExamUI.Controllers
         [HttpPost]
         public async Task<PartialViewResult> EditPartial()
         {
-            var result = await menuService.QueryAsync(express: src => src.MenuType > 20 && src.MenuType < 23);
+            var result = await menuService.QueryAsync();
             result.Insert(0, new MenuDto { ID = 0, Title = "--所属父类--" });
             ViewData["ParentList"] = new SelectList(result.AsEnumerable(), "ID", "Title");
             ViewData["MenuTypeList"] = GlobalUtils.GetSelectList(20, 23);
@@ -59,14 +59,10 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> PagingAsync(int? offset, int? limit, int? tp = 0, string tle = null)
+        public async Task<JsonResult> PagingAsync(int? offset, int? limit, string tle = null)
         {
             Expression<Func<MenuInfo, bool>> express = null;
-            if (tp.Value > 0 && !string.IsNullOrEmpty(tle))
-                express = src => src.MenuType == tp.Value && src.Title.Contains(tle);
-            if (tp.Value > 0 && string.IsNullOrEmpty(tle))
-                express = src => src.MenuType == tp.Value;
-            if (tp.Value == 0 && !string.IsNullOrEmpty(tle))
+            if (!string.IsNullOrEmpty(tle))
                 express = src => src.Title.Contains(tle);
             var pageResult = await menuService.QueryAsync(offset.Value, limit.Value, express);
             return Json(pageResult);

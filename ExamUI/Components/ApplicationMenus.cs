@@ -37,7 +37,8 @@ namespace ExamUI.Components
             //缓存角色菜单
             if (!(appCache.Get("ApplicationMenus") is List<MenuDto> appMenus) || appMenus.Count == 0)
             {
-                appMenus = ReadRoleMenus(fromRoles);
+                //appMenus = ReadRoleMenus(fromRoles);
+                appMenus = null;
                 appCache.Set("ApplicationMenus", appMenus, new MemoryCacheEntryOptions
                 {
                     AbsoluteExpiration = DateTime.Now.AddMinutes(20),  //设置缓存绝对过期时间
@@ -52,26 +53,26 @@ namespace ExamUI.Components
         /// </summary>
         /// <param name="fromRoles">角色字符串</param>
         /// <returns></returns>
-        private List<MenuDto> ReadRoleMenus(string fromRoles)
-        {
-            List<MenuDto> appMenus = null;
-            if (fromRoles.IndexOf(',') > 0)
-            {
-                foreach (var code in fromRoles.Split(','))
-                {
-                    var dtoRole = roleService.SingleIn(express: src => src.Code == code,
-                        include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
-                    appMenus = BuilderTree(dtoRole.MenuDtos, null, 0);
-                }
-            }
-            else
-            {
-                var dtoRole = roleService.SingleIn(express: src => src.Code == fromRoles, 
-                    include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
-                appMenus = BuilderTree(dtoRole.MenuDtos, null, 0);
-            }
-            return appMenus;
-        }
+        //private List<MenuDto> ReadRoleMenus(string fromRoles)
+        //{
+        //    List<MenuDto> appMenus = null;
+        //    if (fromRoles.IndexOf(',') > 0)
+        //    {
+        //        foreach (var code in fromRoles.Split(','))
+        //        {
+        //            var dtoRole = roleService.SingleIn(express: src => src.Code == code,
+        //                include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
+        //            appMenus = BuilderTree(dtoRole.MenuDtos, null, 0);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        var dtoRole = roleService.SingleIn(express: src => src.Code == fromRoles, 
+        //            include: src => src.Include(r => r.RoleMenus).ThenInclude(m => m.MenuInfomation));
+        //        appMenus = BuilderTree(dtoRole.MenuDtos, null, 0);
+        //    }
+        //    return appMenus;
+        //}
 
         /// <summary>
         /// 递归生成菜单
@@ -80,17 +81,17 @@ namespace ExamUI.Components
         /// <param name="treeNode">节点对象</param>
         /// <param name="levelID">层级ID</param>
         /// <returns></returns>
-        private List<MenuDto> BuilderTree(List<MenuDto> dtos, MenuDto treeNode, int levelID)
-        {
-            var appMenus = dtos.Where(x => x.ParentID == levelID).Distinct().ToList();
-            if (appMenus != null && appMenus.Count > 0)
-            {
-                foreach (var node in appMenus)
-                {
-                    node.ChildNodes = BuilderTree(dtos, node, node.ID);
-                }
-            }
-            return appMenus;
-        }
+        //private List<MenuDto> BuilderTree(List<MenuDto> dtos, MenuDto treeNode, int levelID)
+        //{
+        //    var appMenus = dtos.Where(x => x.ParentID == levelID).Distinct().ToList();
+        //    if (appMenus != null && appMenus.Count > 0)
+        //    {
+        //        foreach (var node in appMenus)
+        //        {
+        //            node.ChildNodes = BuilderTree(dtos, node, node.ID);
+        //        }
+        //    }
+        //    return appMenus;
+        //}
     }
 }

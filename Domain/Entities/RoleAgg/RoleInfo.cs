@@ -13,7 +13,7 @@ namespace Domain.Entities.RoleAgg
         //导航属性
         public virtual IEnumerable<RoleAuthorize> RoleAuthorizes { get; set; }
         //导航属性
-        public virtual IEnumerable<RoleMenu> RoleMenus { get; set; }
+        //public virtual IEnumerable<RoleMenu> RoleMenus { get; set; }
         //导航属性
         public virtual IEnumerable<UserRole> UserRoles { get; set; }
     }

@@ -22,6 +22,7 @@ namespace Domain.IComm
         DbSet<RoleAuthorize> RoleAuthorizes { get; set; }
         DbSet<RoleMenu> RoleMenus { get; set; }
         DbSet<UserInfo> Users{ get; set; }
+        DbSet<UserRole> UserRoles { get; set; }
         DbSet<AdminInfo> Admins { get; set; }
         DbSet<TeacherInfo> Teachers { get; set; }
         DbSet<StudentInfo> Students { get; set; }

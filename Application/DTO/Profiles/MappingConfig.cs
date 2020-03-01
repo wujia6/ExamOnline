@@ -21,15 +21,22 @@ namespace Application.DTO.Profiles
         public MappingConfig()
         {
             //权限映射
-            CreateMap<PermissionInfo, PermissionDto>().ForMember(dst => dst.Childs, opt => opt.Ignore());
-            CreateMap<PermissionDto, PermissionInfo>().ForMember(dst => dst.RoleAuthorizes, opt => opt.Ignore());
+            CreateMap<PermissionInfo, PermissionDto>()
+                .ForMember(dst => dst.Enabled, opt => opt.MapFrom(src => src.Enabled ? "启用" : "未启用"))
+                .ForMember(dst => dst.Childs, opt => opt.Ignore());
+            CreateMap<PermissionDto, PermissionInfo>()
+                .ForMember(dst => dst.Enabled, opt => opt.MapFrom(src => src.Enabled == "启用" ? true : false))
+                .ForMember(dst => dst.RoleAuthorizes, opt => opt.Ignore());
             //菜单映射
-            CreateMap<MenuInfo, MenuDto>().ForMember(dst => dst.ChildNodes, opt => opt.Ignore());
-            CreateMap<MenuDto, MenuInfo>().ForMember(dst => dst.RoleMenus, opt => opt.Ignore());
+            //CreateMap<MenuInfo, MenuDto>().ForMember(dst => dst.ChildNodes, opt => opt.Ignore());
+            //CreateMap<MenuDto, MenuInfo>().ForMember(dst => dst.RoleMenus, opt => opt.Ignore());
+            CreateMap<MenuInfo, MenuDto>()
+                .ForMember(dst => dst.Enabled, opt => opt.MapFrom(src => src.Enabled ? "启用" : "未启用"))
+                .ReverseMap();
             //角色映射
             CreateMap<RoleInfo, RoleDto>()
                 .ForMember(dst => dst.PermssionDtos, opt => opt.MapFrom(src => Mapper.Map<List<PermissionDto>>(src.RoleAuthorizes.Select(r => r.PermissionInformation))))
-                .ForMember(dst => dst.MenuDtos, opt => opt.MapFrom(src => Mapper.Map<List<MenuDto>>(src.RoleMenus.Select(x => x.MenuInfomation))))
+                //.ForMember(dst => dst.MenuDtos, opt => opt.MapFrom(src => Mapper.Map<List<MenuDto>>(src.RoleMenus.Select(x => x.MenuInfomation))))
                 .ForMember(dst => dst.UserDtos, opt => opt.MapFrom(src => Mapper.Map<List<ApplicationUser>>(src.UserRoles.Select(s => s.UserInfomation))))
                 .ReverseMap();
             //用户映射

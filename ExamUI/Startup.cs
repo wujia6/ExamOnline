@@ -30,6 +30,7 @@ namespace ExamUI
         {
             services.AddDbContext<ExamDbContext>(options =>
                 options.UseSqlServer(ConfigurationUtils.Settings.GetConfig("ConnectionStrings:ExamDbConnection")));
+            services.AddScoped<DbSeed>();   //初始化种子数据服务
             //添加Cookie验证授权支持
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opts =>

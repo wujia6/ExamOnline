@@ -13,6 +13,7 @@ namespace Domain.Entities.PermissionAgg
             builder.Property(e => e.TypeAt).IsRequired();
             builder.Property(e => e.Named).IsRequired().HasMaxLength(30);
             builder.Property(e => e.Command).IsRequired().HasMaxLength(20);
+            builder.Property(e => e.Enabled).IsRequired();
         }
     }
 }

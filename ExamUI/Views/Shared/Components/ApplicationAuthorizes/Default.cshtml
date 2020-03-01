@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Default";
+}
+
+@model List<PermissionDto>
+@using Infrastructure.Utils
+
+<div class="sidebar">
+    <!-- 用户面板 (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image"><img src="~/images/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"></div>
+        <div class="info"><a href="#" class="d-block">@ViewBag.CurrentUser</a></div>
+        <div class="info"><a href="/Account/Logout" class="d-block">退出登录</a></div>
+    </div>
+    <nav class="mt-2">
+        <!-- 权限导航 -->
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            @foreach (var perms in Model)
+            {
+                var isActive = ViewBag.CurrentMenu == perms.Command;
+                <!--moduel-->
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link @(isActive ? "active" : "")">
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <p>@perms.Named</p>
+                    </a>
+                    @if (perms.Childs.Count > 0)
+                    {
+                        <ul class="nav nav-treeview">
+                            @foreach (var permCtl in perms.Childs)
+                            {
+                                var permAct = permCtl.Childs.Find(delegate(PermissionDto p) { return p.Command == "browse"; });
+                                if (permAct != null)
+                                {
+                                    <!--controller-->
+                                    <li class="nav-item">
+                                        <a href="/@perms.Command/@permCtl.Command/@permAct.Command" class="nav-link @(isActive ? "active" : "")">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>@permCtl.Named</p>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    }
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
