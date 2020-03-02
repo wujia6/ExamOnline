@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Utils
 {
-    public abstract class BaseResult
+    public abstract class ApplicationResult
     {
         public bool Success { get; set; }
 
@@ -12,16 +12,18 @@ namespace Infrastructure.Utils
     /// <summary>
     /// 请求结果
     /// </summary>
-    public class HttpResult : BaseResult
+    public class HttpResult : ApplicationResult
     {
         public string PathUrl { get; set; }
+
+        public List<dynamic> ResponseResult { get; set; }
     }
 
     /// <summary>
     /// 分页帮助类
     /// </summary>
     /// <typeparam name="TDestination"></typeparam>
-    public class PageResult<TDestination> : BaseResult
+    public class PageResult<TDestination> : ApplicationResult
     {
         /// <summary>
         /// 总分页记录数

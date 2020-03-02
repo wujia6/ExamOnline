@@ -23,13 +23,13 @@ namespace Application.IServices
         Task<MenuDto> SingleAsync(
             Expression<Func<MenuInfo, bool>> express, 
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
-        
+
         Task<List<MenuDto>> QueryAsync(
-            Expression<Func<MenuInfo, bool>> express = null, 
+            Expression<Func<MenuInfo, bool>> express = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
-        
+
         Task<PageResult<MenuDto>> QueryAsync(
-            int offset, int limit,
+            int? offset, int? limit,
             Expression<Func<MenuInfo, bool>> express = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
     }

@@ -34,7 +34,8 @@ namespace Domain.Manages
             return efCore.SaveAs(entity);
         }
 
-        public async Task<object> QueryAsync(int? offset, int? limit, 
+        public async Task<object> QueryAsync(
+            int? offset, int? limit, 
             ISpecification<PermissionInfo> spec = null, 
             Func<IQueryable<PermissionInfo>, IIncludableQueryable<PermissionInfo, object>> include = null)
         {

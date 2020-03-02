@@ -21,12 +21,8 @@ namespace Domain.IManages
             ISpecification<MenuInfo> spec,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
 
-        Task<IEnumerable<MenuInfo>> QueryAsync(
-            ISpecification<MenuInfo> spec = null,
-            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
-
         Task<object> QueryAsync(
-            int offset, int limit,
+            int? offset, int? limit,
             ISpecification<MenuInfo> spec = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
         #endregion

@@ -60,8 +60,7 @@ namespace Infrastructure.EfCore
                         new PermissionInfo{ Remarks="暂无", LevelID=11, TypeAt=23, Named="导出", Command="export", Enabled=true },
                         new PermissionInfo{ Remarks="暂无", LevelID=11, TypeAt=23, Named="浏览", Command="browse", Enabled=true },
                     };
-                    applicationContext.Permissions.AddRange(lstPerms);
-                    //await applicationContext.Permissions.AddRangeAsync(lstPerms);
+                    await applicationContext.Permissions.AddRangeAsync(lstPerms);
                 }
                 // 初始化角色
                 if (!await applicationContext.Roles.AnyAsync())
@@ -90,31 +89,27 @@ namespace Infrastructure.EfCore
                             return r;
                         })
                     };
-                    applicationContext.Roles.AddRange(lstRoles);
+                    await applicationContext.Roles.AddRangeAsync(lstRoles);
                 }
                 // 初始化角色授权
                 if (!await applicationContext.RoleAuthorizes.AnyAsync())
                 {
-                    var roleInfo = ApplicationFactory.Create<RoleInfo>(r => { return r; });
-                    var permInfo = ApplicationFactory.Create<PermissionInfo>(p => { return p; });
                     var lstAuthorizes = new List<RoleAuthorize>();
                     for (int i = 1; i <= 28; i++)
                     {
-                        lstAuthorizes.Add(ApplicationFactory.Create<RoleAuthorize>(func: p =>
+                        lstAuthorizes.Add(ApplicationFactory.Create<RoleAuthorize>(func: src =>
                         {
-                            roleInfo.ID = 1;
-                            p.RoleInformation = roleInfo;
-                            permInfo.ID = i;
-                            p.PermissionInformation = permInfo;
-                            return p;
+                            src.RoleInformation = applicationContext.Roles.FirstOrDefault(p => p.Code == "admin");
+                            src.PermissionInformation = applicationContext.Permissions.FirstOrDefault(p => p.ID == i);
+                            return src;
                         }));
                     }
-                    applicationContext.RoleAuthorizes.AddRange(lstAuthorizes);
+                    await applicationContext.RoleAuthorizes.AddRangeAsync(lstAuthorizes);
                 }
                 // 初始化用户
                 if (!await applicationContext.Users.AnyAsync())
                 {
-                    applicationContext.Users.Add(ApplicationFactory.Create<UserInfo>(func: src =>
+                    await applicationContext.Users.AddAsync(ApplicationFactory.Create<UserInfo>(func: src =>
                     {
                         src.Remarks = "管理员";
                         src.Account = "sysadmin";
@@ -130,10 +125,10 @@ namespace Infrastructure.EfCore
                 // 初始化用户角色
                 if (!await applicationContext.UserRoles.AnyAsync())
                 {
-                    applicationContext.UserRoles.Add(ApplicationFactory.Create<UserRole>(func: src =>
+                    await applicationContext.UserRoles.AddAsync(ApplicationFactory.Create<UserRole>(func: src =>
                     {
-                        src.RoleInfomation = new RoleInfo { ID = 1 };
-                        src.UserInfomation = new UserInfo { ID = 1 };
+                        src.RoleInfomation = applicationContext.Roles.FirstOrDefault(p => p.Code == "admin");
+                        src.UserInfomation = applicationContext.Users.FirstOrDefault(p => p.Account == "sysadmin");
                         return src;
                     }));
                 }
@@ -159,7 +154,7 @@ namespace Infrastructure.EfCore
                             return p;
                         })
                     };
-                    applicationContext.Menus.AddRange(lstMenu);
+                    await applicationContext.Menus.AddRangeAsync(lstMenu);
                 }
                 // 保存更改
                 await applicationContext.SaveChangesAsync();
