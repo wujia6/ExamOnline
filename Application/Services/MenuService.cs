@@ -73,13 +73,12 @@ namespace Application.Services
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
             var spec = express == null ? null : Specification<MenuInfo>.Eval(express);
-            var anonymous = await menuManage.QueryAsync(null, null, spec, include);
-            var result = (anonymous.GetType().GetProperty("Rows").GetValue(anonymous) as IEnumerable<object>).MapToList<MenuDto>();
-            return result;
+            var result = await menuManage.QueryAsync(spec, include);
+            return result.MapToList<MenuDto>();
         }
 
         public async Task<PageResult<MenuDto>> QueryAsync(
-            int? offset, int? limit, 
+            int offset, int limit, 
             Expression<Func<MenuInfo, bool>> express = null, 
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {

@@ -10,6 +10,7 @@ using Domain.Entities.ExamAgg;
 using Domain.Entities.AnwserAgg;
 using Domain.Entities.QuestionAgg;
 using Domain.Entities.PermissionAgg;
+using Infrastructure.Utils;
 
 namespace Application.DTO.Profiles
 {
@@ -22,6 +23,7 @@ namespace Application.DTO.Profiles
         {
             //权限映射
             CreateMap<PermissionInfo, PermissionDto>()
+                .ForMember(dst => dst.TypeAt, opt => opt.MapFrom(src => GlobalUtils.GetApplicationTypeName(src.TypeAt)))
                 .ForMember(dst => dst.Enabled, opt => opt.MapFrom(src => src.Enabled ? "启用" : "未启用"))
                 .ForMember(dst => dst.Childs, opt => opt.Ignore());
             CreateMap<PermissionDto, PermissionInfo>()
@@ -36,7 +38,6 @@ namespace Application.DTO.Profiles
             //角色映射
             CreateMap<RoleInfo, RoleDto>()
                 .ForMember(dst => dst.PermssionDtos, opt => opt.MapFrom(src => Mapper.Map<List<PermissionDto>>(src.RoleAuthorizes.Select(r => r.PermissionInformation))))
-                //.ForMember(dst => dst.MenuDtos, opt => opt.MapFrom(src => Mapper.Map<List<MenuDto>>(src.RoleMenus.Select(x => x.MenuInfomation))))
                 .ForMember(dst => dst.UserDtos, opt => opt.MapFrom(src => Mapper.Map<List<ApplicationUser>>(src.UserRoles.Select(s => s.UserInfomation))))
                 .ReverseMap();
             //用户映射

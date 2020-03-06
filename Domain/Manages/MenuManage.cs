@@ -47,22 +47,30 @@ namespace Domain.Manages
         }
 
         public async Task<object> QueryAsync(
-            int? offset, int? limit,
+            int offset, int limit,
             ISpecification<MenuInfo> spec = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
         {
-            dynamic anonymous = new { };
             if (include != null)
                 efCore.EntitySet = include(efCore.EntitySet);
             if (spec != null)
                 efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
-            if (offset.HasValue && limit.HasValue)
+            return new
             {
-                anonymous.Total = await efCore.EntitySet.CountAsync();
-                efCore.EntitySet = efCore.EntitySet.Skip(offset.Value).Take(limit.Value);
-            }
-            anonymous.Rows = await efCore.EntitySet.ToListAsync();
-            return anonymous;
+                Total = await efCore.EntitySet.CountAsync(),
+                Rows = await efCore.EntitySet.Skip(offset).Take(limit).ToListAsync()
+            };
+        }
+
+        public async Task<IEnumerable<MenuInfo>> QueryAsync(
+            ISpecification<MenuInfo> spec = null, 
+            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
+        {
+            if (include != null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            if (spec != null)
+                efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
+            return await efCore.EntitySet.ToListAsync();
         }
         #endregion
     }

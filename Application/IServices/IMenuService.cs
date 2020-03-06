@@ -29,7 +29,7 @@ namespace Application.IServices
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
 
         Task<PageResult<MenuDto>> QueryAsync(
-            int? offset, int? limit,
+            int offset, int limit,
             Expression<Func<MenuInfo, bool>> express = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
     }

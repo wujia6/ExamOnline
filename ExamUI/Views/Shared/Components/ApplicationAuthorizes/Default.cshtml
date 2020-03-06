@@ -1,9 +1,7 @@
 ﻿@{
-    ViewData["Title"] = "Default";
+    ViewData["Title"] = "";
 }
-
 @model List<PermissionDto>
-@using Infrastructure.Utils
 
 <div class="sidebar">
     <!-- 用户面板 (optional) -->
@@ -15,29 +13,29 @@
     <nav class="mt-2">
         <!-- 权限导航 -->
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            @foreach (var perms in Model)
+            @foreach (var module in Model)
             {
-                var isActive = ViewBag.CurrentMenu == perms.Command;
-                <!--moduel-->
+                var isActive = ViewBag.CurrentMenu == module.Command;
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link @(isActive ? "active" : "")">
                         <i class="nav-icon fas fa-chart-pie"></i>
-                        <p>@perms.Named</p>
+                        <p>@module.Named</p>
                     </a>
-                    @if (perms.Childs.Count > 0)
+                    @if (module.TypeAt == "module" && module.Childs.Count > 0)
                     {
                         <ul class="nav nav-treeview">
-                            @foreach (var permCtl in perms.Childs)
+                            @foreach (var control in module.Childs)
                             {
-                                var permAct = permCtl.Childs.Find(delegate(PermissionDto p) { return p.Command == "browse"; });
-                                if (permAct != null)
+                                var act = control.Childs.Find(delegate (PermissionDto p) { return p.Command == "browse"; });
+                                if (act != null)
                                 {
-                                    <!--controller-->
+                                    string path = "/" + module.Command + "/" + control.Command + "/" + act.Command;
                                     <li class="nav-item">
-                                        <a href="/@perms.Command/@permCtl.Command/@permAct.Command" class="nav-link @(isActive ? "active" : "")">
+                                        <a href="#" class="nav-link @(isActive ? "active" : "")">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>@permCtl.Named</p>
+                                            <p>@control.Named</p>
                                         </a>
+                                        @Html.ActionLink(string.Empty,"BrowseAsync","")
                                     </li>
                                 }
                             }

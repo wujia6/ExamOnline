@@ -5,7 +5,7 @@ using Infrastructure.Utils;
 namespace System
 {
     /// <summary>
-    /// Object对象扩展类
+    /// 分页扩展Object类
     /// </summary>
     public static class PaginatorExtensions 
     {

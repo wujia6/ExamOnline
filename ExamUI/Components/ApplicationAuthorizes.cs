@@ -24,7 +24,7 @@ namespace ExamUI.Components
         }
 
         /// <summary>
-        /// 回调方法
+        /// 系统回调
         /// </summary>
         /// <returns></returns>
         public IViewComponentResult Invoke()
@@ -32,7 +32,7 @@ namespace ExamUI.Components
             ViewBag.CurrentUser = UserClaimsPrincipal.FindFirstValue(ClaimTypes.Name);
             string appRoles = UserClaimsPrincipal.FindFirstValue(ClaimTypes.Role);
             //缓存角色授权
-            if (!(appCache.Get("AppRoleAuthorizes") is List<PermissionDto> AppRoleAuthorizes) || AppRoleAuthorizes.Count == 0)
+            if (!(appCache.Get("AppRoleAuthorizes") is List<PermissionDto> AppRoleAuthorizes))
             {
                 AppRoleAuthorizes = GetRoleAuthorizeBy(appRoles);
                 appCache.Set("AppRoleAuthorizes", AppRoleAuthorizes, new MemoryCacheEntryOptions
@@ -56,14 +56,16 @@ namespace ExamUI.Components
             {
                 foreach (var code in roles.Split(','))
                 {
-                    var currRole = roleSvr.SingleIn(express: src => src.Code == code, 
+                    var currRole = roleSvr.SingleIn(
+                        express: src => src.Code == code, 
                         include: src => src.Include(s => s.RoleAuthorizes).ThenInclude(d => d.PermissionInformation));
                     authorizes = CreateAuthorizeRoot(currRole.PermssionDtos);
                 }
             }
             else
             {
-                var currRole = roleSvr.SingleIn(express: src => src.Code == roles,
+                var currRole = roleSvr.SingleIn(
+                    express: src => src.Code == roles,
                     include: src => src.Include(s => s.RoleAuthorizes).ThenInclude(d => d.PermissionInformation));
                 authorizes = CreateAuthorizeRoot(currRole.PermssionDtos);
             }
@@ -71,7 +73,7 @@ namespace ExamUI.Components
         }
 
         /// <summary>
-        /// 递归生成权限
+        /// 递归生成授权导航
         /// </summary>
         /// <param name="srcList">数据源</param>
         /// <param name="levelId">层级ID</param>

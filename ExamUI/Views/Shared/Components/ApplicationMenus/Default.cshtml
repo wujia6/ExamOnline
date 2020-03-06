@@ -1,13 +1,8 @@
 ﻿@model List<MenuDto>
 
-<ul class="navbar-nav">
-    <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+@foreach (var item in Model)
+{
+    <li class="nav-item d-none d-sm-inline-block">
+        <a href="@item.PathUrl" class="nav-link">@item.Title</a>
     </li>
-    @foreach (var item in Model)
-    {
-        <li class="nav-item d-none d-sm-inline-block">
-            <a href="@item.PathUrl" class="nav-link">@item.Title</a>
-        </li>
-    }
-</ul>
+}

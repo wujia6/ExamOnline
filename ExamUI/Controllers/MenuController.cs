@@ -59,7 +59,7 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> PagingAsync(int? offset, int? limit, string tle = null)
+        public async Task<JsonResult> PagingAsync(int? offset = 1, int? limit = 10, string tle = null)
         {
             Expression<Func<MenuInfo, bool>> express = null;
             if (!string.IsNullOrEmpty(tle))
