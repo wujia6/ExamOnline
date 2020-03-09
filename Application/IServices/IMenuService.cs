@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Query;
 using Application.DTO.Models;
 using Domain.Entities.MenuAgg;
 using Infrastructure.Utils;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.IServices
 {
@@ -19,10 +19,6 @@ namespace Application.IServices
         Task<bool> EditAsync(MenuDto model);
         
         Task<bool> RemoveAsync(Expression<Func<MenuInfo, bool>> express);
-        
-        Task<MenuDto> SingleAsync(
-            Expression<Func<MenuInfo, bool>> express, 
-            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
 
         Task<List<MenuDto>> QueryAsync(
             Expression<Func<MenuInfo, bool>> express = null,

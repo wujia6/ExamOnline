@@ -99,10 +99,10 @@ var formUtils = {
             var propName = key == "id" ? key.toUpperCase() : key.substr(0, 1).toUpperCase() + key.substr(1, key.lenght);
             var dmEle = frm.find("*[name=" + propName + "]");
             if (dmEle == "undefined" || dmEle == null) continue;
-            if ($(dmEle).is("select") && $.type(obj[key]) == "string")
-                dmEle.find("option:contains(" + obj[key] + ")").attr("selected", true);
-            else
-                dmEle.val(obj[key]);
+            //if ($(dmEle).is("select") && $.type(obj[key]) == "string")
+            //    dmEle.find("option:contains(" + obj[key] + ")").attr("selected", true);
+            //else
+            //    dmEle.val(obj[key]);
         }
     }
 };

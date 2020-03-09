@@ -28,7 +28,7 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Manage()
+        public IActionResult Browse()
         {
             return View();
         }

@@ -59,15 +59,6 @@ namespace Application.Services
             return menuManage.RemoveAt(spec) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public async Task<MenuDto> SingleAsync(
-            Expression<Func<MenuInfo, bool>> express, 
-            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
-        {
-            var spec = Specification<MenuInfo>.Eval(express);
-            var entity = await menuManage.SingleAsync(spec);
-            return entity.MapTo<MenuDto>();
-        }
-
         public async Task<List<MenuDto>> QueryAsync(
             Expression<Func<MenuInfo, bool>> express = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)

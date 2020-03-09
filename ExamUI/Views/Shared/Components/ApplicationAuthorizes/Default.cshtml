@@ -18,24 +18,22 @@
                 var isActive = ViewBag.CurrentMenu == module.Command;
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link @(isActive ? "active" : "")">
-                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <i class="nav-icon fa fa-th-large" aria-hidden="true"></i>
                         <p>@module.Named</p>
                     </a>
-                    @if (module.TypeAt == "module" && module.Childs.Count > 0)
+                    @if (module.TypeAt == "module" && module.Childs != null)
                     {
                         <ul class="nav nav-treeview">
                             @foreach (var control in module.Childs)
                             {
-                                var act = control.Childs.Find(delegate (PermissionDto p) { return p.Command == "browse"; });
+                                var act = control.Childs.Find(delegate (PermissionDto p) { return p.Command == "Browse"; });
                                 if (act != null)
                                 {
-                                    string path = "/" + module.Command + "/" + control.Command + "/" + act.Command;
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link @(isActive ? "active" : "")">
-                                            <i class="far fa-circle nav-icon"></i>
+                                        <a href="@Url.Action(act.Command, control.Command)" class="nav-link @(isActive ? "active" : "")">
+                                            <i class="fa fa-bars nav-icon" aria-hidden="true"></i>
                                             <p>@control.Named</p>
                                         </a>
-                                        @Html.ActionLink(string.Empty,"BrowseAsync","")
                                     </li>
                                 }
                             }

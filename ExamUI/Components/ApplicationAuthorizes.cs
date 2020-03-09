@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Application.DTO.Models;
 using Application.IServices;
-using Infrastructure.Utils;
 using System.Linq;
 
 namespace ExamUI.Components

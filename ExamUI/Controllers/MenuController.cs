@@ -52,14 +52,14 @@ namespace ExamUI.Controllers
         public async Task<PartialViewResult> EditPartial()
         {
             var result = await menuService.QueryAsync();
-            result.Insert(0, new MenuDto { ID = 0, Title = "--所属父类--" });
-            ViewData["ParentList"] = new SelectList(result.AsEnumerable(), "ID", "Title");
-            ViewData["MenuTypeList"] = GlobalUtils.GetSelectList(20, 23);
+            //result.Insert(0, new MenuDto { ID = 0, Title = "--所属父类--" });
+            //ViewData["ParentList"] = new SelectList(result.AsEnumerable(), "ID", "Title");
+            //ViewData["MenuTypeList"] = GlobalUtils.GetSelectList(20, 23);
             return PartialView("EditPartial");
         }
 
         [HttpGet]
-        public async Task<JsonResult> PagingAsync(int? offset = 1, int? limit = 10, string tle = null)
+        public async Task<JsonResult> BrowseAsync(int? offset = 1, int? limit = 10, string tle = null)
         {
             Expression<Func<MenuInfo, bool>> express = null;
             if (!string.IsNullOrEmpty(tle))
@@ -69,9 +69,9 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Settings()
+        public IActionResult Browse()
         {
-            ViewData["MenuTypeList"] = GlobalUtils.GetSelectList(20, 23);
+            //ViewData["MenuTypeList"] = GlobalUtils.GetSelectList(20, 23);
             return View();
         }
     }

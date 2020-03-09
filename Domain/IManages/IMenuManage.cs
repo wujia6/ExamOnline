@@ -17,10 +17,6 @@ namespace Domain.IManages
 
         bool RemoveAt(ISpecification<MenuInfo> spec);
 
-        Task<MenuInfo> SingleAsync(
-            ISpecification<MenuInfo> spec,
-            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);
-
         Task<IEnumerable<MenuInfo>> QueryAsync(
             ISpecification<MenuInfo> spec = null,
             Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null);

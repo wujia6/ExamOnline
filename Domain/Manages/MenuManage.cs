@@ -37,15 +37,6 @@ namespace Domain.Manages
             return entities == null ? false : efCore.RemoveAt(entities);
         }
 
-        public async Task<MenuInfo> SingleAsync(
-            ISpecification<MenuInfo> spec,
-            Func<IQueryable<MenuInfo>, IIncludableQueryable<MenuInfo, object>> include = null)
-        {
-            if (include != null)
-                efCore.EntitySet = include(efCore.EntitySet);
-            return await efCore.EntitySet.FirstOrDefaultAsync(spec.Expression);
-        }
-
         public async Task<object> QueryAsync(
             int offset, int limit,
             ISpecification<MenuInfo> spec = null,

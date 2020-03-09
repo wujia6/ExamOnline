@@ -9,7 +9,7 @@
             <div class="col-sm-6"><h1>菜单设置</h1></div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">菜单管理</a></li>
+                    <li class="breadcrumb-item"><a href="#">菜单设置</a></li>
                     <li class="breadcrumb-item active">浏览</li>
                 </ol>
             </div>
@@ -23,9 +23,14 @@
                 <div class="card-body">
                     <form id="frm_search_menu" class="form-inline">
                         <h4 class="card-title  col-md-2 text-right">查询条件</h4>
-                        @*@Html.DropDownList("slt_search_type", ViewData["MenuTypeList"] as SelectList, new { @class="form-control" })*@
-                        <input type="text" id="txt_search_title" class="form-control col-md-3" placeholder="标题关键字" />
-                        <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i> 查询</button>
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <input type="text" id="txt_search_title" class="form-control" placeholder="标题关键字">
+                                <span class="input-group-btn">
+                                    <button id="btn_query" class="btn btn-default" type="button"><i class="fas fa-search"></i></button>
+                                </span>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -58,25 +63,17 @@
 <script>
     $(function () {
         //table初始化
-        var manageTable = new initTable({
+        var manageTable = new btTable.parentTable({
             tableId: "tab_menus",
-            ajaxUrl: "/Menu/PagingAsync",
+            ajaxUrl: "/Menu/BrowseAsync",
             ajaxMethod: "get",
             queryParamsCallback: function () {
                 return {
-                    //tp: $("#slt_search_type").val(),
                     tle: $("#txt_search_title").val()
                 }
             },
             dataColumns: [
                 { checkbox: true, align: "center", valign: "middle" },
-                //{ field: "id", title: "编号", align: "center", valign: "middle" },
-                //{ field: "parentID", title: "层级", align: "center", valign: "middle" },
-                //{ field: "menuType", title: "类型", align: "center", valign: "middle", formatter: function (value, row, index) {
-                //    return $("#slt_search_type option[value='" + value + "']").text();
-                //}},
-                //{ field: "controller", title: "模块", align: "center", valign: "middle" },
-                //{ field: "action", title: "动作", align: "center", valign: "middle" },
                 { field: "title", title: "标题", align: "center", valign: "middle" },
                 { field: "pathUrl", title: "路径", align: "center", valign: "middle" },
                 { field: "enabled", title: "启用", align: "center", valign: "middle", formatter: function (row, index, value) {

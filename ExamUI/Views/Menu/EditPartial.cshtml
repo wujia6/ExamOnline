@@ -8,19 +8,18 @@
     <form id="frm_menu_edit" role="form" class="form-horizontal">
         <input type="hidden" id="frm_hd_key" name="ID" value="0" />
         <div class="form-group">
-            @Html.DropDownList("ParentID", ViewData["ParentList"] as SelectList, new { @class = "form-control" })
+            <label class="radio-inline">
+                <input type="radio" name="Enabled" id="rd_active" value="1"> 已启用
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="Enabled" id="rd_unactive" value="0" checked> 未启用
+            </label>
         </div>
         <div class="form-group">
-            @Html.DropDownList("MenuType", ViewData["MenuTypeList"] as SelectList, new { @class = "form-control" })
+            <input id="txt_menu_title" name="Title" class="form-control" placeholder="编辑菜单标题" />
         </div>
         <div class="form-group">
-            <input id="txt_menu_title" name="Title" class="form-control" placeholder="编辑项标题" />
-        </div>
-        <div class="form-group">
-            <input id="txt_menu_controller" name="Controller" class="form-control" placeholder="编辑项模块名称" />
-        </div>
-        <div class="form-group">
-            <input id="txt_menu_action" name="Action" class="form-control" placeholder="编辑项功能名称" />
+            <input id="txt_menu_url" name="Controller" class="form-control" placeholder="编辑菜单路径" />
         </div>
         <div class="form-group">
             <input id="txt_menu_remarks" name="Remarks" class="form-control" placeholder="编辑项备注" />

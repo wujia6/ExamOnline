@@ -34,7 +34,7 @@
                     <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
                 </li>
                 <!--菜单组件-->
-                @await Component.InvokeAsync("ApplicationMenus");
+                @await Component.InvokeAsync("ApplicationMenus")
             </ul>
             <!-- 右侧链接 -->
             <ul class="navbar-nav ml-auto">
@@ -135,7 +135,7 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Sidebar -->
             <!--权限导航组件-->
-            @await Component.InvokeAsync("ApplicationAuthorizes");
+            @await Component.InvokeAsync("ApplicationAuthorizes")
         </aside>
         <!-- 左侧菜单结束 -->
         <!-- 右侧内容开始 -->
@@ -151,7 +151,7 @@
         </footer>
         <!-- 下部结束 -->
         <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
+            <!-- 控制侧边栏内容在这里 -->
         </aside>
     </div>
     <!--定义模态框-->
