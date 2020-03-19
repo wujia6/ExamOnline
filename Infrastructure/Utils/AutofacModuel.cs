@@ -35,6 +35,8 @@ namespace Infrastructure.Utils
                     .Where(tp => tp.Name.EndsWith("Service") && !tp.IsInterface && !tp.IsAbstract)
                     .AsImplementedInterfaces()
                     .InstancePerLifetimeScope();
+                //注册缓存工具类(单列)
+                builder.RegisterType<CacheUtils>().AsSelf().SingleInstance();
             }
             catch (DependencyResolutionException ex)
             {

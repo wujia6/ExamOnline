@@ -20,7 +20,6 @@ namespace Domain.IComm
         DbSet<MenuInfo> Menus { get; set; }
         DbSet<RoleInfo> Roles { get; set; }
         DbSet<RoleAuthorize> RoleAuthorizes { get; set; }
-        DbSet<RoleMenu> RoleMenus { get; set; }
         DbSet<UserInfo> Users{ get; set; }
         DbSet<UserRole> UserRoles { get; set; }
         DbSet<AdminInfo> Admins { get; set; }

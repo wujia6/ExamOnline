@@ -16,10 +16,6 @@ namespace Domain.IManages
 
         bool RemoveAt(ISpecification<RoleInfo> spec);
 
-        RoleInfo SingleIn(
-            ISpecification<RoleInfo> spec,
-            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null);
-
         Task<RoleInfo> SingleAsync(
             ISpecification<RoleInfo> spec, 
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null);
@@ -28,9 +24,9 @@ namespace Domain.IManages
             ISpecification<RoleInfo> spec = null,
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null);
 
-        Task<object> QueryAsync(
-            int index, int size,
-            ISpecification<RoleInfo> spec = null, 
-            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null);
+        //Task<object> QueryAsync(
+        //    int index, int size,
+        //    ISpecification<RoleInfo> spec = null, 
+        //    Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null);
     }
 }

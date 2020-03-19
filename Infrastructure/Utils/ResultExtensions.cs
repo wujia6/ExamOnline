@@ -16,7 +16,7 @@ namespace Infrastructure.Utils
     {
         public string PathUrl { get; set; }
 
-        public List<dynamic> ResponseResult { get; set; }
+        public List<object> Result { get; set; }
     }
 
     /// <summary>

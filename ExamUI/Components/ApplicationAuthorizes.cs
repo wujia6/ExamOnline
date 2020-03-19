@@ -1,92 +1,57 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Application.DTO.Models;
 using Application.IServices;
-using System.Linq;
+using System.Collections.Generic;
+using Infrastructure.Utils;
 
 namespace ExamUI.Components
 {
     [ViewComponent(Name = "ApplicationAuthorizes")]
     public class ApplicationAuthorizes : ViewComponent
     {
-        private readonly IRoleService roleSvr;
-        private readonly IMemoryCache appCache;
+        private readonly IRoleService roleService;
+        //private readonly IMemoryCache appCache;
+        private readonly CacheUtils appCache;
 
-        public ApplicationAuthorizes(IRoleService svr, IMemoryCache cache)
+        public ApplicationAuthorizes(IRoleService service, CacheUtils cache)
         {
-            this.roleSvr = svr ?? throw new ArgumentNullException(nameof(roleSvr));
+            this.roleService = service ?? throw new ArgumentNullException(nameof(roleService));
             this.appCache = cache ?? throw new ArgumentNullException(nameof(appCache));
         }
-
-        /// <summary>
-        /// 系统回调
-        /// </summary>
-        /// <returns></returns>
+        
+        //此方法由视图组件调用
         public IViewComponentResult Invoke()
         {
             ViewBag.CurrentUser = UserClaimsPrincipal.FindFirstValue(ClaimTypes.Name);
-            string appRoles = UserClaimsPrincipal.FindFirstValue(ClaimTypes.Role);
-            //缓存角色授权
-            if (!(appCache.Get("AppRoleAuthorizes") is List<PermissionDto> AppRoleAuthorizes))
+            string roleKeys = UserClaimsPrincipal.FindFirstValue(ClaimTypes.Role);
+            //缓存权限集合
+            var dtos = appCache.GetOrCreateCache(roleKeys, () =>
             {
-                AppRoleAuthorizes = GetRoleAuthorizeBy(appRoles);
-                appCache.Set("AppRoleAuthorizes", AppRoleAuthorizes, new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpiration = DateTime.Now.AddMinutes(5),  //设置缓存绝对过期时间
-                    Priority = CacheItemPriority.Normal   //设置缓存优先级
-                });
-            }
-            return View(AppRoleAuthorizes);
-        }
+                return roleService.SingleAsync(
+                    express: inf => inf.Code.Contains(roleKeys),
+                    include: inf => inf.Include(r => r.RoleAuthorizes).ThenInclude(p => p.PermissionInformation))
+                    .Result
+                    .PermssionDtos;
+            });
+            return View(dtos);
 
-        /// <summary>
-        /// 获取角色授权
-        /// </summary>
-        /// <param name="roles">角色(多个之间用,分割)</param>
-        /// <returns></returns>
-        private List<PermissionDto> GetRoleAuthorizeBy(string roles)
-        {
-            List<PermissionDto> authorizes = null;
-            if (roles.IndexOf(',') > 0)
-            {
-                foreach (var code in roles.Split(','))
-                {
-                    var currRole = roleSvr.SingleIn(
-                        express: src => src.Code == code, 
-                        include: src => src.Include(s => s.RoleAuthorizes).ThenInclude(d => d.PermissionInformation));
-                    authorizes = CreateAuthorizeRoot(currRole.PermssionDtos);
-                }
-            }
-            else
-            {
-                var currRole = roleSvr.SingleIn(
-                    express: src => src.Code == roles,
-                    include: src => src.Include(s => s.RoleAuthorizes).ThenInclude(d => d.PermissionInformation));
-                authorizes = CreateAuthorizeRoot(currRole.PermssionDtos);
-            }
-            return authorizes;
-        }
+            //if (!(appCache.Get(roleKeys) is List<PermissionDto> dtos))
+            //{
+                //dtos = roleService.SingleAsync(express: inf => inf.Code.Contains(roleKeys),
+                //    include: inf => inf.Include(r => r.RoleAuthorizes).ThenInclude(p => p.PermissionInformation))
+                //    .Result.PermssionDtos;
 
-        /// <summary>
-        /// 递归生成授权导航
-        /// </summary>
-        /// <param name="srcList">数据源</param>
-        /// <param name="levelId">层级ID</param>
-        /// <returns></returns>
-        private List<PermissionDto> CreateAuthorizeRoot(List<PermissionDto> srcList, int levelId = 0)
-        {
-            var matchs = srcList.Where(x => x.LevelID == levelId);
-            if (matchs == null || matchs.Count() == 0)
-                return null;
-            foreach (var item in matchs)
-            {
-                item.Childs = CreateAuthorizeRoot(srcList, item.ID);
-            } 
-            return matchs.ToList();
+            //    appCache.Set(roleKeys, dtos, new MemoryCacheEntryOptions
+            //    {
+            //        AbsoluteExpiration = DateTime.Now.AddMinutes(5),
+            //        Priority = CacheItemPriority.Normal
+            //    });
+            //}
+            //return View(dtos);
         }
     }
 }

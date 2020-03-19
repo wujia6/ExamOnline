@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Application.DTO.Models;
-using Application.IServices;
-using Domain.Entities.RoleAgg;
-using Infrastructure.Utils;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using Application.DTO.Models;
+using Application.IServices;
+using Domain.Entities.RoleAgg;
+using Infrastructure.Utils;
+using Newtonsoft.Json;
 
 namespace ExamUI.Controllers
 {
@@ -17,37 +19,37 @@ namespace ExamUI.Controllers
     public class RoleController : Controller
     {
         private readonly IRoleService roleService;
-        private readonly IMenuService menuService;
-        private readonly IMemoryCache appCache;
+        private readonly IPermssionService permissionService;
+        private readonly CacheUtils cacheUtils;
 
-        public RoleController(IRoleService roleSvr, IMenuService menuSvr, IMemoryCache cache)
+        public RoleController(IRoleService _roleService, IPermssionService _permissionService, CacheUtils cache)
         {
-            this.roleService = roleSvr ?? throw new ArgumentNullException(nameof(roleService));
-            this.menuService = menuSvr ?? throw new ArgumentNullException(nameof(menuService));
-            this.appCache = cache ?? throw new ArgumentNullException(nameof(appCache));
+            this.roleService = _roleService ?? throw new ArgumentNullException(nameof(roleService));
+            this.permissionService = _permissionService ?? throw new ArgumentNullException(nameof(permissionService));
+            this.cacheUtils = cache ?? throw new ArgumentNullException(nameof(cacheUtils));
         }
 
         [HttpGet]
-        public IActionResult Browse()
+        public async Task<IActionResult> Browse()
         {
+            //获取缓存的全部权限
+            var models = await cacheUtils.GetCacheAsync("ApplicationPermissions", async () =>
+             {
+                return await permissionService.QueryAsync();
+             });
+            ViewBag.AllPermissions = JsonConvert.SerializeObject(models);
             return View();
         }
 
         [HttpGet]
-        public async Task<JsonResult> BrowseAsync(int? offset, int? limit, string name = null, string code = null)
+        public async Task<JsonResult> PaginatorAsync(int? offset = 0, int? limit = 10, string name = null, string code = null)
         {
-            Expression<Func<RoleInfo, bool>> express = null;
-            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(code))
-                express = src => src.Name == name && src.Code == code;
-            if (!string.IsNullOrEmpty(name) && string.IsNullOrEmpty(code))
-                express = src => src.Name == name;
-            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(code))
-                express = src => src.Code == code;
-            var pageResult = await roleService.QueryAsync(
-                    offset.Value, 
-                    limit.Value, 
-                    express, 
-                    include: src => src.Include(r => r.RoleAuthorizes).ThenInclude(m => m.PermissionInformation));
+            Expression<Func<RoleInfo, bool>> express = src => true;
+            if (!string.IsNullOrEmpty(name))
+                express = src => express.Compile()(src) && src.Name.Contains(name);
+            if (!string.IsNullOrEmpty(code))
+                express = src => express.Compile()(src) && src.Code.Contains(code);
+            var pageResult = await roleService.QueryAsync(offset.Value, limit.Value);
             return Json(pageResult);
         }
 
@@ -76,19 +78,19 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> CompleteMenusAsync()
+        public async Task<JsonResult> GetAuthorizesByRole(string code)
         {
-            if (!(appCache.Get("AllMenus") is List<MenuDto> allMenus) || allMenus.Count == 0)
+            //var result = await Task.Run(async ()=> { });
+            var roleCode = User.FindFirstValue(ClaimTypes.Role);
+            //获取角色授权
+            var authorizesDtos = await cacheUtils.GetCacheAsync(roleCode, async () =>
             {
-                allMenus = await menuService.QueryAsync();
-                allMenus = GlobalUtils.Recursion(allMenus, 0);
-                appCache.Set("AllMenus", allMenus, new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpiration = DateTime.Now.AddMinutes(5),  //设置缓存绝对过期时间
-                    Priority = CacheItemPriority.Normal   //设置缓存优先级
-                });
-            }
-            return Json(allMenus);
+                var model = await roleService.SingleAsync(
+                express: src => src.Code.Contains(code),
+                include: src => src.Include(inf => inf.RoleAuthorizes).ThenInclude(p => p.PermissionInformation));
+                return model.PermssionDtos;
+            });
+            return Json(authorizesDtos);
         }
     }
 }

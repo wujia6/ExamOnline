@@ -6,10 +6,10 @@
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6"><h1>角色管理</h1></div>
+            <div class="col-sm-6"><h1>角色设置</h1></div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">角色管理</a></li>
+                    <li class="breadcrumb-item"><a href="#">角色设置</a></li>
                     <li class="breadcrumb-item active">浏览</li>
                 </ol>
             </div>
@@ -25,11 +25,11 @@
                         <h4 class="card-title col-md-2 d-md-inline text-right">查询条件</h4>
                         <div class="input-group col-md-4">
                             <span class="input-group-addon"><i class="fade fa-user"></i></span>
-                            <input type="text" id="txt_search_role" class="form-control" placeholder="输入角色名称">
+                            <input type="text" id="txt_search_role" class="form-control" placeholder="角色名称关键字">
                         </div>
                         <div class="input-group col-md-4">
                             <span class="input-group-addon"><i class="fade fa-code"></i></span>
-                            <input type="text" id="txt_search_code" class="form-control" placeholder="输入角色代码">
+                            <input type="text" id="txt_search_code" class="form-control" placeholder="角色代码关键字">
                         </div>
                         <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i></button>
                     </div>
@@ -63,10 +63,11 @@
 <script>
     $(function () {
         //初始化table
-        var manageTable = new btTable.parentTable({
+        var mgrTable = new tableView.manageTable({
             tableId: "tab_roles",
+            toolbarId:"tab_toolbar",
             showDetail: true,
-            ajaxUrl: "/Role/BrowseAsync",
+            ajaxUrl: "/Role/PaginatorAsync",
             ajaxMethod: "get",
             queryParamsCallback: function () {
                 return {
@@ -80,32 +81,53 @@
                 { field: "code", title: "代码", align: "center", valign: "middle" },
                 { field: "remarks", title: "备注", align: "center", valign: "middle" }
             ],
-            onRowExpandCallback: function (row, $detail) {  //行展开事件
-                var subTable = new btTable.childTable({
-                    rowData: row.menuDtos,
-                    domEle: $detail,
-                    ajaxUrl: "/Role/CompleteMenusAsync",
-                    ajaxMethod: "get",
+            onExpandRowCallback: function (index, row, $detail) {  //行展开事件
+                var firstTable = new tableView.detailTable({
+                    rowCode: row.code,
+                    detail: $detail,
+                    showDetail: true,
+                    ajaxUrl: "/Permission/GetPermissionAllAsync",
+                    //queryParamsCallback: function () {
+                    //    return { code: row.code };
+                    //},
                     dataColumns: [
-                        { checkbox: true, align: "center", valign: "middle" },
-                        { field: "title", width: "200", align: "center", valign: "middle" },
-                        { field: "controller", width: "100", align: "center", valign: "middle" },
-                        {
-                            field: "", width: "600", align: "center", valign: "middle", formatter: function (row, index, value) {
-                                var childs = row.menuDtos;
-                                var actionHtml = "<div class='form-inline'><div class='col-sm-offset-2 col-sm-10'>";
-                                for (var key in childs) {
-                                    if (key == "action") {
-                                        actionHtml.append("<div class='checkbox'>");
-                                        actionHtml.append("<label><input type='checkbox'>" + childs[key] + "</label>");
-                                        actionHtml.append("</div>");
-                                    }
-                                }
-                                actionHtml.append("</div></div>");
-                                return actionHtml;
-                            }
-                        }
-                    ]
+                        //{ checkbox: true, width: "50", align: "center", valign: "middle" },
+                        //{ field: "id", align: "center", valign: "middle" },
+                        //{ field: "levelID", align: "center", valign: "middle" },
+                        { field: "typeAt", align: "center", valign: "middle" },
+                        { field: "named", align: "center", valign: "middle" },
+                        { field: "command", align: "center", valign: "middle" },
+                        { field: "remarks", align: "center", valign: "middle" }
+                    ],
+                    onExpandRowCallback: function (index, row, $detail) {
+                        var twoTable = new tableView.detailTable({
+                            data: row.childs,
+                            rowCode: row,
+                            detail: $detail,
+                            //ajaxUrl: "/Role/GetAuthorizesByRole",
+                            //ajaxMethod: "get",
+                            //queryParamsCallback: function () {
+                            //    return { code: firstTable.instance.rowCode };
+                            //},
+                            dataColumns: [
+                                { field: "named", align: "center", valign: "middle" },
+                                { field: "typeAt", align: "center", valign: "middle" },
+                                { fiele: "command", align: "center", valign: "middle" }
+                                //{ field: "", width: "700", align: "left", valign: "middle", formatter: function (index, row, value) {
+                                //    var cmdHtml = "<div class='form-inline'><div class='col-sm-offset-2 col-sm-10'>";
+                                //    for (var key in row.childs) {
+                                //        if (key == "typeAt" && row.childs[key] == "action") {
+                                //            cmdHtml.append("<div class='checkbox'>");
+                                //            cmdHtml.append("<label><input type='checkbox'>" + row[key] + "</label>");
+                                //            cmdHtml.append("</div>");
+                                //        }
+                                //    }
+                                //    cmdHtml.append("</div></div>");
+                                //    return cmdHtml;
+                                //}}
+                            ]
+                        });
+                    }
                 });
             }
         });

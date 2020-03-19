@@ -24,15 +24,4 @@ namespace Domain.Entities.RoleAgg
             builder.HasOne(e => e.PermissionInformation).WithMany(s => s.RoleAuthorizes);
         }
     }
-
-    //public class RoleMenuConfig : IEntityTypeConfiguration<RoleMenu>
-    //{
-    //    public void Configure(EntityTypeBuilder<RoleMenu> builder)
-    //    {
-    //        builder.HasKey(e => e.ID);
-    //        builder.Property(e => e.Remarks).HasMaxLength(50);
-    //        builder.HasOne(e => e.RoleInfomation).WithMany(s => s.RoleMenus);
-    //        builder.HasOne(e => e.MenuInfomation).WithMany(s => s.RoleMenus);
-    //    }
-    //}
 }

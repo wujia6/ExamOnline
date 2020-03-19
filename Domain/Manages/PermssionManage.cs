@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities.PermissionAgg;
@@ -34,23 +35,16 @@ namespace Domain.Manages
             return efCore.SaveAs(entity);
         }
 
-        public async Task<object> QueryAsync(
-            int? offset, int? limit, 
-            ISpecification<PermissionInfo> spec = null, 
-            Func<IQueryable<PermissionInfo>, IIncludableQueryable<PermissionInfo, object>> include = null)
+        public async Task<IEnumerable<PermissionInfo>> QueryAsync(ISpecification<PermissionInfo> spec = null)
         {
-            dynamic anonymous = new { };
-            if (include != null)
-                efCore.EntitySet = include(efCore.EntitySet);
             if (spec != null)
                 efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
-            if (offset.HasValue && limit.HasValue)
-            {
-                anonymous.Total = await efCore.EntitySet.CountAsync();
-                efCore.EntitySet = efCore.EntitySet.Skip(offset.Value).Take(limit.Value);
-            }
-            anonymous.Rows = await efCore.EntitySet.ToListAsync();
-            return anonymous;
+            return await efCore.EntitySet.ToListAsync();
+        }
+
+        public async Task<PermissionInfo> SingleAsync(ISpecification<PermissionInfo> spec)
+        {
+            return await efCore.EntitySet.FirstOrDefaultAsync(spec.Expression);
         }
     }
 }

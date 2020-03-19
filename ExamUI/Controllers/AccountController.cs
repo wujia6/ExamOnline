@@ -71,10 +71,10 @@ namespace ExamUI.Controllers
                 //创建身份证件使用者，添加身份证
                 var identitys = new ClaimsIdentity(new List<Claim>
                 {
-                    new Claim(ClaimTypes.Sid,applicationUser.UserID.ToString()),
-                    new Claim(ClaimTypes.NameIdentifier,applicationUser.UserAccount),
-                    new Claim(ClaimTypes.Role,applicationUser.InRoles),
-                    new Claim(ClaimTypes.Name,applicationUser.Name)
+                    new Claim(ClaimTypes.Sid, applicationUser.UserID.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, applicationUser.UserAccount),
+                    new Claim(ClaimTypes.Role, applicationUser.InRoles),
+                    new Claim(ClaimTypes.Name, applicationUser.Name)
                     //new Claim("Password",model.Password),
                     //new Claim(ClaimTypes.UserData,JsonConvert.SerializeObject(applicationUser))
                 });

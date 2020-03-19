@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Infrastructure.Utils
 {
-    public enum ApplicationTypes
+    public enum CommonEnum
     {
         //科目
         无 = 0,
@@ -53,24 +53,24 @@ namespace Infrastructure.Utils
         美女=33
     }
 
-    public class GlobalUtils
+    public class CommonUtils
     {
         /// <summary>
-        /// 从全局枚举获取指定值并封装SelectList返回
+        /// 获取指定枚举值并封装SelectList
         /// </summary>
-        /// <param name="start">开始枚举编号</param>
-        /// <param name="end">结束枚举编号</param>
+        /// <param name="start">开始枚举值/param>
+        /// <param name="end">结束枚举值</param>
         /// <returns></returns>
         public static SelectList GetSelectList(int start, int end)
         {
             var selectList = new List<SelectListItem>();
-            var arr = Enum.GetValues(typeof(ApplicationTypes));
-            foreach (int tp in arr)
+            var arr = Enum.GetValues(typeof(CommonEnum));
+            foreach (int ce in arr)
             {
-                if (tp >= start && tp <= end)
+                if (ce >= start && ce <= end)
                 {
-                    string itemName = Enum.GetName(typeof(ApplicationTypes), tp);
-                    var item = new SelectListItem(itemName, tp.ToString());
+                    string ceName = Enum.GetName(typeof(CommonEnum), ce);
+                    var item = new SelectListItem(ceName, ce.ToString());
                     selectList.Add(item);
                 }
             }
@@ -81,11 +81,11 @@ namespace Infrastructure.Utils
         /// <summary>
         /// 获取指定枚举值的名称
         /// </summary>
-        /// <param name="typeValue">枚举值</param>
+        /// <param name="enumValue">枚举值</param>
         /// <returns></returns>
-        public static string GetApplicationTypeName(int typeValue)
+        public static string GetCommonEnumName(int enumValue)
         {
-            return Enum.GetName(typeof(ApplicationTypes), typeValue);
+            return Enum.GetName(typeof(CommonEnum), enumValue);
         }
 
         /// <summary>
@@ -96,6 +96,8 @@ namespace Infrastructure.Utils
         /// <returns></returns>
         public static List<T> Recursion<T>(List<T> srcList, int levelId = 0) where T : class
         {
+            if (srcList == null || srcList.Count == 0)
+                return null;
             var matchs = srcList.Where(x => { dynamic cls = x; return cls.LevelID == levelId ? true : false; });
             if (matchs != null && matchs.Count() > 0)
             {

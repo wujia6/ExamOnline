@@ -22,8 +22,8 @@ namespace Application.Services
 
         public RoleService(IRoleManage manage, IExamDbContext cxt)
         {
-            this.roleManage = manage;
-            this.context = cxt;
+            this.roleManage = manage ?? throw new ArgumentNullException(nameof(roleManage));
+            this.context = cxt ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<bool> SaveAsync(RoleDto model)
@@ -49,8 +49,10 @@ namespace Application.Services
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
         {
             var spec = Specification<RoleInfo>.Eval(express);
-            var entity = await roleManage.SingleAsync(spec);
-            return entity.MapTo<RoleDto>();
+            var entity = await roleManage.SingleAsync(spec, include);
+            var model = entity.MapTo<RoleDto>();
+            model.PermssionDtos = CommonUtils.Recursion(model.PermssionDtos);
+            return model;
         }
 
         public async Task<List<RoleDto>> QueryAsync(
@@ -63,22 +65,15 @@ namespace Application.Services
         }
 
         public async Task<PageResult<RoleDto>> QueryAsync(
-            int index, int size,
+            int offset, 
+            int limit,
             Expression<Func<RoleInfo, bool>> express = null, 
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
         {
             var spec = express == null? null : Specification<RoleInfo>.Eval(express);
-            var anonymous = await roleManage.QueryAsync(index, size, spec, include);
+            var entities = await roleManage.QueryAsync(spec, include);
+            var anonymous = new { Total = entities.Count(), Rows = entities.Skip(offset).Take(limit).ToList() };
             return anonymous.ToPageResult<RoleDto>();
-        }
-
-        public RoleDto SingleIn(
-            Expression<Func<RoleInfo, bool>> express, 
-            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
-        {
-            var spec = Specification<RoleInfo>.Eval(express);
-            var entity = roleManage.SingleIn(spec,include);
-            return entity.MapTo<RoleDto>();
         }
     }
 }

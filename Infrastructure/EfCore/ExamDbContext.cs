@@ -37,7 +37,6 @@ namespace Infrastructure.EfCore
             //roles
             model.ApplyConfiguration(new RoleConfig());
             model.ApplyConfiguration(new RoleAuthorizeConfig());
-            //model.ApplyConfiguration(new RoleMenuConfig());
             //users
             model.ApplyConfiguration(new UserConfig())
                 .Entity<UserInfo>()
@@ -72,7 +71,6 @@ namespace Infrastructure.EfCore
         public DbSet<MenuInfo> Menus { get; set; }
         public DbSet<RoleInfo> Roles { get; set; }
         public DbSet<RoleAuthorize> RoleAuthorizes { get; set; }
-        public DbSet<RoleMenu> RoleMenus { get; set; }
         public DbSet<UserInfo> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<AdminInfo> Admins { get; set; }

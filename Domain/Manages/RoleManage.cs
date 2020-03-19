@@ -16,7 +16,7 @@ namespace Domain.Manages
 
         public RoleManage(IEfCoreRepository<RoleInfo> ef)
         {
-            this.efCore = ef;
+            this.efCore = ef ?? throw new ArgumentNullException(nameof(efCore));
         }
 
         public bool SaveAs(RoleInfo entity)
@@ -35,42 +35,6 @@ namespace Domain.Manages
             return entity == null ? false : efCore.RemoveAt(entity);
         }
 
-        public RoleInfo SingleIn(
-            ISpecification<RoleInfo> spec, 
-            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
-        {
-            if (include != null)
-                efCore.EntitySet = include(efCore.EntitySet);
-            return efCore.EntitySet.FirstOrDefault(spec.Expression);
-        }
-
-        public async Task<IEnumerable<RoleInfo>> QueryAsync(
-            ISpecification<RoleInfo> spec = null, 
-            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
-        {
-            if (include!=null)
-                efCore.EntitySet = include(efCore.EntitySet);
-            if (spec!=null)
-                efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
-            return await efCore.EntitySet.ToArrayAsync();
-        }
-
-        public async Task<object> QueryAsync(
-            int offset, int limit,
-            ISpecification<RoleInfo> spec = null, 
-            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
-        {
-            if (include != null)
-                efCore.EntitySet = include(efCore.EntitySet);
-            if (spec != null)
-                efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
-            return new
-            {
-                Total = await efCore.EntitySet.CountAsync(),
-                Rows = await efCore.EntitySet.Skip(offset).Take(limit).ToListAsync()
-            };
-        }
-
         public async Task<RoleInfo> SingleAsync(
             ISpecification<RoleInfo> spec, 
             Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
@@ -79,5 +43,32 @@ namespace Domain.Manages
                 efCore.EntitySet = include(efCore.EntitySet);
             return await efCore.EntitySet.FirstOrDefaultAsync(spec.Expression);
         }
+
+        public async Task<IEnumerable<RoleInfo>> QueryAsync(
+            ISpecification<RoleInfo> spec = null,
+            Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
+        {
+            if (include != null)
+                efCore.EntitySet = include(efCore.EntitySet);
+            if (spec != null)
+                efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
+            return await efCore.EntitySet.ToListAsync();
+        }
+
+        //public async Task<object> QueryAsync(
+        //    int offset, int limit,
+        //    ISpecification<RoleInfo> spec = null,
+        //    Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
+        //{
+        //    if (include != null)
+        //        efCore.EntitySet = include(efCore.EntitySet);
+        //    if (spec != null)
+        //        efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
+        //    return new
+        //    {
+        //        Total = await efCore.EntitySet.CountAsync(),
+        //        Rows = await efCore.EntitySet.Skip(offset).Take(limit).ToListAsync()
+        //    };
+        //}
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query;
 using Domain.Entities.PermissionAgg;
 using Domain.IComm;
+using System.Collections.Generic;
 
 namespace Domain.IManages
 {
@@ -15,9 +16,8 @@ namespace Domain.IManages
 
         bool RemoveAt(ISpecification<PermissionInfo> spec);
 
-        Task<object> QueryAsync(
-            int? offset, int? limit,
-            ISpecification<PermissionInfo> spec = null,
-            Func<IQueryable<PermissionInfo>, IIncludableQueryable<PermissionInfo, object>> include = null);
+        Task<PermissionInfo> SingleAsync(ISpecification<PermissionInfo> spec);
+
+        Task<IEnumerable<PermissionInfo>> QueryAsync(ISpecification<PermissionInfo> spec = null);
     }
 }

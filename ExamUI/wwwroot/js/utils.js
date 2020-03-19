@@ -1,6 +1,4 @@
-﻿/**
- * JQuery序列化扩展方法
- * */
+﻿//JQuery序列化扩展方法
 $.fn.serializeObject = function () {
     var hasOwnProperty = Object.prototype.hasOwnProperty;
     return this.serializeArray().reduce(function (data, pair) {
@@ -13,7 +11,7 @@ $.fn.serializeObject = function () {
 
 //modal组件封装
 var modalUtils = {
-    /**
+    /**********************************************************
      * 显示模态框
      * @param {object} opts 参数对象
      * @param {string} opts.remote：远程url
@@ -21,7 +19,7 @@ var modalUtils = {
      * @param {function} opts.onOpenedEvent：窗口完成显示后触发事件
      * @param {function} opts.onClosedEvent：窗口关闭后回调事件
      * @param {function} opts.onSaveEvent：保存按钮回调事件
-     */
+     **********************************************************/
     showModal: function (opts) {
         //合并设置对象
         var options = $.extend({}, { id: "#dialogModal", backdrop: true, keyboard: false }, opts);
@@ -37,13 +35,13 @@ var modalUtils = {
             .modal("show");
     },
 
-    /**
+    /**********************************************************
      * 警告模态框
      * @param {any} opts
      * @param {string} opts.title  标题文本
      * @param {string} opts.message  消息文本
      * @param {function} opts.onSureEvent    确定按钮事件的回调函数
-     */
+     **********************************************************/
     showConfirm: function (opts) {
         //html
         var contentHtml =
@@ -72,37 +70,45 @@ var modalUtils = {
 
 //form封装
 var formUtils = {
-    /**
+    /*************************************
      * 清空表单
      * @param {object} frm 表单对象
-     */
+     ************************************/
     clear: function (frm) {
-        $(":input", frm).not(":button,:submit,:reset,:option").val('').removeAttr("checked");
+        $(":input", frm)
+            .not(":button", ":submit", ":reset", ":option").val('')
+            .removeAttr("checked");
         $(":option: first-child", frm).attr("selected", true);
+        $(frm)[0].reset();
     },
 
-    /**
+    /****************************************************
      * 表单回显
      * @param {object} frm 表单对象
      * @param {JSON} json JSON对象
      * toLowerCase() ------ 将字符串中的所有字符都转换成小写；
      * toUpperCase() ------ 将字符串中的所有字符都转换成大写；
-     */
-    load: function (frm, obj) {
-        if (frm == null || frm == 'undefined' || obj == null || obj == 'undefined') {
+     ****************************************************/
+    echo: function (frm, strJson) {
+        if (frm == null || frm == 'undefined' || strJson == null || strJson == 'undefined') {
             layerUtils.info("表单对象或数据对象为空", 2);
             return;
         }
-        for (var key in obj) {
-            if (key == "0" || obj[key] == null) continue;
-            //重新拼凑json属性名(parnetID=ParentID)
-            var propName = key == "id" ? key.toUpperCase() : key.substr(0, 1).toUpperCase() + key.substr(1, key.lenght);
+        for (var key in strJson) {
+            if (key == "0" || strJson[key] == null)
+                continue;
+            var propName = key == "id" ?    //重新拼凑json属性名(parnetID=ParentID)
+                key.toUpperCase() : key.substr(0, 1).toUpperCase() + key.substr(1, key.lenght);
             var dmEle = frm.find("*[name=" + propName + "]");
-            if (dmEle == "undefined" || dmEle == null) continue;
-            //if ($(dmEle).is("select") && $.type(obj[key]) == "string")
-            //    dmEle.find("option:contains(" + obj[key] + ")").attr("selected", true);
-            //else
-            //    dmEle.val(obj[key]);
+
+            if (dmEle == "undefined" || dmEle == null)
+                continue;
+            else if (dmEle.is("select") && $.type(strJson[key]) == "string")  //判断下拉列表框
+                dmEle.find("option:contains(" + strJson[key] + ")").attr("selected", true);
+            else if (dmEle.prop("type") == "checkbox" && strJson[key] == "启用")   //判断复选框
+                dmEle.attr("checked", "checked");
+            else
+                dmEle.val(strJson[key]);
         }
     }
 };
@@ -140,40 +146,44 @@ var layerUtils = {
     }
 };
 
-/**
- * 主从表组件
- * */
-window.btTable = {
-    /**
-     * bootstrapTable主表组件封装
-     * @param {object} opts 参数对象
-     * @param {string} opts.tableId 表格ID
-     * @param {bool} opts.showDetail 显示子表
-     * @param {string} opts.ajaxUrl ajax请求地址
-     * @param {string} opts.ajaxMethod ajax请求方法
-     * @param {object} opts.queryParamsCallback 自定义ajax查询参数回调函数
-     * @param {array} opts.dataColumns 需绑定的数据列
-     * @param {function} opts.onRowExpandCallback 行展开事件回调函数
-     */
-    parentTable: function (opts) {
+//表组件
+window.tableView = {
+    /****************************************************************
+    * bootstrapTable表组件封装
+    * @param {object} opts 参数对象
+    * @param {string} opts.tableId 表格ID
+    * @param {string} opts.toolbarId 工具条ID，默认"tab_toolbar"
+    * @param {bool} opts.showDetail 显示详细视图，默认false
+    * @param {bool} opts.paging 开启分页，默认true
+    * @param {string} opts.paginator 分页器，默认"server"
+    * @param {string} opts.ajaxUrl ajax请求地址
+    * @param {string} opts.ajaxMethod ajax请求方法，默认"get"
+    * @param {object} opts.queryParamsCallback 自定义ajax查询参数回调函数
+    * @param {function} opts.onExpandRowCallback 行展开事件回调函数
+    * @param {array} opts.dataColumns 需绑定的数据列
+    *****************************************************************/
+    manageTable: function (opts) {
         //参数初始化
         opts = opts || {};
         opts.tableId = opts.tableId || "";
-        opts.detailView = opts.showDetail || false;
+        opts.toolbarId = opts.toolbarId || "tab_toolbar"; 
+        opts.showDetail = opts.showDetail || false;
+        opts.paging = opts.paging || true;
+        opts.paginator = opts.paginator || "server";
         opts.ajaxUrl = opts.ajaxUrl || "";
         opts.ajaxMethod = opts.ajaxMethod || "get";
-        opts.queryParamsCallback = opts.queryParamsCallback || this.setQueryParams;
-        opts.dataColumns = opts.dataColumns || this.setDataColumns;
-        opts.onRowExpandCallback = opts.onRowExpandCallback || Function;
+        opts.queryParamsCallback = opts.queryParamsCallback || Function;
+        opts.onExpandRowCallback = opts.onExpandRowCallback || Function;
+        opts.dataColumns = opts.dataColumns || [];
         //父表实列
         this.instance = $("#" + opts.tableId);
         //初始化table组件
         this.instance.bootstrapTable({
             uniqueId: "ID",
+            toolbar: "#" + opts.toolbarId,
             showHeader: true,
             showLoading: true,
             striped: true,
-            toolbar: "#tab_toolbar",
             clickToSelect: true,
             search: false,
             //searchOnEnterKey: true,
@@ -186,17 +196,11 @@ window.btTable = {
             method: opts.ajaxMethod,
             queryParams: function (params) {
                 var querys = opts.queryParamsCallback();
-                return $.extend({}, {
-                    search: params.search,
-                    sort: params.sort,
-                    order: params.order,
-                    offset: params.offset,  //偏移量（跳过的记录数）
-                    limit: params.limit,    //页记录大小
-                }, querys);
+                return $.extend({}, params, querys);
             },
             paginationLoop: false,
-            pagination: true,
-            sidePagination: "server",
+            pagination: opts.paging,
+            sidePagination: opts.paginator,
             pageNumber: 1,
             pageSize: 10,
             pageList: [10, 25, 50, 100],
@@ -209,74 +213,73 @@ window.btTable = {
                 console.log("数据加载成功");
             },
             onExpandRow: function (index, row, $detail) {
-                opts.onRowExpandCallback(row, $detail);
+                opts.onExpandRowCallback(index, row, $detail);
             }
         });
-        /**
-         * 获取table组件已选择行
-         * */
+        //获取table组件已选择行
         this.getSelecteds = function () {
             return this.instance.bootstrapTable("getSelections");
         };
-        /**
-         * 设置table组件额外查询参数
-         * @param {object} params 参数对象
-         */
-        this.setQueryParams = function (querys) {
-            return querys;
-        };
-        /**
-         * 设置table组件数据列
-         * @param {array} dataColumns
-         */
-        this.setDataColumns = function (dataColumns) {
-            return dataColumns;
-        };
-        /**
-         * 刷新table组件
-         * */
+        //刷新table组件
         this.setRefresh = function () {
             this.instance.bootstrapTable("refresh");
         };
         return this;
     },
 
-    /**
+    /******************************************************************
      * bootstrapTable子表组件封装
-     * @param {object} options 参数对象
-     * @param {json} options.rowData 父表列绑定数据
-     * @param {object} options.domEle 父表行td对象
-     * @param {string} options.ajaxUrl ajax请求地址
-     * @param {string} options.ajaxMethod ajax请求类型
-     * @param {array} options.dataColumns 数据列数组
-     */
-    childTable: function (options) {
+     * @param {object} opts 参数对象
+     * @param {json} opts.rowCode 主表行数据
+     * @param {object} opts.detail 主表行装载详细视图的容器对象
+     * @param {bool} opt.showDetail 显示详细视图，默认false
+     * @param {string} opts.ajaxUrl ajax请求地址
+     * @param {string} opts.ajaxMethod ajax请求类型
+     * @param {function} opts.queryParamsCallback ajax请求参数回调方法
+     * @param {function} opts.onExpandRowCallback 行展开回调方法
+     * @param {array} opts.dataColumns 数据列数组
+     ******************************************************************/
+    detailTable: function (opts) {
         //参数初始化
-        options = options || {};
-        options.rowData = options.rowData || null;
-        options.domEle = options.domEle || null;
-        options.ajaxUrl = options.ajaxUrl || "";
-        options.ajaxMethod = options.ajaxMethod || "get";
-        options.dataColumns = options.dataColumns || [];
+        opts = opts || {};
+        opts.data = opts.data || {};
+        opts.rowCode = opts.rowCode || null;
+        opts.detail = opts.detail || null;
+        opts.showDetail = opts.showDetail || false;
+        opts.ajaxUrl = opts.ajaxUrl || "";
+        opts.ajaxMethod = opts.ajaxMethod || "get";
+        opts.queryParamsCallback = opts.queryParamsCallback || Function;
+        opts.onExpandRowCallback = opts.onExpandRowCallback || Function;
+        opts.dataColumns = opts.dataColumns || [];
         //实例
-        this.instance = options.domEle.html("<table></table>").find("table");
+        this.instance = opts.detail.html("<table></table>").find("table");
         //初始化
         this.instance.bootstrapTable({
             uniqueId: "ID",
-            showHeader: true,
+            showHeader: false,
             showLoading: true,
             clickToSelect: true,
             striped: true,
+            data: opts.data,
+            detailView: opts.showDetail,
             cache: false,
             url: opts.ajaxUrl,
-            method: options.ajaxMethod,
-            columns: options.dataColumns,
+            method: opts.ajaxMethod,
+            queryParams: function (params) {
+                var querys = opts.queryParamsCallback();
+                return $.extend({}, params, querys);
+            },
+            //queryParams: opts.queryParamsCallback,
+            columns: opts.dataColumns,
             responseHandler: function (data) {
                 console.log(data);
                 return data;
             },
             onLoadSuccess: function () {
                 console.log("行table组件数据已加载");
+            },
+            onExpandRow: function (index, row, $detail) {
+                opts.onExpandRowCallback(index, row, $detail);
             }
         });
         //获取已选中的checkbox集合 
@@ -290,124 +293,3 @@ window.btTable = {
         return this;
     }
 }
-
-//window.initTable = function (opts) {
-//    //参数初始化
-//    opts = opts || {};
-//    opts.tableId = opts.tableId || "";
-//    opts.detailView = opts.showDetail || false;
-//    opts.ajaxUrl = opts.ajaxUrl || "";
-//    opts.ajaxMethod = opts.ajaxMethod || "get";
-//    opts.queryParamsCallback = opts.queryParamsCallback || this.setQueryParams;
-//    opts.dataColumns = opts.dataColumns || this.setDataColumns;
-//    opts.onRowExpandCallback = opts.onRowExpandCallback || Function;
-//    //父表实列
-//    this.instance = $("#" + opts.tableId);
-//    //初始化table组件
-//    this.instance.bootstrapTable({
-//        uniqueId: "ID",
-//        showHeader: true,
-//        showLoading: true,
-//        striped: true,
-//        toolbar: "#tab_toolbar",
-//        clickToSelect: true,
-//        search: false,
-//        //searchOnEnterKey: true,
-//        detailView: opts.showDetail,
-//        showColumns: true,
-//        showRefresh: true,
-//        showToggle: true,
-//        cache: false,
-//        url: opts.ajaxUrl,
-//        method: opts.ajaxMethod,
-//        queryParams: function (params) {
-//            var querys = opts.queryParamsCallback();
-//            return $.extend({}, {
-//                search: params.search,
-//                sort: params.sort,
-//                order: params.order,
-//                offset: params.offset,  //偏移量（跳过的记录数）
-//                limit: params.limit,    //页记录大小
-//            }, querys);
-//        },
-//        paginationLoop: false,
-//        pagination: true,
-//        sidePagination: "server",
-//        pageNumber: 1,
-//        pageSize: 10,
-//        pageList: [10, 25, 50, 100],
-//        columns: opts.dataColumns,
-//        responseHandler: function (data) {
-//            console.log(data);
-//            return data;
-//        },
-//        onLoadSuccess: function () {
-//            console.log("数据加载成功");
-//        },
-//        onExpandRow: function (index, row, $detail) {
-//            opts.onRowExpandCallback(row, $detail);
-//        }
-//    });
-//    /**
-//     * 获取table组件已选择行
-//     * */
-//    this.getSelecteds = function () {
-//        return this.instance.bootstrapTable("getSelections");
-//    };
-//    /**
-//     * 设置table组件额外查询参数
-//     * @param {object} params 参数对象
-//     */
-//    this.setQueryParams = function (querys) {
-//        return querys;
-//    };
-//    /**
-//     * 设置table组件数据列
-//     * @param {array} dataColumns
-//     */
-//    this.setDataColumns = function (dataColumns) {
-//        return dataColumns;
-//    };
-//    /**
-//     * 刷新table组件
-//     * */
-//    this.setRefresh = function () {
-//        this.instance.bootstrapTable("refresh");
-//    };
-//    return this;
-//};
-
-//window.initRowTable = function (options) {
-//    options = options || {};
-//    options.srcData = options.srcData || null;
-//    options.domEle = options.domEle || null;
-//    options.ajaxUrl = options.ajaxUrl || "";
-//    options.ajaxMethod = options.ajaxMethod || "get";
-//    options.dataColumns = options.dataColumns || [];
-//    //实例
-//    this.instance = options.domEle.html("<table></table>").find("table");
-//    //初始化
-//    this.instance.bootstrapTable({
-//        uniqueId: "ID",
-//        showHeader: false,
-//        showLoading: true,
-//        clickToSelect: true,
-//        striped: true,
-//        cache: false,
-//        url: options.ajaxUrl,
-//        method: options.ajaxMethod,
-//        columns: options.dataColumns,
-//        responseHandler: function (data) {
-//            console.log(data);
-//            return data;
-//        },
-//        onLoadSuccess: function () {
-//            console.log("行table组件数据已加载");
-//        }
-//    });
-//    //获取已选中的checkbox集合 
-//    this.getSelecteds = function () {
-//        return this.instance.find("input[type='checkbox']: checked");
-//    };
-//    return this;
-//};
