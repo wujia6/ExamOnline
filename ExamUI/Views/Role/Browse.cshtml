@@ -54,16 +54,49 @@
                             <i class="fas fa-trash"></i> 删除
                         </button>
                     </div>
-                    <table id="tab_roles"></table>
+                    <table id="tab_roles" class="table table-hover"></table>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<style>
+    .table .thead-blue th {
+        color:#fff;
+        background-color:#3195f1;
+        /*border-color:#0d7adf;*/
+    }
+</style>
 <script>
     $(function () {
+        var mgrTable, firstTable, twoTable;
+        mgrTable = firstTable = twoTable = null;
+
+        /**************************************
+         * 检查指定键是否存在
+         * @@param jsonData 源数据
+         * @@param key 要检查的键
+         * @@return bool
+         *************************************/
+        function isExist(jsonData, id) {
+            if (jsonData == null || jsonData == "undefine") 
+                return false;
+            for (key in jsonData) {
+                var entry = jsonData[key];
+                if (entry.key != id) {
+                    if (entry.childs != null && entry.childs != "undefine") {
+                        if (isExist(entry.childs, id))
+                            return true;
+                    }
+                }
+                else
+                    return true;
+            }
+            return false;
+        }
+
         //初始化table
-        var mgrTable = new tableView.manageTable({
+        mgrTable = new tableView.manageTable({
             tableId: "tab_roles",
             toolbarId:"tab_toolbar",
             showDetail: true,
@@ -76,55 +109,46 @@
                 }
             },
             dataColumns: [
-                { checkbox: true, align: "center", valign: "middle" },
+                { checkbox: true, width:"50", align: "center", valign: "middle" },
                 { field: "name", title: "角色", align: "center", valign: "middle" },
                 { field: "code", title: "代码", align: "center", valign: "middle" },
                 { field: "remarks", title: "备注", align: "center", valign: "middle" }
             ],
             onExpandRowCallback: function (index, row, $detail) {  //行展开事件
-                var firstTable = new tableView.detailTable({
-                    rowCode: row.code,
+                //获取指定角色授权
+                var assDtos = $.getJSON("/Role/GetAuthorizesByRole", {code: row.code}, function (data) {
+                    return data;
+                });
+                //初始模块集table
+                firstTable = new tableView.detailTable({
+                    //rowCode: row.code,
                     detail: $detail,
                     showDetail: true,
-                    ajaxUrl: "/Permission/GetPermissionAllAsync",
-                    //queryParamsCallback: function () {
-                    //    return { code: row.code };
-                    //},
+                    ajaxUrl: "/Permission/GetPermissionAllAsync",   //获取所有授权
                     dataColumns: [
-                        //{ checkbox: true, width: "50", align: "center", valign: "middle" },
-                        //{ field: "id", align: "center", valign: "middle" },
-                        //{ field: "levelID", align: "center", valign: "middle" },
-                        { field: "typeAt", align: "center", valign: "middle" },
-                        { field: "named", align: "center", valign: "middle" },
-                        { field: "command", align: "center", valign: "middle" },
-                        { field: "remarks", align: "center", valign: "middle" }
+                        { field: "named", align: "left", valign: "middle" },
+                        { field: "typeAt", align: "left", valign: "middle" },
+                        { field: "command", align: "left", valign: "middle" },
+                        { field: "remarks", align: "left", valign: "middle" }
                     ],
                     onExpandRowCallback: function (index, row, $detail) {
-                        var twoTable = new tableView.detailTable({
+                        //初始化模块table
+                        twoTable = new tableView.detailTable({
                             data: row.childs,
-                            rowCode: row,
                             detail: $detail,
-                            //ajaxUrl: "/Role/GetAuthorizesByRole",
-                            //ajaxMethod: "get",
-                            //queryParamsCallback: function () {
-                            //    return { code: firstTable.instance.rowCode };
-                            //},
                             dataColumns: [
-                                { field: "named", align: "center", valign: "middle" },
-                                { field: "typeAt", align: "center", valign: "middle" },
-                                { fiele: "command", align: "center", valign: "middle" }
-                                //{ field: "", width: "700", align: "left", valign: "middle", formatter: function (index, row, value) {
-                                //    var cmdHtml = "<div class='form-inline'><div class='col-sm-offset-2 col-sm-10'>";
-                                //    for (var key in row.childs) {
-                                //        if (key == "typeAt" && row.childs[key] == "action") {
-                                //            cmdHtml.append("<div class='checkbox'>");
-                                //            cmdHtml.append("<label><input type='checkbox'>" + row[key] + "</label>");
-                                //            cmdHtml.append("</div>");
-                                //        }
-                                //    }
-                                //    cmdHtml.append("</div></div>");
-                                //    return cmdHtml;
-                                //}}
+                                { field: "named", width: "120", align: "center", valign: "middle" },
+                                { field: "enabled", width: "120", align: "center", valign: "middle" },
+                                { field: "", width: "700", align: "left", valign: "middle", formatter: function (index, row, value) {
+                                    var dtos = row.childs;
+                                    var domEle = $("<div class='col-sm-offset-2 col-sm-10'></div>");
+                                    for (var key in dtos) {
+                                        if (dtos[key].typeAt == "action")
+                                            domEle.append("<div class='checkbox d-md-inline  ml-1 mr-1'><label><input type='checkbox' checked='" +
+                                                isExist(assDtos, dtos[key].id) + "' value='" + dtos[key].id + "'> " + dtos[key].named + "</label></div>");
+                                    }
+                                    return domEle.html();
+                                }}
                             ]
                         });
                     }

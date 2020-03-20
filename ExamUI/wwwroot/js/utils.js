@@ -159,8 +159,8 @@ window.tableView = {
     * @param {string} opts.ajaxUrl ajax请求地址
     * @param {string} opts.ajaxMethod ajax请求方法，默认"get"
     * @param {object} opts.queryParamsCallback 自定义ajax查询参数回调函数
-    * @param {function} opts.onExpandRowCallback 行展开事件回调函数
     * @param {array} opts.dataColumns 需绑定的数据列
+    * @param {function} opts.onExpandRowCallback 行展开事件回调函数
     *****************************************************************/
     manageTable: function (opts) {
         //参数初始化
@@ -173,13 +173,14 @@ window.tableView = {
         opts.ajaxUrl = opts.ajaxUrl || "";
         opts.ajaxMethod = opts.ajaxMethod || "get";
         opts.queryParamsCallback = opts.queryParamsCallback || Function;
-        opts.onExpandRowCallback = opts.onExpandRowCallback || Function;
         opts.dataColumns = opts.dataColumns || [];
+        opts.onExpandRowCallback = opts.onExpandRowCallback || Function;
         //父表实列
         this.instance = $("#" + opts.tableId);
         //初始化table组件
         this.instance.bootstrapTable({
-            uniqueId: "ID",
+            theadClasses: "thead-blue",
+            uniqueId: "id",
             toolbar: "#" + opts.toolbarId,
             showHeader: true,
             showLoading: true,
@@ -195,11 +196,11 @@ window.tableView = {
             url: opts.ajaxUrl,
             method: opts.ajaxMethod,
             queryParams: function (params) {
-                var querys = opts.queryParamsCallback();
-                return $.extend({}, params, querys);
+                return $.extend({}, params, opts.queryParamsCallback());
             },
             paginationLoop: false,
             pagination: opts.paging,
+            onlyInfoPagination: true,
             sidePagination: opts.paginator,
             pageNumber: 1,
             pageSize: 10,
@@ -213,7 +214,7 @@ window.tableView = {
                 console.log("数据加载成功");
             },
             onExpandRow: function (index, row, $detail) {
-                opts.onExpandRowCallback(index, row, $detail);
+                opts.onExpandRowCallback(index, row, $detail)
             }
         });
         //获取table组件已选择行
@@ -229,48 +230,47 @@ window.tableView = {
 
     /******************************************************************
      * bootstrapTable子表组件封装
-     * @param {object} opts 参数对象
-     * @param {json} opts.rowCode 主表行数据
-     * @param {object} opts.detail 主表行装载详细视图的容器对象
-     * @param {bool} opt.showDetail 显示详细视图，默认false
-     * @param {string} opts.ajaxUrl ajax请求地址
-     * @param {string} opts.ajaxMethod ajax请求类型
-     * @param {function} opts.queryParamsCallback ajax请求参数回调方法
-     * @param {function} opts.onExpandRowCallback 行展开回调方法
-     * @param {array} opts.dataColumns 数据列数组
+     * @param {object} parms 参数对象
+     * @param {json} parms.rowCode 主表行数据
+     * @param {object} parms.detail 主表行装载详细视图的容器对象
+     * @param {bool} parms.showDetail 显示详细视图，默认false
+     * @param {string} parms.ajaxUrl ajax请求地址
+     * @param {string} parms.ajaxMethod ajax请求类型
+     * @param {function} parms.queryParamsCallback ajax请求参数回调方法
+     * @param {function} parms.onExpandRowCallback 行展开回调方法
+     * @param {array} parms.dataColumns 数据列数组
      ******************************************************************/
-    detailTable: function (opts) {
+    detailTable: function (parms) {
         //参数初始化
-        opts = opts || {};
-        opts.data = opts.data || {};
-        opts.rowCode = opts.rowCode || null;
-        opts.detail = opts.detail || null;
-        opts.showDetail = opts.showDetail || false;
-        opts.ajaxUrl = opts.ajaxUrl || "";
-        opts.ajaxMethod = opts.ajaxMethod || "get";
-        opts.queryParamsCallback = opts.queryParamsCallback || Function;
-        opts.onExpandRowCallback = opts.onExpandRowCallback || Function;
-        opts.dataColumns = opts.dataColumns || [];
+        parms = parms || {};
+        parms.data = parms.data || {};
+        parms.rowCode = parms.rowCode || null;
+        parms.detail = parms.detail || null;
+        parms.showDetail = parms.showDetail || false;
+        parms.ajaxUrl = parms.ajaxUrl || "";
+        parms.ajaxMethod = parms.ajaxMethod || "get";
+        parms.queryParamsCallback = parms.queryParamsCallback || Function;
+        parms.dataColumns = parms.dataColumns || [];
+        parms.onExpandRowCallback = parms.onExpandRowCallback || Function;
+        parms.onPer
         //实例
-        this.instance = opts.detail.html("<table></table>").find("table");
+        this.instance = parms.detail.html("<table class='table table-hover table-sm'></table>").find("table");
         //初始化
         this.instance.bootstrapTable({
-            uniqueId: "ID",
+            uniqueId: "id",
             showHeader: false,
             showLoading: true,
             clickToSelect: true,
-            striped: true,
-            data: opts.data,
-            detailView: opts.showDetail,
+            striped: false,
+            data: parms.data,
+            detailView: parms.showDetail,
             cache: false,
-            url: opts.ajaxUrl,
-            method: opts.ajaxMethod,
+            url: parms.ajaxUrl,
+            method: parms.ajaxMethod,
             queryParams: function (params) {
-                var querys = opts.queryParamsCallback();
-                return $.extend({}, params, querys);
+                return $.extend({}, params, parms.queryParamsCallback());
             },
-            //queryParams: opts.queryParamsCallback,
-            columns: opts.dataColumns,
+            columns: parms.dataColumns,
             responseHandler: function (data) {
                 console.log(data);
                 return data;
@@ -279,7 +279,7 @@ window.tableView = {
                 console.log("行table组件数据已加载");
             },
             onExpandRow: function (index, row, $detail) {
-                opts.onExpandRowCallback(index, row, $detail);
+                parms.onExpandRowCallback(index, row, $detail)
             }
         });
         //获取已选中的checkbox集合 
