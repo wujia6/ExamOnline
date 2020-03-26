@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Application.DTO.Models;
 using Application.IServices;
 using Domain.Entities.RoleAgg;
 using Infrastructure.Utils;
-using Newtonsoft.Json;
 
 namespace ExamUI.Controllers
 {
@@ -19,26 +16,24 @@ namespace ExamUI.Controllers
     public class RoleController : Controller
     {
         private readonly IRoleService roleService;
-        private readonly IPermssionService permissionService;
         private readonly CacheUtils cacheUtils;
 
-        public RoleController(IRoleService _roleService, IPermssionService _permissionService, CacheUtils cache)
+        public RoleController(IRoleService _roleService, CacheUtils cache)
         {
             this.roleService = _roleService ?? throw new ArgumentNullException(nameof(roleService));
-            this.permissionService = _permissionService ?? throw new ArgumentNullException(nameof(permissionService));
             this.cacheUtils = cache ?? throw new ArgumentNullException(nameof(cacheUtils));
         }
 
         [HttpGet]
-        public async Task<IActionResult> Browse()
+        public IActionResult Browse()
         {
-            //获取缓存的全部权限
-            var models = await cacheUtils.GetCacheAsync("ApplicationPermissions", async () =>
-             {
-                return await permissionService.QueryAsync();
-             });
-            ViewBag.AllPermissions = JsonConvert.SerializeObject(models);
             return View();
+        }
+
+        [HttpPost]
+        public PartialViewResult EditForm()
+        {
+            return PartialView("EditForm");
         }
 
         [HttpGet]
@@ -72,8 +67,8 @@ namespace ExamUI.Controllers
         [HttpPost]
         public async Task<JsonResult> RemoveAsync(int rid)
         {
-            return await roleService.RemoveAsync(express:src=>src.ID==rid && src.ID != 1)?
-                Json(new HttpResult { Success = true, Message = "操作成功" }) : 
+            return await roleService.RemoveAsync(express: src => src.ID == rid && src.ID != 1) ?
+                Json(new HttpResult { Success = true, Message = "操作成功" }) :
                 Json(new HttpResult { Success = false, Message = "操作失败，请重试" });
         }
 

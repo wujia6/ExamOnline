@@ -54,21 +54,5 @@ namespace Domain.Manages
                 efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
             return await efCore.EntitySet.ToListAsync();
         }
-
-        //public async Task<object> QueryAsync(
-        //    int offset, int limit,
-        //    ISpecification<RoleInfo> spec = null,
-        //    Func<IQueryable<RoleInfo>, IIncludableQueryable<RoleInfo, object>> include = null)
-        //{
-        //    if (include != null)
-        //        efCore.EntitySet = include(efCore.EntitySet);
-        //    if (spec != null)
-        //        efCore.EntitySet = efCore.EntitySet.Where(spec.Expression);
-        //    return new
-        //    {
-        //        Total = await efCore.EntitySet.CountAsync(),
-        //        Rows = await efCore.EntitySet.Skip(offset).Take(limit).ToListAsync()
-        //    };
-        //}
     }
 }

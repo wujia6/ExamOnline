@@ -78,7 +78,7 @@ var formUtils = {
         $(":input", frm)
             .not(":button", ":submit", ":reset", ":option").val('')
             .removeAttr("checked");
-        $(":option: first-child", frm).attr("selected", true);
+        frm.find("option: first-child").attr("selected", true);
         $(frm)[0].reset();
     },
 
@@ -117,7 +117,7 @@ var formUtils = {
 var layerUtils = {
     //弹窗
     alert: function (msg) {
-        lyer.alert(msg, { icon: 1, closeButton: 0 }, function (index) {
+        layer.alert(msg, { icon: 1, closeButton: 0 }, function (index) {
             layer.close(index);
         });
     },
@@ -127,8 +127,8 @@ var layerUtils = {
     tips: function (msg, elementId) { layer.tips(msg, elementId); },
     //询问
     confirm: function (msg, callback) {
-        layer.confirm(msg, { icon: 3, title: '提示' }, function (index) {
-            callback(index);
+        layer.confirm(msg, { icon: 3, title: '警告' }, function (index) {
+            callback();
             layer.close(index);
         });
     },

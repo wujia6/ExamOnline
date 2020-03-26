@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Domain.Entities;
 using Domain.IComm;
@@ -52,7 +53,8 @@ namespace Infrastructure.Repository
         {
             try
             {
-                ApplicationContext.Set<T>().RemoveRange(entities);
+                ApplicationContext.Set<T>().AttachRange(entities);
+                ApplicationContext.Entry(entities).State = EntityState.Deleted;
                 return true;
             }
             catch (Exception)

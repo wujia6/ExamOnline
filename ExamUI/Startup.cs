@@ -60,55 +60,19 @@ namespace ExamUI
             return new AutofacServiceProvider(ApplicationContainer);
         }
 
-        //请求管道中间件配置
+        //配置请求管道中间件
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
             else
             {
-                app.UseExceptionHandler("/Start/Home/Error");
+                app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-            app.UseStaticFiles();
+            app.UseStaticFiles();   //使用静态文件中间件
             app.UseSession();   //启用session中间件
             app.UseAuthentication();    //身份验证中间件
-            //app.UseMvc(routes =>
-            //{
-            //    //添加区域路由
-            //    routes.MapRoute(
-            //        name: "system",
-            //        template: "Sys/{controller}/{action}/{id?}",
-            //        defaults: new { area = "Sys" },
-            //        constraints: new { area = "Sys" });
-            //    routes.MapRoute(
-            //        name: "classes",
-            //        template: "Cls/{controller}/{action}/{id?}",
-            //        defaults: new { area = "Cls" },
-            //        constraints: new { area = "Cls" });
-            //    routes.MapRoute(
-            //        name: "teacher",
-            //        template: "Thr/{controller}/{action}/{id?}",
-            //        defaults: new { area = "Thr" },
-            //        constraints: new { area = "Thr" });
-            //    routes.MapRoute(
-            //        name: "student",
-            //        template: "Stu/{controller}/{action}/{id?}",
-            //        defaults: new { area="Stu" },
-            //        constraints: new { area="Stu" });
-            //    routes.MapRoute(
-            //        name: "examination", 
-            //        template: "Exam/{controller}/{action}/{id?}",
-            //        defaults: new { area="Exam" },
-            //        constraints: new { area="Exam" });
-            //    routes.MapRoute(
-            //        name: "start",
-            //        template: "Start/{controller}/{action}/{id?}",
-            //        defaults: new { area = "Start" },
-            //        constraints: new { area = "Start" });
-            //    //默认路由
-            //    routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
-            //});
             app.UseMvcWithDefaultRoute();   //启用mvc默认路由中间件
         }  
     }

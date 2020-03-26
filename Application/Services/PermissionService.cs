@@ -57,16 +57,16 @@ namespace Application.Services
         public async Task<List<PermissionDto>> QueryAsync(Expression<Func<PermissionInfo, bool>> express = null)
         {
             var spec = express == null ? null : Specification<PermissionInfo>.Eval(express);
-            var entreies = await permssionManage.QueryAsync(spec);
-            var models = entreies.MapToList<PermissionDto>();
+            var entities = await permssionManage.QueryAsync(spec);
+            var models = entities.MapToList<PermissionDto>();
             return CommonUtils.Recursion(models);
         }
 
         public async Task<PageResult<PermissionDto>> PaginatorAsync(int offset, int limit, Expression<Func<PermissionInfo, bool>> express = null)
         {
             var spec = express == null ? null : Specification<PermissionInfo>.Eval(express);
-            var entrys = await permssionManage.QueryAsync(spec);
-            var anonymous = new { total = entrys.Count(), rows = entrys.Skip(offset).Take(limit) };
+            var entities = await permssionManage.QueryAsync(spec);
+            var anonymous = new { total = entities.Count(), rows = entities.Skip(offset).Take(limit) };
             return anonymous.ToPageResult<PermissionDto>();
         }
     }

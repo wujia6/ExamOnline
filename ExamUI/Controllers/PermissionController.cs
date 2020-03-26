@@ -67,7 +67,7 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> QueryAsync(int? id, int? lid, int? tpid)
+        public async Task<JsonResult> SearchAsync(int? id, int? lid, int? tpid)
         {
             Expression<Func<PermissionInfo, bool>> express = src => true;
             if (id.HasValue)

@@ -20,8 +20,8 @@ namespace Domain.Entities.RoleAgg
         {
             builder.HasKey(e => e.ID);
             builder.Property(e => e.Remarks).HasMaxLength(50);
-            builder.HasOne(e => e.RoleInformation).WithMany(s => s.RoleAuthorizes);
-            builder.HasOne(e => e.PermissionInformation).WithMany(s => s.RoleAuthorizes);
+            builder.HasOne(e => e.RoleInformation).WithMany(s => s.RoleAuthorizes).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(e => e.PermissionInformation).WithMany(s => s.RoleAuthorizes).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
