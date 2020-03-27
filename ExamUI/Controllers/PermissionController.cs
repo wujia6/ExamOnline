@@ -93,7 +93,14 @@ namespace ExamUI.Controllers
         [HttpGet]
         public IActionResult Browse()
         {
+            ViewData["PermissionType"] = CommonUtils.GetSelectList(20, 23);
             return View();
+        }
+
+        [HttpPost]
+        public PartialViewResult EditorPartial()
+        {
+            return PartialView("EditorPartial");
         }
 
         [HttpGet]

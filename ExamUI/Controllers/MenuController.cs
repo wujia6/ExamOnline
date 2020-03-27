@@ -49,9 +49,9 @@ namespace ExamUI.Controllers
         }
 
         [HttpPost]
-        public async Task<PartialViewResult> EditPartial()
+        public PartialViewResult EditPartial()
         {
-            var result = await menuService.QueryAsync();
+            //var result = await menuService.QueryAsync();
             //result.Insert(0, new MenuDto { ID = 0, Title = "--所属父类--" });
             //ViewData["ParentList"] = new SelectList(result.AsEnumerable(), "ID", "Title");
             //ViewData["MenuTypeList"] = GlobalUtils.GetSelectList(20, 23);

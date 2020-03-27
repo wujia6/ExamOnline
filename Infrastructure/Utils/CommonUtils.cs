@@ -33,7 +33,7 @@ namespace Infrastructure.Utils
         中级 = 18,
         高级 = 19,
         //权限类型
-        menu = 20,
+        root = 20,
         module = 21,
         controller = 22,
         action = 23,
@@ -74,7 +74,7 @@ namespace Infrastructure.Utils
                     selectList.Add(item);
                 }
             }
-            selectList.Insert(0, new SelectListItem { Text = "--所有类型--", Value = "0", Selected = true });
+            //selectList.Insert(0, new SelectListItem { Text = "--所有类型--", Value = "0", Selected = true });
             return new SelectList(selectList.AsEnumerable(), "Value", "Text");
         }
 

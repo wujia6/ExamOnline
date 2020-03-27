@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\lib\bootstrap\fonts\glyphicons-halflings-regular.svg" />
-    <None Include="wwwroot\lib\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="wwwroot\lib\bootstrap-table\extensions\group-by-v2\bootstrap-table-group-by.js" />
+    <None Include="wwwroot\lib\bootstrap-table\extensions\group-by-v2\bootstrap-table-group-by.min.js" />
     <None Include="wwwroot\lib\icheck-bootstrap\LICENSE" />
   </ItemGroup>
 
