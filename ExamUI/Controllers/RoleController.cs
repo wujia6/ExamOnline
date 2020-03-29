@@ -9,6 +9,7 @@ using Application.DTO.Models;
 using Application.IServices;
 using Domain.Entities.RoleAgg;
 using Infrastructure.Utils;
+using Newtonsoft.Json;
 
 namespace ExamUI.Controllers
 {
@@ -73,19 +74,24 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetAuthorizesByRole(string code)
+        public async Task<IActionResult> GetAuthorizesByRole(string code)
         {
             //var result = await Task.Run(async ()=> { });
-            var roleCode = User.FindFirstValue(ClaimTypes.Role);
             //获取角色授权
-            var authorizesDtos = await cacheUtils.GetCacheAsync(roleCode, async () =>
+            //var model = await roleService.SingleAsync(
+            //        express: src => src.Code.Contains(code),
+            //        include: src => src.Include(inf => inf.RoleAuthorizes).ThenInclude(p => p.PermissionInformation));
+            ////ViewBag.SelectedRole = JsonConvert.SerializeObject(model.PermssionDtos);
+            //return Json(model.PermssionDtos);
+            //var roleCode = User.FindFirstValue(ClaimTypes.Role);
+            var dtoResult = await cacheUtils.GetCacheAsync(code, async () =>
             {
                 var model = await roleService.SingleAsync(
                 express: src => src.Code.Contains(code),
                 include: src => src.Include(inf => inf.RoleAuthorizes).ThenInclude(p => p.PermissionInformation));
                 return model.PermssionDtos;
             });
-            return Json(authorizesDtos);
+            return Json(dtoResult);
         }
     }
 }

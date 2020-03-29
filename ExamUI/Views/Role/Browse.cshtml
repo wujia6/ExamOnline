@@ -24,11 +24,11 @@
                     <div class="form-inline">
                         <h4 class="card-title col-md-2 d-md-inline text-right">查询条件</h4>
                         <div class="input-group col-md-4">
-                            <span class="input-group-addon"><i class="fade fa-user"></i></span>
+                            @*<span class="input-group-addon"><i class="fade fa-user"></i></span>*@
                             <input type="text" id="txt_search_role" class="form-control" placeholder="角色名称关键字">
                         </div>
                         <div class="input-group col-md-4">
-                            <span class="input-group-addon"><i class="fade fa-code"></i></span>
+                            @*<span class="input-group-addon"><i class="fade fa-code"></i></span>*@
                             <input type="text" id="txt_search_code" class="form-control" placeholder="角色代码关键字">
                         </div>
                         <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i></button>
@@ -48,7 +48,7 @@
                         <button type="button" id="btn_edit" class="btn btn-default"><i class="fas fa-edit"></i> 编辑</button>
                         <button type="button" id="btn_remove" class="btn btn-default"><i class="fas fa-trash"></i> 删除</button>
                     </div>
-                    <table id="tab_roles"></table>
+                    <table id="tab_roles" class="table table-hover"></table>
                 </div>
             </div>
         </div>
@@ -77,7 +77,7 @@
             ],
             onExpandRowCallback: function (index, row, $detail) {  //行展开事件
                 //获取指定角色授权
-                var assDtos = $.getJSON("/Role/GetAuthorizesByRole", {code: row.code}, function (data) {
+                var rootAuths = $.getJSON("/Role/GetAuthorizesByRole", { code: row.code }, function (data) {
                     return data;
                 });
                 //初始模块集table
@@ -101,13 +101,11 @@
                                 { field: "named", width: "120", align: "center", valign: "middle" },
                                 { field: "enabled", width: "120", align: "center", valign: "middle" },
                                 { field: "", width: "700", align: "left", valign: "middle", formatter: function (index, row, value) {
-                                    var dtos = row.childs;
                                     var domEle = $("<div class='col-sm-offset-2 col-sm-10'></div>");
-                                    for (var key in dtos) {
-                                        if (dtos[key].typeAt == "action")
-                                            domEle.append("<div class='checkbox d-md-inline  ml-1 mr-1'><label><input type='checkbox' checked='" +
-                                                isExist(assDtos, dtos[key].id) + "' value='" + dtos[key].id + "'> " + dtos[key].named + "</label></div>");
-                                    }
+                                    $.each(row.childs, function (i, obj) {
+                                        var result = isExist(obj.id, rootAuths.responseJSON) ? "checked" : "";
+                                        domEle.append("<div class='checkbox d-md-inline  ml-1 mr-1'><label><input type='checkbox' value='" + obj.id + "' checked='" + result + "'> " + obj.named + "</label></div>");
+                                    });
                                     return domEle.html();
                                 }}
                             ]
@@ -118,16 +116,11 @@
         });
 
         //指定键值是否存在
-        function isExist(jsonData, id) {
-            if (jsonData == null || jsonData == "undefined")
-                return false;
-            for (key in jsonData) {
-                var entry = jsonData[key];
-                if (entry.key != id) {
-                    if (entry.childs != null && entry.childs != "undefined") 
-                        if (isExist(entry.childs, id)) return true;
-                } else
-                    return true;
+        function isExist(id, json) {
+            if (json != null && json != "undefined") {
+                $.each(json, function (i, obj) {
+                    return obj.id == id ? true : isExist(id, obj.childs);
+                });
             }
             return false;
         }

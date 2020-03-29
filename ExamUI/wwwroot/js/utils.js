@@ -179,14 +179,13 @@ window.tableView = {
         this.instance = $("#" + opts.tableId);
         //初始化table组件
         this.instance.bootstrapTable({
-            //theadClasses: "thead-blue",
-            classes:"table table-hover",
+            //classes: "table table-hover",
             theadClasses: "thead-light",
             uniqueId: "id",
             toolbar: "#" + opts.toolbarId,
             showHeader: true,
             showLoading: true,
-            striped: true,
+            //striped: true,
             clickToSelect: true,
             search: false,
             //searchOnEnterKey: true,
@@ -255,10 +254,9 @@ window.tableView = {
         parms.dataColumns = parms.dataColumns || [];
         parms.onExpandRowCallback = parms.onExpandRowCallback || Function;
         //实例
-        this.instance = parms.detail.html("<table></table>").find("table");
+        this.instance = parms.detail.html("<table class='table table-striped table-sm table-bordered table-borderless'></table>").find("table");
         //初始化
         this.instance.bootstrapTable({
-            classes: "table table-bordered table-striped table-borderless table-sm",
             uniqueId: "id",
             showHeader: false,
             showLoading: true,

@@ -106,10 +106,11 @@ namespace ExamUI.Controllers
         [HttpGet]
         public async Task<JsonResult> GetPermissionAllAsync()
         {
-            var models = await cacheUtils.GetCacheAsync("ApplicationPermissions", async () =>
-            {
-                return await permissionService.QueryAsync();
-            });
+            //var models = await cacheUtils.GetCacheAsync("ApplicationPermissions", async () =>
+            //{
+            //    return await permissionService.QueryAsync();
+            //});
+            var models = await permissionService.QueryAsync();
             return Json(models);
         }
     }
