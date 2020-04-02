@@ -38,20 +38,6 @@ namespace ExamUI.Components
                     .PermssionDtos;
             });
             return View(dtos);
-
-            //if (!(appCache.Get(roleKeys) is List<PermissionDto> dtos))
-            //{
-                //dtos = roleService.SingleAsync(express: inf => inf.Code.Contains(roleKeys),
-                //    include: inf => inf.Include(r => r.RoleAuthorizes).ThenInclude(p => p.PermissionInformation))
-                //    .Result.PermssionDtos;
-
-            //    appCache.Set(roleKeys, dtos, new MemoryCacheEntryOptions
-            //    {
-            //        AbsoluteExpiration = DateTime.Now.AddMinutes(5),
-            //        Priority = CacheItemPriority.Normal
-            //    });
-            //}
-            //return View(dtos);
         }
     }
 }
