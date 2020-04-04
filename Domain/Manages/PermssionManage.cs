@@ -40,9 +40,9 @@ namespace Domain.Manages
             return await efCore.EntitySet.ToListAsync();
         }
 
-        public async Task<PermissionInfo> SingleAsync(ISpecification<PermissionInfo> spec)
-        {
-            return await efCore.EntitySet.FirstOrDefaultAsync(spec.Expression);
-        }
+        //public async Task<PermissionInfo> SingleAsync(ISpecification<PermissionInfo> spec)
+        //{
+        //    return await efCore.EntitySet.FirstOrDefaultAsync(spec.Expression);
+        //}
     }
 }

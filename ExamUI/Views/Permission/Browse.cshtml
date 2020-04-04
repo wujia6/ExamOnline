@@ -73,6 +73,21 @@
             ]
         });
 
+        //分部页下拉列表关联事件
+        $("#TypeAt").change(function (e) {
+            var selectedValue = e.target.value;
+            $.getJSON("/Permission/QueryAsync", { tp: selectedVaLue }, function (data) {
+                if (data == null || data == "undefined") {
+                    layerUtils.alert("数据源获取失败，请重新运行");
+                    return;
+                }
+                $.each(data, function (idx, obj) {
+                    $("#sel_levelId").append("<option value='" + obj.id + "'>" + obj.named + "</option>");
+                });
+                //$("#sel_levelId").prepend("<option value = '0' >指定父类</option >");
+            });
+        });
+
         //搜索
         $("#btn_query").click(function () {
             mgrTable.setRefresh();
@@ -101,10 +116,48 @@
         });
 
         //编辑
-        $("#btn_edit").click(function () { });
+        $("#btn_edit").click(function () {
+            var selectedRows = mgrTable.instance.getSelecteds();
+            if (selectedRows.length != 1) {
+                layerUtils.info("请选择有效数据行", 2);
+                return;
+            }
+            //打开模态框
+            modalUtils.showModal({
+                remote: "/Permission/EditorPartial",
+                title: "编辑权限项",
+                onOpenedEvent: function () {
+                    formUtils.echo($("#frm_permission_editor"), selectedRows[0]);
+                },
+                onClosedEvent: function () {
+                    mgrTable.setRefresh();
+                },
+                onSaveEvent: function () {
+                    var frmObj = $("#frm_permission_editor");
+                    $.post("/Permission/EditAsync", { model: frmObj.serializeObject() }, function (result) {
+                        layerUtils.alert(result.message);
+                        if (result.success)
+                            formUtils.clear(frmObj);
+                    });
+                }
+            })
+        });
 
         //删除
-        $("#btn_remove").click(function () { });
+        $("#btn_remove").click(function () {
+            var selectRows = mgrTable.getSelecteds();
+            if (selectRows.length != 1) {
+                layerUtils.info("请选择有效数据行。", 2);
+                return;
+            }
+            layerUtils.confirm("确定删除选择项？其关联数据也同时删除！", function () {
+                $.post("/Permission/RemoveAsync", { id: selectRows[0].id }, function (result) {
+                    layerUtils.alert(result.message);
+                    if (result.success)
+                        mgrTable.setRefresh();
+                });
+            });
+        });
     })
 </script>
 

@@ -16,7 +16,7 @@ namespace Application.IServices
 
         Task<bool> RemoveAsync(Expression<Func<PermissionInfo, bool>> express);
 
-        Task<PermissionDto> SingleAsync(Expression<Func<PermissionInfo, bool>> express);
+        //Task<PermissionDto> SingleAsync(Expression<Func<PermissionInfo, bool>> express);
 
         Task<List<PermissionDto>> QueryAsync(Expression<Func<PermissionInfo, bool>> express = null);
 

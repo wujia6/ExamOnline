@@ -47,12 +47,12 @@ namespace Application.Services
             return permssionManage.RemoveAt(spec) ? await context.SaveChangesAsync() > 0 : false;
         }
 
-        public async Task<PermissionDto> SingleAsync(Expression<Func<PermissionInfo, bool>> express)
-        {
-            var spec = Specification<PermissionInfo>.Eval(express);
-            var entry = await permssionManage.SingleAsync(spec);
-            return entry.MapTo<PermissionDto>();
-        }
+        //public async Task<PermissionDto> SingleAsync(Expression<Func<PermissionInfo, bool>> express)
+        //{
+        //    var spec = Specification<PermissionInfo>.Eval(express);
+        //    var entry = await permssionManage.SingleAsync(spec);
+        //    return entry.MapTo<PermissionDto>();
+        //}
 
         public async Task<List<PermissionDto>> QueryAsync(Expression<Func<PermissionInfo, bool>> express = null)
         {

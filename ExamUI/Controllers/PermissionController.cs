@@ -52,16 +52,26 @@ namespace ExamUI.Controllers
                 Json(new HttpResult { Success = false, Message = "操作失败" });
         }
 
-        [HttpGet]
-        public async Task<JsonResult> SingleAsync(int id, int? lid, int? tpid)
+        [HttpPost]
+        public PartialViewResult EditorPartial()
         {
-            Expression<Func<PermissionInfo, bool>> express = src => src.ID == id;
-            if (lid.HasValue)
-                express = src => express.Compile()(src) && src.LevelID == lid;
-            if (tpid.HasValue)
-                express = src => express.Compile()(src) && src.TypeAt == tpid;
-            var model = await permissionService.SingleAsync(express);
-            return Json(model);
+            ViewData["PermissionType"] = CommonUtils.GetSelectList(20, 23);
+            return PartialView("EditorPartial");
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> QueryAsync(string tp = null)
+        {
+            var models = await cacheUtils.GetCacheAsync("ApplicationPermissions", async () =>
+            {
+                return await permissionService.QueryAsync();
+            });
+
+            if (models == null || models.Count == 0)
+                return Json(new { Success = false, Message = "数据源获取失败" });
+            else if (!string.IsNullOrEmpty(tp))
+                models = models.FindAll((PermissionDto dto) => dto.TypeAt == CommonUtils.GetCommonEnumName(int.Parse(tp)));
+            return Json(models);
         }
 
         [HttpGet]
@@ -85,22 +95,27 @@ namespace ExamUI.Controllers
             return View();
         }
 
-        [HttpPost]
-        public PartialViewResult EditorPartial()
-        {
-            ViewData["PermissionType"] = CommonUtils.GetSelectList(20, 23);
-            return PartialView("EditorPartial");
-        }
+        //[HttpGet]
+        //public async Task<JsonResult> SingleAsync(int id, int? lid, int? tpid)
+        //{
+        //    Expression<Func<PermissionInfo, bool>> express = src => src.ID == id;
+        //    if (lid.HasValue)
+        //        express = src => express.Compile()(src) && src.LevelID == lid;
+        //    if (tpid.HasValue)
+        //        express = src => express.Compile()(src) && src.TypeAt == tpid;
+        //    var model = await permissionService.SingleAsync(express);
+        //    return Json(model);
+        //}
 
-        [HttpGet]
-        public async Task<JsonResult> GetPermissionAllAsync()
-        {
-            var models = await cacheUtils.GetCacheAsync("ApplicationPermissions", async () =>
-            {
-                return await permissionService.QueryAsync();
-            });
-            //var models = await permissionService.QueryAsync();
-            return Json(models);
-        }
+        //[HttpGet]
+        //public async Task<JsonResult> GetPermissionAllAsync()
+        //{
+        //    var models = await cacheUtils.GetCacheAsync("ApplicationPermissions", async () =>
+        //    {
+        //        return await permissionService.QueryAsync();
+        //    });
+        //    //var models = await permissionService.QueryAsync();
+        //    return Json(models);
+        //}
     }
 }

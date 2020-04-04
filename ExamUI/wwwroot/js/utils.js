@@ -180,7 +180,7 @@ window.tableView = {
         this.instance = $("#" + opts.tableId);
         //初始化table组件
         this.instance.bootstrapTable({
-            classes: "table table-hover table-striped",
+            classes: "table table-hover table-striped table-bordered",
             theadClasses: "thead-light",
             uniqueId: "id",
             toolbar: "#" + opts.toolbarId,
@@ -291,19 +291,4 @@ window.tableView = {
         };
         return this;
     }
-}
-
-var JsonUtils = {
-    /**
-     * 指定键值是否存在
-     * @param {JSON} source json
-     * @param {string} key 键值
-     */
-    isExist: function (source, key) {
-        $.each(source, function (idx, obj) {
-            if (obj.id == key) 
-                return true;
-        });
-        return false;
-    },
 }

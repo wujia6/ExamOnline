@@ -83,7 +83,7 @@
                     //rowCode: row.code,
                     detail: $detail,
                     showDetail: true,
-                    ajaxUrl: "/Permission/GetPermissionAllAsync",   //获取所有授权
+                    ajaxUrl: "/Permission/QueryAsync",   //获取所有授权
                     dataColumns: [
                         { field: "named", align: "left", valign: "middle" },
                         { field: "typeAt", align: "left", valign: "middle" },
@@ -174,7 +174,7 @@
                     mgrTable.setRefresh();
                 },
                 onSaveEvent: function () {
-                    var frmObj = $("#frm_role_edit")
+                    var frmObj = $("#frm_role_edit");
                     $.post("/Role/EditAsync", { model: frmObj.serializeObject() }, function (result) {
                         layerUtils.alert(result.message);
                         if (result.success)

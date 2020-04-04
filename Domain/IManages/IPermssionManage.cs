@@ -13,7 +13,7 @@ namespace Domain.IManages
 
         bool RemoveAt(ISpecification<PermissionInfo> spec);
 
-        Task<PermissionInfo> SingleAsync(ISpecification<PermissionInfo> spec);
+        //Task<PermissionInfo> SingleAsync(ISpecification<PermissionInfo> spec);
 
         Task<IEnumerable<PermissionInfo>> QueryAsync(ISpecification<PermissionInfo> spec = null);
     }
