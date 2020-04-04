@@ -24,14 +24,14 @@ namespace Application.DTO.Profiles
             //权限映射
             CreateMap<PermissionInfo, PermissionDto>()
                 .ForMember(dst => dst.TypeAt, opt => opt.MapFrom(src => CommonUtils.GetCommonEnumName(src.TypeAt)))
-                .ForMember(dst => dst.Enabled, opt => opt.MapFrom(src => src.Enabled ? "启用" : "未启用"))
+                .ForMember(dst => dst.Enabled, opt => opt.MapFrom(src => src.Enabled ? "是" : "否"))
                 .ForMember(dst => dst.Childs, opt => opt.Ignore());
             CreateMap<PermissionDto, PermissionInfo>()
-                .ForMember(dst => dst.Enabled, opt => opt.MapFrom(src => src.Enabled == "启用" ? true : false))
+                .ForMember(dst => dst.Enabled, opt => opt.MapFrom(src => src.Enabled == "是" ? true : false))
                 .ForMember(dst => dst.RoleAuthorizes, opt => opt.Ignore());
             //菜单映射
             CreateMap<MenuInfo, MenuDto>()
-                .ForMember(dst => dst.Enabled, opt => opt.MapFrom(src => src.Enabled ? "启用" : "未启用"))
+                .ForMember(dst => dst.Enabled, opt => opt.MapFrom(src => src.Enabled ? "是" : "否"))
                 .ReverseMap();
             //角色映射
             CreateMap<RoleInfo, RoleDto>()

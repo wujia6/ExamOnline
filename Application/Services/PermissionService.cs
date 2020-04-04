@@ -66,7 +66,7 @@ namespace Application.Services
         {
             var spec = express == null ? null : Specification<PermissionInfo>.Eval(express);
             var entities = await permssionManage.QueryAsync(spec);
-            var anonymous = new { total = entities.Count(), rows = entities.Skip(offset).Take(limit) };
+            var anonymous = new { Total = entities.Count(), Rows = entities.Skip(offset).Take(limit) };
             return anonymous.ToPageResult<PermissionDto>();
         }
     }

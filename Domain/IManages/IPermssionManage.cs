@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Query;
+﻿using System.Threading.Tasks;
 using Domain.Entities.PermissionAgg;
 using Domain.IComm;
 using System.Collections.Generic;

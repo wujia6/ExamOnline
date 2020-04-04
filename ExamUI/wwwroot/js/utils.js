@@ -7,7 +7,7 @@ $.fn.serializeObject = function () {
         }
         return data;
     }, {});
-};
+}
 
 //modal组件封装
 var modalUtils = {
@@ -66,7 +66,7 @@ var modalUtils = {
             });
         }).modal("show");
     }
-};
+}
 
 //form封装
 var formUtils = {
@@ -77,9 +77,10 @@ var formUtils = {
     clear: function (frm) {
         $(":input", frm)
             .not(":button", ":submit", ":reset", ":option").val('')
+            .find("option:contains(0)").attr("selected", true)
             .removeAttr("checked");
-        frm.find("option: first-child").attr("selected", true);
-        $(frm)[0].reset();
+        //frm.find("option:contains(0)").attr("selected", true);
+        //frm.reset();
     },
 
     /****************************************************
@@ -111,7 +112,7 @@ var formUtils = {
                 dmEle.val(strJson[key]);
         }
     }
-};
+}
 
 //layer组件封装
 var layerUtils = {
@@ -144,7 +145,7 @@ var layerUtils = {
             content: contentHtml
         });
     }
-};
+}
 
 //表组件
 window.tableView = {
@@ -179,33 +180,31 @@ window.tableView = {
         this.instance = $("#" + opts.tableId);
         //初始化table组件
         this.instance.bootstrapTable({
-            //classes: "table table-hover",
+            classes: "table table-hover table-striped",
             theadClasses: "thead-light",
             uniqueId: "id",
             toolbar: "#" + opts.toolbarId,
             showHeader: true,
             showLoading: true,
-            //striped: true,
             clickToSelect: true,
             search: false,
-            //searchOnEnterKey: true,
-            detailView: opts.showDetail,
             showColumns: true,
             showRefresh: true,
             showToggle: true,
             cache: false,
+            //onlyInfoPagination: true,
+            paginationLoop: false,
+            pageNumber: 1,
+            pageSize: 10,
+            pageList: [10, 25, 50, 100],
+            detailView: opts.showDetail,
             url: opts.ajaxUrl,
             method: opts.ajaxMethod,
             queryParams: function (params) {
                 return $.extend({}, params, opts.queryParamsCallback());
             },
-            paginationLoop: false,
             pagination: opts.paging,
-            onlyInfoPagination: true,
             sidePagination: opts.paginator,
-            pageNumber: 1,
-            pageSize: 10,
-            pageList: [10, 25, 50, 100],
             columns: opts.dataColumns,
             responseHandler: function (data) {
                 console.log(data);
@@ -254,16 +253,17 @@ window.tableView = {
         parms.dataColumns = parms.dataColumns || [];
         parms.onExpandRowCallback = parms.onExpandRowCallback || Function;
         //实例
-        this.instance = parms.detail.html("<table class='table table-striped table-sm table-bordered table-borderless'></table>").find("table");
+        this.instance = parms.detail.html("<table></table>").find("table");
         //初始化
         this.instance.bootstrapTable({
+            classes: "table table-striped table-sm table-bordered table-borderless",
             uniqueId: "id",
             showHeader: false,
             showLoading: true,
             clickToSelect: true,
+            cache: false,
             data: parms.data,
             detailView: parms.showDetail,
-            cache: false,
             url: parms.ajaxUrl,
             method: parms.ajaxMethod,
             queryParams: function (params) {
@@ -291,4 +291,19 @@ window.tableView = {
         };
         return this;
     }
+}
+
+var JsonUtils = {
+    /**
+     * 指定键值是否存在
+     * @param {JSON} source json
+     * @param {string} key 键值
+     */
+    isExist: function (source, key) {
+        $.each(source, function (idx, obj) {
+            if (obj.id == key) 
+                return true;
+        });
+        return false;
+    },
 }

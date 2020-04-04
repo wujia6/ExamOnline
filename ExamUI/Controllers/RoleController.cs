@@ -45,7 +45,7 @@ namespace ExamUI.Controllers
                 express = src => express.Compile()(src) && src.Name.Contains(name);
             if (!string.IsNullOrEmpty(code))
                 express = src => express.Compile()(src) && src.Code.Contains(code);
-            var pageResult = await roleService.QueryAsync(offset.Value, limit.Value);
+            var pageResult = await roleService.QueryAsync(offset.Value, limit.Value, express);
             return Json(pageResult);
         }
 

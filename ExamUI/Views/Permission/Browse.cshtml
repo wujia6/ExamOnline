@@ -1,8 +1,4 @@
-﻿@*@section script{
-    <link href="~/lib/bootstrap-table/extensions/group-by-v2/bootstrap-table-group-by.min.css" rel="stylesheet" />
-    <script src="~/lib/bootstrap-table/extensions/group-by-v2/bootstrap-table-group-by.min.js"></script>
-}*@
-@{
+﻿@{
     ViewData["Title"] = "Browse";
 }
 <section class="content-header">
@@ -23,15 +19,13 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="form-row">
-                        <h4 class="card-title col-2 d-md-inline text-right">查询条件</h4>
+                    <div class="form-inline">
+                        <h4 class="card-title col-2 col-md-2 text-right">查询条件</h4>
                         <div class="input-group col-4">
-                            <span class="input-group-addon"><i class="fade fa-user"></i></span>
-                            @Html.DropDownList("sel_search_typeat", ViewData["PermissionType"] as SelectList, "权限类型");
+                            @Html.DropDownList("sel_search_typeat", ViewData["PermissionType"] as SelectList, "权限类型", new { @class="form-control" })
                         </div>
                         <div class="input-group col-4">
-                            <span class="input-group-addon"><i class="fade fa-code"></i></span>
-                            <input type="text" id="txt_search_named" class="form-control" placeholder="权限名">
+                            <input type="text" id="txt_search_named" class="form-control" placeholder="权限名称关键字">
                         </div>
                         <button type="button" id="btn_query" class="btn btn-primary"><i class="fas fa-search"></i></button>
                     </div>
@@ -50,7 +44,7 @@
                         <button type="button" id="btn_edit" class="btn btn-default"><i class="fas fa-edit"></i> 编辑</button>
                         <button type="button" id="btn_remove" class="btn btn-default"><i class="fas fa-trash"></i> 删除</button>
                     </div>
-                    <table id="tab_permissions" class="table table-hover"></table>
+                    <table id="tab_permissions"></table>
                 </div>
             </div>
         </div>
@@ -59,11 +53,9 @@
 <script>
     $(function () {
         //初始化table
-        var mgrTable = new tableView.mgrTable({
+        var mgrTable = new tableView.manageTable({
             tableId: "tab_permissions",
-            toolbarId: "tab_toolbar",
             ajaxUrl: "/Permission/PaginatorAsync",
-            ajaxMethod: "get",
             queryParamsCallback: function () {
                 return {
                     tpid: $("#sel_search_typeat").val(),
@@ -72,29 +64,33 @@
             },
             dataColumns: [
                 { checkbox: true, width: "50", align: "center", valign: "middle" },
-                { field: "leveID", title: "层级", align: "center", valign: "middle" },
+                //{ field: "levelID", title: "层级", align: "center", valign: "middle" },
                 { field: "typeAt", title: "类型", align: "center", valign: "middle" },
                 { field: "named", title: "名称", align: "center", valign: "middle" },
                 { field: "command", title: "指令", align: "center", valign: "middle" },
-                { field: "enabled", title: "激活", align: "center", valign: "middle" },
-                { field: "remarks", title: "备注", align: "center", valign: "middle" }
+                { field: "enabled", title: "启用", align: "center", valign: "middle" },
+                { field: "remarks", width: "300", title: "备注", align: "center", valign: "middle" }
             ]
         });
 
-        //添加权限
+        //搜索
+        $("#btn_query").click(function () {
+            mgrTable.setRefresh();
+        });
+
+        //添加
         $("#btn_add").click(function () {
-            var frm = null;
             modalUtils.showModal({
                 remote: "/Permission/EditorPartial",
-                title: "新建权限",
+                title: "新建权限项",
                 onOpenedEvent: function () {
-                    frm = $("#frm_permission_editor");
-                    formUtils.clear(frm);
+                    formUtils.clear($("#frm_permission_editor"));
                 },
                 onClosedEvent: function () {
                     mgrTable.setRefresh();
                 },
                 onSaveEvent: function () {
+                    var frm = $("#frm_permission_editor");
                     $.post("/Permission/AddAsync", { model: frm.serializeObject() }, function (result) {
                         layerUtils.info(result.message, 1);
                         if (result.success)

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Application.DTO.Models;
@@ -67,25 +65,15 @@ namespace ExamUI.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> SearchAsync(int? id, int? lid, int? tpid)
+        public async Task<JsonResult> PaginatorAsync(int? offset = 0, int? limit = 10, string tpid = null, string named = null)
         {
-            Expression<Func<PermissionInfo, bool>> express = src => true;
-            if (id.HasValue)
-                express = src => express.Compile()(src) && src.ID == id;
-            if (lid.HasValue)
-                express = src => express.Compile()(src) && src.LevelID == lid;
-            if (tpid.HasValue)
-                express = src => express.Compile()(src) && src.TypeAt == tpid;
-            var models = await permissionService.QueryAsync(express);
-            return Json(models);
-        }
-
-        [HttpGet]
-        public async Task<JsonResult> PaginatorAsync(int? offset = 0, int? limit = 10, string tp = null)
-        {
-            Expression<Func<PermissionInfo, bool>> express = src => true;
-            if (!string.IsNullOrEmpty(tp))
-                express = src => express.Compile()(src) && src.TypeAt == int.Parse(tp);
+            Expression<Func<PermissionInfo, bool>> express = null;
+            if (!string.IsNullOrEmpty(tpid) && string.IsNullOrEmpty(named))
+                express = src => src.TypeAt == int.Parse(tpid);
+            if (string.IsNullOrEmpty(tpid) && !string.IsNullOrEmpty(named))
+                express = src => src.Named == named;
+            if (!string.IsNullOrEmpty(tpid) && !string.IsNullOrEmpty(named))
+                express = src => src.TypeAt == int.Parse(tpid) && src.Named.Contains(named);
             var pageResult = await permissionService.PaginatorAsync(offset.Value, limit.Value, express);
             return Json(pageResult);
         }
@@ -100,17 +88,18 @@ namespace ExamUI.Controllers
         [HttpPost]
         public PartialViewResult EditorPartial()
         {
+            ViewData["PermissionType"] = CommonUtils.GetSelectList(20, 23);
             return PartialView("EditorPartial");
         }
 
         [HttpGet]
         public async Task<JsonResult> GetPermissionAllAsync()
         {
-            //var models = await cacheUtils.GetCacheAsync("ApplicationPermissions", async () =>
-            //{
-            //    return await permissionService.QueryAsync();
-            //});
-            var models = await permissionService.QueryAsync();
+            var models = await cacheUtils.GetCacheAsync("ApplicationPermissions", async () =>
+            {
+                return await permissionService.QueryAsync();
+            });
+            //var models = await permissionService.QueryAsync();
             return Json(models);
         }
     }
