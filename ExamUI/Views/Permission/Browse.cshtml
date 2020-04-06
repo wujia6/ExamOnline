@@ -1,6 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "Browse";
+    ViewData["Title"] = "权限设置";
+    ViewBag.CurrentMenu = "Permission";
 }
+
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -22,7 +24,7 @@
                     <div class="form-inline">
                         <h4 class="card-title col-2 col-md-2 text-right">查询条件</h4>
                         <div class="input-group col-4">
-                            @Html.DropDownList("sel_search_typeat", ViewData["PermissionType"] as SelectList, "权限类型", new { @class="form-control" })
+                            @Html.DropDownList("sel_search_typeat", ViewData["PermissionType"] as SelectList, "==查询类型==", new { @class="form-control" })
                         </div>
                         <div class="input-group col-4">
                             <input type="text" id="txt_search_named" class="form-control" placeholder="权限名称关键字">
@@ -58,7 +60,7 @@
             ajaxUrl: "/Permission/PaginatorAsync",
             queryParamsCallback: function () {
                 return {
-                    tpid: $("#sel_search_typeat").val(),
+                    tp: $("#sel_search_typeat").val(),
                     named: $("#txt_search_named").val()
                 }
             },
@@ -71,21 +73,6 @@
                 { field: "enabled", title: "启用", align: "center", valign: "middle" },
                 { field: "remarks", width: "300", title: "备注", align: "center", valign: "middle" }
             ]
-        });
-
-        //分部页下拉列表关联事件
-        $("#TypeAt").change(function (e) {
-            var selectedValue = e.target.value;
-            $.getJSON("/Permission/QueryAsync", { tp: selectedVaLue }, function (data) {
-                if (data == null || data == "undefined") {
-                    layerUtils.alert("数据源获取失败，请重新运行");
-                    return;
-                }
-                $.each(data, function (idx, obj) {
-                    $("#sel_levelId").append("<option value='" + obj.id + "'>" + obj.named + "</option>");
-                });
-                //$("#sel_levelId").prepend("<option value = '0' >指定父类</option >");
-            });
         });
 
         //搜索
@@ -117,17 +104,20 @@
 
         //编辑
         $("#btn_edit").click(function () {
-            var selectedRows = mgrTable.instance.getSelecteds();
-            if (selectedRows.length != 1) {
+            var selected = mgrTable.getSelecteds();
+            if (selected.length != 1) {
                 layerUtils.info("请选择有效数据行", 2);
                 return;
             }
+            var model = selected[0];
             //打开模态框
             modalUtils.showModal({
                 remote: "/Permission/EditorPartial",
                 title: "编辑权限项",
                 onOpenedEvent: function () {
-                    formUtils.echo($("#frm_permission_editor"), selectedRows[0]);
+                    //$("#TypeAt").bind("change", optionChange(e));
+                    formUtils.echo($("#frm_permission_editor"), model);
+                    $("#slt_level").removeAttr("disabled");
                 },
                 onClosedEvent: function () {
                     mgrTable.setRefresh();
@@ -140,7 +130,7 @@
                             formUtils.clear(frmObj);
                     });
                 }
-            })
+            });
         });
 
         //删除

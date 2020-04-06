@@ -61,21 +61,38 @@ namespace Infrastructure.Utils
         /// <param name="start">开始枚举值/param>
         /// <param name="end">结束枚举值</param>
         /// <returns></returns>
-        public static SelectList GetSelectList(int start, int end)
+        public static SelectList EnumToSelect(int start, int end)
         {
-            var selectList = new List<SelectListItem>();
-            var arr = Enum.GetValues(typeof(CommonEnum));
-            foreach (int ce in arr)
+            var items = new List<SelectListItem>();
+            foreach (int e in Enum.GetValues(typeof(CommonEnum)))
             {
-                if (ce >= start && ce <= end)
+                if (e >= start && e <= end)
                 {
-                    string ceName = Enum.GetName(typeof(CommonEnum), ce);
-                    var item = new SelectListItem(ceName, ce.ToString());
-                    selectList.Add(item);
+                    string eName = Enum.GetName(typeof(CommonEnum), e);
+                    var itm = new SelectListItem(eName, e.ToString());
+                    items.Add(itm);
                 }
             }
-            //selectList.Insert(0, new SelectListItem { Text = "--所有类型--", Value = "0", Selected = true });
-            return new SelectList(selectList.AsEnumerable(), "Value", "Text");
+            //items.Insert(0, new SelectListItem { Text = firstText, Value = "0" });
+            return new SelectList(items.AsEnumerable(), "Value", "Text", 0);
+        }
+
+        /// <summary>
+        /// 初始化下拉框数据
+        /// </summary>
+        /// <typeparam name="T">泛型类</typeparam>
+        /// <param name="source">数据源</param>
+        /// <param name="textField">显示文本字段，默认"Name"字段</param>
+        /// <param name="valueField">绑定值字段，默认"ID"字段</param>
+        /// <param name="firstText">首项显示文本，默认”===默认===“</param>
+        /// <returns>SelectList</returns>
+        public static SelectList DorpDownInit<T>(List<T> source, string textField = "Name", string valueField = "ID")
+        {
+            if (source==null || source.Count==0)
+                throw new ArgumentNullException("source", "初始化下拉框的数据源为空或无数据");
+            var ddl = new SelectList(source, valueField, textField,0);
+            //ddl.ToList().Insert(0, new SelectListItem { Text = firstText, Value = "0" });
+            return ddl;
         }
 
         /// <summary>

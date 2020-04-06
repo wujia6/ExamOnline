@@ -11,12 +11,11 @@
             <input type="checkbox" class="form-check d-inline" id="chk_enabled" name="Enabled"> 启用权限
         </div>
         <div class="form-group">
-            @Html.DropDownList("TypeAt", ViewData["PermissionType"] as SelectList, "权限类型", new { @class = "form-control" })
+            @Html.DropDownList("TypeAt", ViewData["PermissionType"] as SelectList, "权限类型", new { @class = "form-control", @onchange="optionChange(this.value)" })
         </div>
         <div class="form-group">
-            <select id="sel_levelId" name="LevelID" class="form-control">
-                <option value="0" selected="selected">指定父类</option>
-            </select>
+            <select id="slt_level" name="LevelID" class="form-control" disabled="disabled"></select>
+            @*@Html.DropDownList("LevelID", ViewData["PermissionAll"] as SelectList, "层级关系", new { @class = "form-control" })*@
         </div>
         <div class="form-group"><input name="Named" class="form-control" placeholder="编辑权限名" /></div>
         <div class="form-group"><input name="Command" class="form-control" placeholder="编辑指令" /></div>
@@ -27,3 +26,19 @@
     <button type="button" id="btn_modal_close" class="btn btn-default" data-dismiss="modal"><i class="fas fa-power-off"></i> 关闭</button>
     <button type="button" id="btn_modal_save" class="btn btn-primary"><i class="fas fa-save"></i> 保存</button>
 </div>
+<script>
+    //下拉项改变事件
+    var optionChange = function (objValue) {
+        //var objKey = $("#frm_permission_editor").find("input[name=ID]").val();
+        //if (objVlaue == 0 || objVlaue == "undefined") return;
+        $.getJSON("/Permission/QueryAsync", { tp: objValue }, function (data) {
+            if (data != null && data != "undefined") {
+                $("#slt_level").empty();
+                $.each(data, function (idx, obj) {
+                    $("#slt_level").append("<option value='" + obj.id + "'>" + obj.named + "</option>");
+                });
+                $("#slt_level").removeAttr("disabled");
+            }
+        });
+    }
+</script>

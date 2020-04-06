@@ -76,11 +76,11 @@ var formUtils = {
      ************************************/
     clear: function (frm) {
         $(":input", frm)
-            .not(":button", ":submit", ":reset", ":option").val('')
-            .find("option:contains(0)").attr("selected", true)
-            .removeAttr("checked");
-        //frm.find("option:contains(0)").attr("selected", true);
-        //frm.reset();
+            .not(":button", ":submit", ":reset").val('')
+            .removeAttr("checked")
+            .removeAttr("selected");
+            //.find("option:contains(0)").attr("selected", true);
+        //frm[0].reset();
     },
 
     /****************************************************
@@ -90,26 +90,23 @@ var formUtils = {
      * toLowerCase() ------ 将字符串中的所有字符都转换成小写；
      * toUpperCase() ------ 将字符串中的所有字符都转换成大写；
      ****************************************************/
-    echo: function (frm, strJson) {
-        if (frm == null || frm == 'undefined' || strJson == null || strJson == 'undefined') {
+    echo: function (frm, filde) {
+        if (frm == null || frm == 'undefined' || filde == null || filde == 'undefined') {
             layerUtils.info("表单对象或数据对象为空", 2);
             return;
         }
-        for (var key in strJson) {
-            if (key == "0" || strJson[key] == null)
-                continue;
-            var propName = key == "id" ?    //重新拼凑json属性名(parnetID=ParentID)
-                key.toUpperCase() : key.substr(0, 1).toUpperCase() + key.substr(1, key.lenght);
+        for (var key in filde) {
+            if (key == "0" || filde[key] == null) continue;
+            var propName = key == "id" ? key.toUpperCase() : key.substr(0, 1).toUpperCase() + key.substr(1, key.lenght);     //重新拼凑json属性名(parnetID=ParentID)
             var dmEle = frm.find("*[name=" + propName + "]");
-
-            if (dmEle == "undefined" || dmEle == null)
-                continue;
-            else if (dmEle.is("select") && $.type(strJson[key]) == "string")  //判断下拉列表框
-                dmEle.find("option:contains(" + strJson[key] + ")").attr("selected", true);
-            else if (dmEle.prop("type") == "checkbox" && strJson[key] == "启用")   //判断复选框
-                dmEle.attr("checked", "checked");
-            else
-                dmEle.val(strJson[key]);
+            if (dmEle != "undefined" && dmEle != null) {
+                if (dmEle.is("select") && $.type(filde[key]) == "string")  //判断下拉列表框
+                    dmEle.find("option:contains(" + filde[key] + ")").attr("selected", true);
+                else if (dmEle.prop("type") == "checkbox" && filde[key] == "是")   //判断复选框
+                    dmEle.attr("checked", "checked");
+                else
+                    dmEle.val(filde[key]);
+            }
         }
     }
 }

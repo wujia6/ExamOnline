@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +8,6 @@ using Application.DTO.Models;
 using Application.IServices;
 using Domain.Entities.RoleAgg;
 using Infrastructure.Utils;
-using Newtonsoft.Json;
 
 namespace ExamUI.Controllers
 {
@@ -40,12 +38,14 @@ namespace ExamUI.Controllers
         [HttpGet]
         public async Task<JsonResult> PaginatorAsync(int? offset = 0, int? limit = 10, string name = null, string code = null)
         {
-            Expression<Func<RoleInfo, bool>> express = src => true;
+            Expression<Func<RoleInfo, bool>> exp = null;
             if (!string.IsNullOrEmpty(name))
-                express = src => express.Compile()(src) && src.Name.Contains(name);
+                exp = src => src.Name.Contains(name);
             if (!string.IsNullOrEmpty(code))
-                express = src => express.Compile()(src) && src.Code.Contains(code);
-            var pageResult = await roleService.QueryAsync(offset.Value, limit.Value, express);
+                exp = src => src.Code.Contains(code);
+            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(code))
+                exp = src => src.Name.Contains(name) && src.Code.Contains(code);
+            var pageResult = await roleService.QueryAsync(offset.Value, limit.Value, exp);
             return Json(pageResult);
         }
 

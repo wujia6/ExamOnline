@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Application.DTO.Models;
@@ -55,67 +56,55 @@ namespace ExamUI.Controllers
         [HttpPost]
         public PartialViewResult EditorPartial()
         {
-            ViewData["PermissionType"] = CommonUtils.GetSelectList(20, 23);
+            ViewData["PermissionType"] = CommonUtils.EnumToSelect(20, 23);
+            //var models = GetMemoryCacheList("PermissionAll").Result;
+            //models = models.FindAll((PermissionDto dto) => dto.TypeAt != "action");
+            //ViewData["PermissionAll"] = CommonUtils.DorpDownInit(models, "Named", "ID");
             return PartialView("EditorPartial");
         }
 
         [HttpGet]
         public async Task<JsonResult> QueryAsync(string tp = null)
         {
-            var models = await cacheUtils.GetCacheAsync("ApplicationPermissions", async () =>
-            {
-                return await permissionService.QueryAsync();
-            });
-
-            if (models == null || models.Count == 0)
-                return Json(new { Success = false, Message = "数据源获取失败" });
-            else if (!string.IsNullOrEmpty(tp))
+            var models = await GetMemoryCacheList("PermissionAll");
+            if (!string.IsNullOrEmpty(tp))
                 models = models.FindAll((PermissionDto dto) => dto.TypeAt == CommonUtils.GetCommonEnumName(int.Parse(tp)));
             return Json(models);
         }
 
         [HttpGet]
-        public async Task<JsonResult> PaginatorAsync(int? offset = 0, int? limit = 10, string tpid = null, string named = null)
+        public async Task<JsonResult> PaginatorAsync(int? offset = 0, int? limit = 10, string tp = null, string named = null)
         {
-            Expression<Func<PermissionInfo, bool>> express = null;
-            if (!string.IsNullOrEmpty(tpid) && string.IsNullOrEmpty(named))
-                express = src => src.TypeAt == int.Parse(tpid);
-            if (string.IsNullOrEmpty(tpid) && !string.IsNullOrEmpty(named))
-                express = src => src.Named == named;
-            if (!string.IsNullOrEmpty(tpid) && !string.IsNullOrEmpty(named))
-                express = src => src.TypeAt == int.Parse(tpid) && src.Named.Contains(named);
-            var pageResult = await permissionService.PaginatorAsync(offset.Value, limit.Value, express);
+            Expression<Func<PermissionInfo, bool>> exp = null;
+            if (!string.IsNullOrEmpty(tp) && string.IsNullOrEmpty(named))
+                exp = src => src.TypeAt == int.Parse(tp);
+            if (string.IsNullOrEmpty(tp) && !string.IsNullOrEmpty(named))
+                exp = src => src.Named == named;
+            if (!string.IsNullOrEmpty(tp) && !string.IsNullOrEmpty(named))
+                exp = src => src.TypeAt == int.Parse(tp) && src.Named.Contains(named);
+            var pageResult = await permissionService.PaginatorAsync(offset.Value, limit.Value, exp);
             return Json(pageResult);
         }
 
         [HttpGet]
         public IActionResult Browse()
         {
-            ViewData["PermissionType"] = CommonUtils.GetSelectList(20, 23);
+            ViewData["PermissionType"] = CommonUtils.EnumToSelect(20, 23);
             return View();
         }
 
-        //[HttpGet]
-        //public async Task<JsonResult> SingleAsync(int id, int? lid, int? tpid)
-        //{
-        //    Expression<Func<PermissionInfo, bool>> express = src => src.ID == id;
-        //    if (lid.HasValue)
-        //        express = src => express.Compile()(src) && src.LevelID == lid;
-        //    if (tpid.HasValue)
-        //        express = src => express.Compile()(src) && src.TypeAt == tpid;
-        //    var model = await permissionService.SingleAsync(express);
-        //    return Json(model);
-        //}
-
-        //[HttpGet]
-        //public async Task<JsonResult> GetPermissionAllAsync()
-        //{
-        //    var models = await cacheUtils.GetCacheAsync("ApplicationPermissions", async () =>
-        //    {
-        //        return await permissionService.QueryAsync();
-        //    });
-        //    //var models = await permissionService.QueryAsync();
-        //    return Json(models);
-        //}
+        /// <summary>
+        /// 获取缓存集合
+        /// </summary>
+        /// <param name="cacheKey"></param>
+        /// <returns></returns>
+        private async Task<List<PermissionDto>> GetMemoryCacheList(string cacheKey)
+        {
+            var models = await cacheUtils.GetCacheAsync(cacheKey, async () =>
+            {
+                return await permissionService.QueryAsync();
+            });
+            return models;
+        }
     }
 }

@@ -2,10 +2,8 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Application.DTO.Models;
 using Application.IServices;
-using System.Collections.Generic;
 using Infrastructure.Utils;
 
 namespace ExamUI.Components
@@ -14,7 +12,6 @@ namespace ExamUI.Components
     public class ApplicationAuthorizes : ViewComponent
     {
         private readonly IRoleService roleService;
-        //private readonly IMemoryCache appCache;
         private readonly CacheUtils appCache;
 
         public ApplicationAuthorizes(IRoleService service, CacheUtils cache)
@@ -29,14 +26,13 @@ namespace ExamUI.Components
             ViewBag.CurrentUser = UserClaimsPrincipal.FindFirstValue(ClaimTypes.Name);
             string roleKeys = UserClaimsPrincipal.FindFirstValue(ClaimTypes.Role);
             //缓存权限集合
-            var dtos = appCache.GetOrCreateCache(roleKeys, () =>
+            var dtos = appCache.GetCacheAsync<PermissionDto>(roleKeys, async () =>
             {
-                return roleService.SingleAsync(
+                var model = await roleService.SingleAsync(
                     express: inf => inf.Code.Contains(roleKeys),
-                    include: inf => inf.Include(r => r.RoleAuthorizes).ThenInclude(p => p.PermissionInformation))
-                    .Result
-                    .PermssionDtos;
-            });
+                    include: inf => inf.Include(r => r.RoleAuthorizes).ThenInclude(p => p.PermissionInformation));
+                return model.PermssionDtos;
+            }).Result;
             return View(dtos);
         }
     }

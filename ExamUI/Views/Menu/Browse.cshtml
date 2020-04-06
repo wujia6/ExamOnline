@@ -106,8 +106,8 @@
 
         //编辑
         $("#btn_edit").click(function () {
-            var rows = mgrTable.getSelecteds();
-            if (rows.length != 1) {
+            var selectedRows = mgrTable.getSelecteds();
+            if (selectedRows.length != 1) {
                 layerUtils.info("请选择有效数据行！", 2);
                 return;
             }
@@ -117,7 +117,8 @@
                 title: "编辑菜单项",
                 onOpenedEvent: function () {
                     frm = $("#frm_menu_edit");
-                    formUtils.echo(frm, rows[0]);
+                    //formUtils.bindModel(frm, selectedRows[0]);
+                    formUtils.echo(frm, selectedRows[0]);
                 },
                 onClosedEvent: function () {
                     mgrTable.setRefresh();

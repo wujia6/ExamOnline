@@ -37,25 +37,6 @@ namespace Infrastructure.Utils
         }
 
         /// <summary>
-        /// 获取缓存，如不存在则创建
-        /// </summary>
-        /// <param name="cacheKey">键</param>
-        /// <param name="cacheValue">值</param>
-        /// <param name="minute">过期分钟</param>
-        /// <returns></returns>
-        public dynamic GetOrCreateCache(string cacheKey, dynamic cacheValue, int minute = 5)
-        {
-            return string.IsNullOrEmpty(cacheKey) || cacheValue == null ? 
-                null : appCache.GetOrCreate(cacheKey, entry =>
-            {
-                entry.Value = cacheValue;
-                entry.AbsoluteExpiration = DateTime.Now.AddMinutes(minute);  //设置缓存绝对过期时间
-                entry.Priority = CacheItemPriority.Normal;  //设置缓存优先级
-                return cacheValue;
-            });
-        }
-
-        /// <summary>
         /// 获取缓存集合
         /// </summary>
         /// <typeparam name="T">泛型类型</typeparam>

@@ -59,7 +59,8 @@ namespace Application.Services
             var spec = express == null ? null : Specification<PermissionInfo>.Eval(express);
             var entities = await permssionManage.QueryAsync(spec);
             var models = entities.MapToList<PermissionDto>();
-            return CommonUtils.Recursion(models);
+            return models;
+            //return CommonUtils.Recursion(models);
         }
 
         public async Task<PageResult<PermissionDto>> PaginatorAsync(int offset, int limit, Expression<Func<PermissionInfo, bool>> express = null)
